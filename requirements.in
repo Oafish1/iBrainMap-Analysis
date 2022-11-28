@@ -1,8 +1,12 @@
 jupyterlab
 matplotlib
+networkx
 numpy
 pandas
+pydot
 seaborn
+sklearn
 torch
 torch_geometric
 torch_sparse
+umap-learn
