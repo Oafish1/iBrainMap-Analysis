@@ -1,9 +1,11 @@
 hiveplotlib
+ipywidgets
 jupyterlab
 matplotlib
 networkx
 numpy
 pandas
+pecanpy
 pydot
 seaborn
 sklearn
