@@ -8,7 +8,7 @@ pandas
 pecanpy
 pydot
 seaborn
-sklearn
+scikit-learn
 torch
 torch_geometric
 torch_sparse
