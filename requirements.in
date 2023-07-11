@@ -8,9 +8,11 @@ numpy
 pandas
 pecanpy
 pip-tools
+plotly
 pydot
 seaborn
 scikit-learn
+sympy
 torch
 torch_geometric
 torch_sparse
