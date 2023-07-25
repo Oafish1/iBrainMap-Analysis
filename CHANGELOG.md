@@ -1,4 +1,4 @@
-### 2023-07-24
+### 2023-07-24 (1-2)
 - Add enhanced graph subsetting features
 - Add filtering to graph computation
 - Add graph embedding loading
