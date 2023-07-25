@@ -1,2 +1,2 @@
 ### TODO
-- Highlight epochs using `sessInfo.Epochs` in preview
+- Get attentions for a constant list of genes across all samples (easier to compare)

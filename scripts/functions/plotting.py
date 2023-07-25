@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import seaborn as sns
 import sympy
 
+from .computation import *
 from .utility import *
 
 
@@ -27,12 +28,12 @@ def plot_tf_outgoing(graph_summary, ax=None):
         plt.title('TGs per Regulon')
 
 
-def plot_tf_closeness(graph_summary, ax=None):
+def plot_statistic(graph_summary, col='TF Closeness', ax=None):
     # Phenotype and Sub-Phenotype vs TF Outgoing
     sns.boxplot(
         graph_summary,
         x=graph_summary.columns[1],
-        y='TF Closeness',
+        y=col,
         hue=graph_summary.columns[2],
         showfliers=False,
         ax=ax,
@@ -54,10 +55,10 @@ def plot_nps(meta, sample_ids, ax=None):
     data = data.transpose()
 
     # Heatmap
-    sns.heatmap(data=data, cbar=False, ax=ax)
+    sns.heatmap(data=data, square=True, xticklabels=True, yticklabels=True, cbar=False, ax=ax)
 
     # Format
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=-90)
 
 
 def plot_label(s, ax=None):
@@ -160,21 +161,23 @@ def plot_sankey(meta, flow, order=None, use_nan=False):
 
 
 ### Graph visualizations
-def visualize_graph(g, scale=.06, ax=None):
-    if ax is None: ax = plt.gca()
+def visualize_graph(g, pos=None, scale=.06, ax=None):
+    if not ax: ax = plt.gca()
+    if not pos: pos = get_graph_pos(g)
     # TODO: Prioritize synthetic nodes on top
     np.random.seed(42)
     gt.seed_rng(42)
     gt.graph_draw(
         g,
-        pos=gt.sfdp_layout(g),  # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
+        pos=pos,
         ink_scale=scale,
         vertex_fill_color=g.vp.color,
-        vertex_size=gt.prop_to_size(g.vp.self_loop_value, 10, 30, power=1.5),
+        vertex_size=gt.prop_to_size(g.vp.self_loop_value, 20, 40, power=1.5),
         vertex_text=g.vp.text,
         vertex_font_size=8,
         vertex_text_position=-2,  # No automatic node scaling
-        edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
+        # edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
+        edge_color=g.ep.color,
         edge_end_marker='arrow',
         edge_marker_size=gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
         mplfig=ax,
@@ -183,29 +186,32 @@ def visualize_graph(g, scale=.06, ax=None):
     # Custom Legend
     palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
     legend_elements = [
-        Line2D([0], [0], marker='o', color='gray', label='Hub', markerfacecolor=palette[0], markersize=15),
+        # Line2D([0], [0], marker='o', color='gray', label='Hub', markerfacecolor=palette[0], markersize=15),  # Hub
         Line2D([0], [0], marker='o', color='gray', label='Cell Type', markerfacecolor=palette[1], markersize=15),
-        Line2D([0], [0], marker='o', color='gray', label='TF', markerfacecolor=palette[2], markersize=15),
         Line2D([0], [0], marker='o', color='gray', label='TG', markerfacecolor=palette[3], markersize=15),
+        Line2D([0], [0], marker='o', color='gray', label='TF', markerfacecolor=palette[2], markersize=15),
         Line2D([0], [0], marker='o', color='gray', label='TF+TG', markerfacecolor=palette[4], markersize=15),
     ]
     ax.legend(handles=legend_elements, loc='best')
 
 
-def visualize_graph_diffusion(g, scale=.12, ax=None):
+def visualize_graph_diffusion(g, pos=None, scale=.12, ax=None):
+    if not ax: ax = plt.gca()
+    if not pos: pos = get_graph_pos(g)
     # TODO: Prioritize synthetic nodes on top
     np.random.seed(42)
     gt.seed_rng(42)
     gt.graph_draw(
         g,
-        pos=gt.sfdp_layout(g),  # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
+        pos=pos,
         ink_scale=scale,
         vertex_fill_color=g.vp.diffusion_color,
-        vertex_size=gt.prop_to_size(g.vp.self_loop_value, 10, 30, power=1.5),
+        vertex_size=gt.prop_to_size(g.vp.self_loop_value, 20, 40, power=1.5),
         vertex_text=g.vp.text,
-        vertex_font_size=8,
+        vertex_font_size=4,
         vertex_text_position=-2,  # No automatic node scaling
-        edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
+        # edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
+        edge_color=g.ep.color,
         edge_end_marker='arrow',
         edge_marker_size=gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
         mplfig=ax,

@@ -35,6 +35,10 @@ def combine_graphs(graphs, dynamic_load=True, **kwargs):
                 on=['TF', 'TG'],
             )
 
+    # Raise exception if no graphs
+    if graph is None:
+        raise LookupError('No graphs found.')
+
     # Replace nan with 0
     graph = graph.fillna(0)
 
@@ -52,7 +56,7 @@ def combine_graphs(graphs, dynamic_load=True, **kwargs):
     return graph[['TF', 'TG', 'coef']]
 
 
-def simulate_diffusion(g, genes, spread=.1, eps=1e-6, color_power=1/2):
+def simulate_diffusion(g, genes, spread=.1, eps=1e-6, color_power=1):
     # Perform diffusion recursively
     g.vp.diffusion_value = g.new_vertex_property('double')
     vertices = []
