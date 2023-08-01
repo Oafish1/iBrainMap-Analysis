@@ -100,19 +100,21 @@ def plot_sankey(meta, flow, order=None, use_nan=False):
                     y.append(len(indices[col]) - 1)
                     # label_color.append(cycle[idx])
 
-    # Scale positions
-    x = np.array(x)
-    x = (x - x.min()) / (x.max() - x.min())
-    x = .9 * x + .05
+    if order:
+        # Scale positions
+        x = np.array(x)
+        x = (x - x.min()) / (x.max() - x.min())
+        x = .9 * x + .05
 
-    y = np.array(y)
-    y_new = []
-    for xi in np.unique(x):
-        y_sub = y[x==xi]
-        y_sub = (y_sub - y_sub.min()) / (y_sub.max() - y_sub.min())
-        y_sub = .9 * y_sub + .05
-        y_new.append(y_sub)  # No idea why reassignment doesn't work
-    y = np.concatenate(y_new)
+        y = np.array(y)
+        y_new = []
+        for xi in np.unique(x):
+            y_sub = y[x==xi]
+            y_sub = (y_sub - y_sub.min()) / (y_sub.max() - y_sub.min())
+            y_sub = .8 * y_sub + .1  # Lower is higher
+            y_new.append(y_sub)  # No idea why reassignment doesn't work
+        y = np.concatenate(y_new)
+
     # Generate, shuffle, and fade
     n = sympy.nextprime(len(label))
     label_color = plt.cm.rainbow(np.linspace(0, 1, n))
@@ -145,19 +147,20 @@ def plot_sankey(meta, flow, order=None, use_nan=False):
     fig = go.Figure(data=[go.Sankey(
         arrangement='snap',
         node=dict(
+            pad=15,
+            thickness=15,
             label=label,
-            # x=x,
-            # y=y,
-            color=label_color,
-            pad=3),
+            x=x if order else None,
+            y=y if order else None,
+            color=label_color),
         link=dict(
             source=source,
             target=target,
             value=value,
             color=edge_color),
     )])
-    # fig.update_layout(title_text='Data Overview', font_size=10)
-    fig.show()
+    fig.update_layout(title_text='Data Overview', font_size=10)
+    return fig
 
 
 ### Graph visualizations
