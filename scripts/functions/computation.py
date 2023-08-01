@@ -1,3 +1,4 @@
+import colorsys
 import itertools as it
 
 import graph_tool.all as gt
@@ -118,11 +119,7 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
             g.vp.self_loop_value[e.source()] = g.ep.coef[e]
 
         # Add color to edges
-        x = g.ep.coef[e]
-        x = np.log10(1+x)  # Log scaling
-        # x = x**(1/3)  # Power scaling
-        alpha = x / (1+x)
-        alpha = .05 + .95 * alpha  # Add floor
+        alpha = get_alpha(g.ep.coef[e])
         g.ep.color[e] = [0, 0, 0, alpha]
 
     # View without synthetic nodes or self loops
@@ -185,6 +182,10 @@ def subset_graph(source, target):
 
 
 def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
+    """
+    Subsets a graph to nodes in `g` connected to those in `vertices`.
+    """
+    # TODO: Add degrees of difference, i.e. 2nd gen connections and below
     # Convert ids to vertices
     vertices_new = []
     if verticies_are_ids:
@@ -209,12 +210,23 @@ def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
     )
 
 
-def concatenate_graphs(*graphs):
-    "Concatenate all graphs provided, assesses duplicates by IDs"
+def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
+    """
+    Concatenate all graphs provided, assesses duplicates by IDs
+    """
     g = None
-    for gc in graphs:
+    g_coefs = {}
+    for i, gc in enumerate(graphs):
         # Copy if first
         if not g:
+            _add_attribute_to_dict(
+                g_coefs,
+                gc.edges(),
+                indexer=lambda e: _get_edge_string(gc, e),
+                attribute=gc.ep.coef,
+                default=lambda: [0 for _ in range(len(graphs))],
+                index=i,
+            )
             g = gc.copy()
             continue
 
@@ -234,17 +246,94 @@ def concatenate_graphs(*graphs):
                 raise LookupError(f'ID \'{vid}\' has duplicate entries in \'g\'.')
 
 
+        # Track coefs
+        _add_attribute_to_dict(
+            g_coefs,
+            gc.edges(),
+            indexer=lambda e: _get_edge_string(gc, e),
+            attribute=gc.ep.coef,
+            default=lambda: [0 for _ in range(len(graphs))],
+            index=i,
+        )
+
         # Concatenate (assumes all vertex and edge properties are the same)
-        # TODO: Other props
+        # TODO: Other props, add coef averaging
         g, props = gt.graph_union(
             g,
             gc,
             intersection=vertex_map,
-            props=[(g.vp.ids, gc.vp.ids), (g.ep.coef, gc.ep.coef)],
+            props=[
+                (g.vp.color, gc.vp.color),
+                (g.vp.ids, gc.vp.ids),
+                (g.vp.text, gc.vp.text),
+                (g.vp.text_synthetic, gc.vp.text_synthetic),
+                (g.ep.coef, gc.ep.coef),
+            ],
             include=True)
-        g.vp.ids, g.ep.coef = props
+        g.vp.color, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
+
+    # Label self loops
+    g.ep.self_loop = g.new_edge_property('bool')
+    gt.label_self_loops(g, eprop=g.ep.self_loop)
+
+    # Add processed attributes
+    g.vp.self_loop_value = g.new_vertex_property('double')
+    g.ep.color = g.new_edge_property('vector<double>')
+    for e in g.edges():
+        # Get coefs
+        coefs = g_coefs[_get_edge_string(g, e)]
+
+        # Get processed attributes
+        in_graph = [c != 0 for c in coefs]
+        present_coef = np.mean([c for c in coefs if c != 0]) if exclude_zeroes_from_mean else np.mean(coefs)
+        color = [0, 0, 0, 0]
+
+        # Set color
+        if sum(in_graph) == len(graphs) or not color:
+            color[:3] = [0, 0, 0]
+        else:
+            # Get color index
+            cindex = ''.join([str(int(b)) for b in in_graph])[::-1]  # Convert to binary
+            cindex = int(cindex, 2) # Binary to int
+            color[:3] = colorsys.hsv_to_rgb(cindex*(1./len(graphs)), 1, 1)
+
+        # Set alpha
+        color[3] = get_alpha(present_coef)
+
+        # Write
+        g.ep.color[e] = color
+        if g.ep.self_loop:
+            g.vp.self_loop_value[e.source()] = present_coef
 
     return g
+
+
+def _get_edge_string(g, e):
+    return f'{g.vp.ids[e.source()]}-{g.vp.ids[e.target()]}'
+
+
+def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
+    """
+    Add result `dict[indexer[i]] = attribute[i]` for `i` in `iterator` in-place
+    """
+    for item in iterator:
+        if not indexer(item) in dict:
+            dict[indexer(item)] = default()
+        if index is None:
+            dict[indexer(item)].append(attribute[item])
+        else:
+            dict[indexer(item)][index] = attribute[item]
+
+
+def _normalize_dict_item_length(dict, length, default=0):
+    """
+    Normalize dictionary array length in-place
+    """
+    for k in dict.keys():
+        if len(dict[k]) > length:
+            raise IndexError('Dictionary entry too long.')
+        elif len(dict[k]) < length:
+            dict[k] += [default for _ in range(length - len(dict[k]))]
 
 
 def get_graph_pos(g, scale=None):

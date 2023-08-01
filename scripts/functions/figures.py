@@ -127,7 +127,7 @@ def figure_data_driven(
     # TF closeness data
     ax = axs['B2']
     plot_statistic(data_graph_summary, col='Cliques', ax=ax)
-    ax.set_title(None)
+    ax.set_title('Number of Cliques')
     ax.get_legend().set_visible(False)
     ax.set_ylabel('Data Driven')
 

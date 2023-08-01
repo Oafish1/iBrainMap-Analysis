@@ -79,6 +79,7 @@ def simulate_diffusion(g, genes, spread=.1, eps=1e-6, color_power=1):
 
     return g
 
+
 def simulate_diffusion_helper(g, vertices, value, spread, eps):
     if value < eps or len(vertices) == 0:
         return g
@@ -93,3 +94,11 @@ def simulate_diffusion_helper(g, vertices, value, spread, eps):
     new_vertices = np.concatenate(new_vertices)
 
     return simulate_diffusion_helper(g, new_vertices, new_value, spread, eps)
+
+
+def get_alpha(coef):
+    x = np.log10(1+coef)  # Log scaling
+    # x = x**(1/3)  # Power scaling
+    alpha = x / (1+x)
+    alpha = .05 + .95 * alpha  # Add floor
+    return alpha

@@ -1,3 +1,11 @@
+### 2023-08-01
+- Add coloration option to graph combination
+- Add example plots
+- Increase compatibility of `concatenate_graphs` with visualization and utility functions
+
+### 2023-07-25
+- Add graph embedding analysis
+
 ### 2023-07-24 (1-2)
 - Add enhanced graph subsetting features
 - Add filtering to graph computation
