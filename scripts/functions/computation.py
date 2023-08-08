@@ -1,4 +1,3 @@
-import colorsys
 import itertools as it
 
 import graph_tool.all as gt
@@ -87,17 +86,7 @@ def compute_statistics(meta, x, x_sub, filter=.8, **kwargs):
 
 def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something more interesting than cutting off `filter`
     # Detect synthetic vertices
-    if hub_present:
-        synthetic_vertices = list(graph[graph['TG'] == 'hub']['TF'])
-    else:
-        synthetic_vertices = [
-            s for s in np.unique(graph['TG'])
-            if (
-                s != s.upper()
-                or s in ['EN', 'IN', 'OPC', 'PC', 'VLMC', 'PVM', 'SMC']
-                or sum([s.startswith(t) for t in ['EN_', 'IN_', 'CD8_']])
-            )]
-        synthetic_vertices += ['EN', 'IN', 'OPC', 'PC']
+    synthetic_vertices = detect_synthetic_vertices_list(graph, hub_present=hub_present)
     cell_vertices = [v for v in synthetic_vertices if v != 'hub']
 
     # Filter to high-valued edges
@@ -123,16 +112,18 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
         g.ep.color[e] = [0, 0, 0, alpha]
 
     # View without synthetic nodes or self loops
-    # Need to do `vfilt` slowly bc `g.vp.ids.fa`` doesn't work with string
+    # Need to do `vfilt` slowly bc `g.vp.ids.fa` doesn't work with string
+    # DO NOT use [... for ... in g.vertices/edges()] as the ordering is not the same
     g_nosynthetic = gt.GraphView(
         g,
-        vfilt=[g.vp.ids[v] not in synthetic_vertices for v in g.vertices()],
+        vfilt=lambda v: g.vp.ids[v] not in synthetic_vertices,
         efilt=1-g.ep.self_loop.fa,
     )
 
     # Determine color and flavor text
     # g.vp.color = g.new_vertex_property('vector<double>')
     g.vp.color = g.new_vertex_property('string')  # Can't show with text if set to `vector<double>``
+    g.vp.shape = g.new_vertex_property('string')
     g.vp.text_synthetic = g.new_vertex_property('string')
     g.vp.text = g.new_vertex_property('string')
     for v in g.vertices():
@@ -143,25 +134,31 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
             g.vp.color[v] = rgba_to_hex(palette[0])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
+            g.vp.shape[v] = 'hexagon'
             # root = v
         # Cell-type
         elif v_id in cell_vertices:
             g.vp.color[v] = rgba_to_hex(palette[1])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
+            g.vp.shape[v] = 'pentagon'
         # Default
         else:
             is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
             is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
             if is_tf and not is_tg:
                 g.vp.color[v] = rgba_to_hex(palette[2])
+                g.vp.shape[v] = 'triangle'
             elif not is_tf and is_tg:
                 g.vp.color[v] = rgba_to_hex(palette[3])
+                g.vp.shape[v] = 'circle'
             elif is_tf and is_tg:
                 g.vp.color[v] = rgba_to_hex(palette[4])
+                g.vp.shape[v] = 'triangle'  # Same as just tf
             else:
                 # Only connections from synthetic node
                 g.vp.color[v] = '#FFFFFF'
+                g.vp.shape[v] = 'circle'  # Default
             # Add text to outer nodes (optional)
             g.vp.text[v] = v_id
 
@@ -169,201 +166,3 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
     g_noself = gt.GraphView(g, efilt=1-g.ep.self_loop.fa)
 
     return g_noself
-
-
-def subset_graph(source, target):
-    "Subset `source` graph nodes to those present in `target`"
-    return gt.GraphView(
-        source,
-        vfilt=[source.vp.ids[v] in [target.vp.ids[v]
-                                    for v in target.vertices()]
-                for v in source.vertices()],
-    )
-
-
-def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
-    """
-    Subsets a graph to nodes in `g` connected to those in `vertices`.
-    """
-    # TODO: Add degrees of difference, i.e. 2nd gen connections and below
-    # Convert ids to vertices
-    vertices_new = []
-    if verticies_are_ids:
-        for vid in vertices:
-            vertices_new.append(gt.find_vertex(g, g.vp.ids, vid)[0])
-    vertices = vertices_new
-
-    # Select vertices
-    vfilt = []
-    for v in vertices:
-        vfilt.append(v)
-        for vn in v.all_neighbors():
-            if include_synthetic or not g.vp.text_synthetic[vn]:
-                vfilt.append(vn)
-
-    # Convert to proper format
-    vfilt = [v in vfilt for v in g.vertices()]
-
-    return gt.GraphView(
-        g,
-        vfilt=vfilt,
-    )
-
-
-def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
-    """
-    Concatenate all graphs provided, assesses duplicates by IDs
-    """
-    g = None
-    g_coefs = {}
-    for i, gc in enumerate(graphs):
-        # Copy if first
-        if not g:
-            _add_attribute_to_dict(
-                g_coefs,
-                gc.edges(),
-                indexer=lambda e: _get_edge_string(gc, e),
-                attribute=gc.ep.coef,
-                default=lambda: [0 for _ in range(len(graphs))],
-                index=i,
-            )
-            g = gc.copy()
-            continue
-
-        # Get common vertices
-        vertex_map = gc.new_vertex_property('int')
-        for v in gc.vertices():
-            # Find corresponding v in g
-            vid = gc.vp.ids[v]
-            idx = gt.find_vertex(g, g.vp.ids, vid)  # Not really idx, actually list of vertex refs
-
-            # Cases for finding
-            if not idx:
-                vertex_map[v] = -1
-            elif len(idx) == 1:
-                vertex_map[v] = int(idx[0])
-            else:
-                raise LookupError(f'ID \'{vid}\' has duplicate entries in \'g\'.')
-
-
-        # Track coefs
-        _add_attribute_to_dict(
-            g_coefs,
-            gc.edges(),
-            indexer=lambda e: _get_edge_string(gc, e),
-            attribute=gc.ep.coef,
-            default=lambda: [0 for _ in range(len(graphs))],
-            index=i,
-        )
-
-        # Concatenate (assumes all vertex and edge properties are the same)
-        # TODO: Other props, add coef averaging
-        g, props = gt.graph_union(
-            g,
-            gc,
-            intersection=vertex_map,
-            props=[
-                (g.vp.color, gc.vp.color),
-                (g.vp.ids, gc.vp.ids),
-                (g.vp.text, gc.vp.text),
-                (g.vp.text_synthetic, gc.vp.text_synthetic),
-                (g.ep.coef, gc.ep.coef),
-            ],
-            include=True)
-        g.vp.color, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
-
-    # Label self loops
-    g.ep.self_loop = g.new_edge_property('bool')
-    gt.label_self_loops(g, eprop=g.ep.self_loop)
-
-    # Add processed attributes
-    g.vp.self_loop_value = g.new_vertex_property('double')
-    g.ep.color = g.new_edge_property('vector<double>')
-    for e in g.edges():
-        # Get coefs
-        coefs = g_coefs[_get_edge_string(g, e)]
-
-        # Get processed attributes
-        in_graph = [c != 0 for c in coefs]
-        present_coef = np.mean([c for c in coefs if c != 0]) if exclude_zeroes_from_mean else np.mean(coefs)
-        color = [0, 0, 0, 0]
-
-        # Set color
-        if sum(in_graph) == len(graphs) or not color:
-            color[:3] = [0, 0, 0]
-        else:
-            # Get color index
-            cindex = ''.join([str(int(b)) for b in in_graph])[::-1]  # Convert to binary
-            cindex = int(cindex, 2) # Binary to int
-            color[:3] = colorsys.hsv_to_rgb(cindex*(1./len(graphs)), 1, 1)
-
-        # Set alpha
-        color[3] = get_alpha(present_coef)
-
-        # Write
-        g.ep.color[e] = color
-        if g.ep.self_loop:
-            g.vp.self_loop_value[e.source()] = present_coef
-
-    return g
-
-
-def _get_edge_string(g, e):
-    return f'{g.vp.ids[e.source()]}-{g.vp.ids[e.target()]}'
-
-
-def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
-    """
-    Add result `dict[indexer[i]] = attribute[i]` for `i` in `iterator` in-place
-    """
-    for item in iterator:
-        if not indexer(item) in dict:
-            dict[indexer(item)] = default()
-        if index is None:
-            dict[indexer(item)].append(attribute[item])
-        else:
-            dict[indexer(item)][index] = attribute[item]
-
-
-def _normalize_dict_item_length(dict, length, default=0):
-    """
-    Normalize dictionary array length in-place
-    """
-    for k in dict.keys():
-        if len(dict[k]) > length:
-            raise IndexError('Dictionary entry too long.')
-        elif len(dict[k]) < length:
-            dict[k] += [default for _ in range(length - len(dict[k]))]
-
-
-def get_graph_pos(g, scale=None):
-    # Compute scale
-    if not scale:
-        scale = 20 * np.sqrt(g.num_vertices())
-
-    # Compute layout
-    # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
-    # return gt.sfdp_layout(g, eweight=g.ep.coef)
-    # return gt.arf_layout(g, weight=g.ep.coef)
-    return gt.fruchterman_reingold_layout(g, weight=g.ep.coef, scale=scale)
-
-
-def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
-    # NOTE: Probably a way to do this without `source_graph`
-    converted_map = target_graph.new_vertex_property('vector<double>')
-    for v in source_graph.vertices():
-        # Find corresponding v in target_graph
-        vid = source_graph.vp.ids[v]
-        idx = gt.find_vertex(target_graph, target_graph.vp.ids, vid)
-
-        # Cases for finding
-        if idx:
-            if len(idx) > 1: raise LookupError(f'ID \'{vid}\' has duplicate entries in \'g\'.')
-            converted_map[idx[0]] = vertex_map[v]
-
-    if debug:
-        for v in target_graph.vertices():
-            if not converted_map[v]:
-                print(f'\'{target_graph.vp.ids[v]}\' not defined in `vertex_map`.')
-
-    return converted_map

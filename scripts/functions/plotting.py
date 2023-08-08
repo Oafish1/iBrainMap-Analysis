@@ -164,7 +164,8 @@ def plot_sankey(meta, flow, order=None, use_nan=False):
 
 
 ### Graph visualizations
-def visualize_graph(g, pos=None, scale=.06, ax=None):
+def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
+    if not scale: scale = get_default_scale(g)
     if not ax: ax = plt.gca()
     if not pos: pos = get_graph_pos(g)
     # TODO: Prioritize synthetic nodes on top
@@ -175,6 +176,7 @@ def visualize_graph(g, pos=None, scale=.06, ax=None):
         pos=pos,
         ink_scale=scale,
         vertex_fill_color=g.vp.color,
+        vertex_shape=g.vp.shape,
         vertex_size=gt.prop_to_size(g.vp.self_loop_value, 20, 40, power=1.5),
         vertex_text=g.vp.text,
         vertex_font_size=8,
@@ -182,23 +184,31 @@ def visualize_graph(g, pos=None, scale=.06, ax=None):
         # edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
         edge_color=g.ep.color,
         edge_end_marker='arrow',
-        edge_marker_size=gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
+        edge_marker_size=10,  # gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
         mplfig=ax,
     )
+
+    if legend: plot_legend
+
+
+def plot_legend(hub=False, ax=None):
+    if not ax: ax = plt.gca()
 
     # Custom Legend
     palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
     legend_elements = [
-        # Line2D([0], [0], marker='o', color='gray', label='Hub', markerfacecolor=palette[0], markersize=15),  # Hub
-        Line2D([0], [0], marker='o', color='gray', label='Cell Type', markerfacecolor=palette[1], markersize=15),
-        Line2D([0], [0], marker='o', color='gray', label='TG', markerfacecolor=palette[3], markersize=15),
-        Line2D([0], [0], marker='o', color='gray', label='TF', markerfacecolor=palette[2], markersize=15),
-        Line2D([0], [0], marker='o', color='gray', label='TF+TG', markerfacecolor=palette[4], markersize=15),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='p', markerfacecolor=palette[1], label='Cell Type'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=palette[4], label='TF+TG'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=palette[2], label='TF'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='o', markerfacecolor=palette[3], label='TG'),
     ]
+    if hub:
+        legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='h', markerfacecolor=palette[1], label='Hub'),] + legend_elements
     ax.legend(handles=legend_elements, loc='best')
 
 
-def visualize_graph_diffusion(g, pos=None, scale=.12, ax=None):
+def visualize_graph_diffusion(g, pos=None, scale=None, ax=None):
+    if not scale: scale = get_default_scale(g)
     if not ax: ax = plt.gca()
     if not pos: pos = get_graph_pos(g)
     # TODO: Prioritize synthetic nodes on top
@@ -209,6 +219,7 @@ def visualize_graph_diffusion(g, pos=None, scale=.12, ax=None):
         pos=pos,
         ink_scale=scale,
         vertex_fill_color=g.vp.diffusion_color,
+        vertex_shape=g.vp.shape,
         vertex_size=gt.prop_to_size(g.vp.self_loop_value, 20, 40, power=1.5),
         vertex_text=g.vp.text,
         vertex_font_size=4,
@@ -216,7 +227,7 @@ def visualize_graph_diffusion(g, pos=None, scale=.12, ax=None):
         # edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
         edge_color=g.ep.color,
         edge_end_marker='arrow',
-        edge_marker_size=gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
+        edge_marker_size=10,  # gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
         mplfig=ax,
     )
 
@@ -268,3 +279,65 @@ def visualize_graph_state(g, scale=.01, highlight=False, ax=None):
             edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
             mplfig=ax,
         )
+
+
+def plot_enrichment(df, ax=None):
+    if not ax: ax = plt.gca()
+
+    # Plot
+    sns.scatterplot(
+        data=df,
+        x='Disease',
+        y='Cell Type',
+        size='-log10(p)',
+        color='black',
+        sizes=(10, 200),
+        ax=ax,
+    )
+    # Zoom X
+    margin = .5
+    min_xlim, max_xlim = ax.get_xlim()
+    min_xlim -= margin; max_xlim += margin
+    # Zoom Y
+    max_ylim, min_ylim = ax.get_ylim()
+    min_ylim -= margin; max_ylim += margin
+    ax.set(xlim=(min_xlim, max_xlim), ylim=(max_ylim, min_ylim))
+    # Formatting
+    plt.grid()
+    plt.xticks(rotation=90)
+    # Legend
+    plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
+
+
+def plot_individual_edge_comparison(g, sample_ids, ax=None):
+    if not ax: ax = plt.gca()
+
+    # Assemble dataframe
+    df = {k: [] for k in ['id'] + sample_ids}
+    for e in g.edges():
+        coefs = g.ep.coefs[e]
+        df['id'].append(get_edge_string(g, e))
+        for i, sample_id in enumerate(sample_ids):
+            df[sample_id].append(coefs[i])
+    df = pd.DataFrame(df)
+
+    # Plot
+    sns.scatterplot(
+        data=df,
+        x=sample_ids[0],
+        y=sample_ids[1],
+        color='black',
+        ax=ax,
+    )
+
+    # Plot y=x
+    lims = [
+            max(ax.get_xlim()[0], ax.get_ylim()[0]),
+            min(ax.get_xlim()[1], ax.get_ylim()[1])]
+    ax.plot(lims, lims, '-', color='black', alpha=0.3)
+
+    # Formatting
+    # ax.set_xscale('log')
+    # ax.set_yscale('log')
+
+    return df
