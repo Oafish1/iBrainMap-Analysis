@@ -25,7 +25,6 @@ def figure_diffusion(
         individual_sample_ids,
 ):
     # Generate figure layout
-    scale = 3
     mosaic = [
         ['A2', 'A2', 'A2', 'B1', 'B1', 'B1',],
         ['A2', 'A2', 'A2', 'B1', 'B1', 'B1',],
@@ -33,8 +32,7 @@ def figure_diffusion(
         ['.', 'D1', 'D1', 'E1', 'E1', 'E1',],
         ['.', 'D1', 'D1', 'E2', 'E2', 'E2',],
     ]
-    fig = plt.figure(figsize=(scale*len(mosaic[0]), scale*len(mosaic)), constrained_layout=True)
-    axs = fig.subplot_mosaic(mosaic)
+    fig, axs = get_mosaic(mosaic)
     axs['E1'].get_shared_x_axes().join(axs['E1'], axs['E2'])
 
     # Get common pos for `diff_g_individual` and `diff_g_other`
@@ -91,15 +89,13 @@ def figure_data_driven(
         individual_sample_ids,
 ):
     # Generate figure layout
-    scale = 3
     mosaic = [
         ['A1', 'A1', 'A2', 'A2', 'B1', 'B1',],
         ['A1', 'A1', 'A2', 'A2', 'B2', 'B2',],
         ['A3', 'A3', 'A4', 'A4', 'C1', 'C1',],
         ['A3', 'A3', 'A4', 'A4', 'C1', 'C1',],
     ]
-    fig = plt.figure(figsize=(scale*len(mosaic[0]), scale*len(mosaic)), constrained_layout=True)
-    axs = fig.subplot_mosaic(mosaic)
+    fig, axs = get_mosaic(mosaic)
     axs['B1'].get_shared_x_axes().join(axs['B1'], axs['B2'])
 
     # Get common pos for `diff_g_individual` and `data_g_other`

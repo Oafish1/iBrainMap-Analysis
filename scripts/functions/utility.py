@@ -211,13 +211,14 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
             intersection=vertex_map,
             props=[
                 (g.vp.color, gc.vp.color),
+                (g.vp.shape, gc.vp.shape),
                 (g.vp.ids, gc.vp.ids),
                 (g.vp.text, gc.vp.text),
                 (g.vp.text_synthetic, gc.vp.text_synthetic),
                 (g.ep.coef, gc.ep.coef),
             ],
             include=True)
-        g.vp.color, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
+        g.vp.color, g.vp.shape, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
 
     # Label self loops
     g.ep.self_loop = g.new_edge_property('bool')
@@ -324,7 +325,7 @@ def get_graph_pos(g, scale=None):
     # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
     # return gt.sfdp_layout(g, eweight=g.ep.coef)
     # return gt.arf_layout(g, weight=g.ep.coef)
-    return gt.fruchterman_reingold_layout(g, weight=g.ep.coef, scale=scale)
+    return gt.fruchterman_reingold_layout(g, weight=g.ep.coef, grid=False, scale=scale)
 
 
 def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
@@ -356,7 +357,7 @@ def get_alpha(coef):
     return alpha
 
 
-def remove_text_by_centrality(g, eps=1e-10):
+def remove_text_by_centrality(g, percentile=95, eps=1e-10):
     # Calculate betweenness
     vertex_betweenness, _ = gt.betweenness(g)
 
@@ -365,7 +366,7 @@ def remove_text_by_centrality(g, eps=1e-10):
         g,
         vfilt=[g.vp.text_synthetic[v] == '' for v in g.vertices()],
     )
-    threshold = np.percentile([vertex_betweenness[v] for v in g_nosynthetic.vertices()], 90)
+    threshold = np.percentile([vertex_betweenness[v] for v in g_nosynthetic.vertices()], percentile)
     threshold = max(eps, threshold)  # Use eps as min threshold
 
     # Remove text

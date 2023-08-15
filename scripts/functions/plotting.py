@@ -171,24 +171,31 @@ def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
     # TODO: Prioritize synthetic nodes on top
     np.random.seed(42)
     gt.seed_rng(42)
-    gt.graph_draw(
+    visualize_graph_base(
         g,
         pos=pos,
         ink_scale=scale,
-        vertex_fill_color=g.vp.color,
-        vertex_shape=g.vp.shape,
         vertex_size=gt.prop_to_size(g.vp.self_loop_value, 20, 40, power=1.5),
-        vertex_text=g.vp.text,
         vertex_font_size=8,
         vertex_text_position=-2,  # No automatic node scaling
         # edge_pen_width=gt.prop_to_size(g.ep.coef, .1, 1, power=1.5),
-        edge_color=g.ep.color,
-        edge_end_marker='arrow',
         edge_marker_size=10,  # gt.prop_to_size(g.ep.coef, 2, 7, power=1.5),
         mplfig=ax,
     )
 
     if legend: plot_legend
+
+
+def visualize_graph_base(g, **kwargs):
+    gt.graph_draw(
+        g,
+        vertex_fill_color=g.vp.color,
+        vertex_shape=g.vp.shape,
+        vertex_text=g.vp.text,
+        edge_color=g.ep.color,
+        edge_end_marker='none',
+        **kwargs,
+    )
 
 
 def plot_legend(hub=False, ax=None):
@@ -341,3 +348,97 @@ def plot_individual_edge_comparison(g, sample_ids, ax=None):
     # ax.set_yscale('log')
 
     return df
+
+
+def get_mosaic(mosaic, scale=3):
+    fig = plt.figure(figsize=(scale*len(mosaic[0]), scale*len(mosaic)), constrained_layout=True)
+    axs = fig.subplot_mosaic(mosaic)
+
+    return fig, axs
+
+
+def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_pos=None, axs, subject_ids):
+    # Aggregate and calculate node positions
+    if concatenated_graph is None:
+        concatenated_graph = concatenate_graphs(*graphs)
+        concatenated_graph = remove_text_by_centrality(concatenated_graph)
+    if concatenated_pos is None:
+        concatenated_pos = get_graph_pos(concatenated_graph)
+
+
+    # Plot
+    for i, (g, sid) in enumerate(zip(graphs, subject_ids)):
+        ax = axs[i]
+        if i:
+            axs[0].get_shared_x_axes().join(axs[0], ax)
+            axs[0].get_shared_y_axes().join(axs[0], ax)
+        visualize_graph_base(
+            gt.GraphView(concatenated_graph, efilt=[False for e in concatenated_graph.edges()]),
+            pos=concatenated_pos,
+            vertex_text_position=-2,
+            vertex_font_size=1,
+            ink_scale=1,
+            mplfig=ax)
+        visualize_graph_base(
+            g,
+            pos=convert_vertex_map(concatenated_graph, g, concatenated_pos),
+            vertex_text_position=-2,
+            vertex_font_size=1,
+            ink_scale=1,
+            mplfig=ax)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title(sid)
+
+
+def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges=1, num_x_labels=15):
+    if df is None:
+        assert subject_ids is not None
+        df, _ = compute_edge_summary(graphs=graphs, subject_ids=subject_ids, min_common_edges=min_common_edges)
+
+    # Melt by subject ID
+    df_long = pd.melt(df, id_vars=['Edge', 'Variance', 'Mean'], var_name='Subject ID', value_name='Weight')
+    df_long = df_long.sort_values(['Variance', 'Mean'], ascending=[True, False])
+
+    # Don't plot zero values
+    df_long = df_long.loc[df_long['Weight']!=0]
+
+    # Plot
+    lp = sns.lineplot(data=df_long, x='Edge', y='Weight', hue='Subject ID', ax=ax)
+    plt.xlabel(None)
+    plt.xticks(rotation=90)
+
+    # Only show `num_x_labels` x labels
+    for i, label in enumerate(lp.get_xticklabels()):
+        if i % int(len(df)/num_x_labels) != 0: label.set_visible(False)
+
+
+def plot_aggregate_edge_summary(contrast_subject_ids=None, *, contrast=None, column=None, ax, min_common_edges=1, num_x_labels=15, **kwargs):
+    # Setup
+    if contrast is not None: contrast_concatenated_graphs, contrast_concatenated_subject_ids = contrast
+    else:
+        assert column is not None
+        contrast_concatenated_graphs, contrast_concatenated_subject_ids = compute_aggregate_edge_summary(contrast_subject_ids, column=column, **kwargs)
+
+    # Aggregate data
+    aggregate_df = pd.DataFrame(columns=['Edge', 'Subgroup', 'Variance', 'Mean'])
+    for key, concatenated_graph in contrast_concatenated_graphs.items():
+        df, _ = compute_edge_summary(concatenated_graph=concatenated_graph, subject_ids=contrast_concatenated_subject_ids[key])
+        df['Subgroup'] = key
+        aggregate_df = pd.concat([aggregate_df, df[list(aggregate_df.columns)]])
+
+    # Remove edges with few readings
+    unique, counts = np.unique(aggregate_df['Edge'], return_counts=True)
+    aggregate_df = aggregate_df.loc[aggregate_df['Edge'].isin(unique[counts >= min_common_edges])]
+
+    # Sort
+    aggregate_df = aggregate_df.sort_values(['Variance', 'Mean'], ascending=[True, False])
+
+    # Plot
+    lp = sns.lineplot(data=aggregate_df, x='Edge', y='Variance', hue='Subgroup', ax=ax)
+    plt.xlabel(None)
+    plt.xticks(rotation=90)
+
+    # Only show `num_x_labels` x labels
+    for i, label in enumerate(lp.get_xticklabels()):
+        if i % int(len(df)/num_x_labels) != 0: label.set_visible(False)

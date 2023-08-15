@@ -166,3 +166,47 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
     g_noself = gt.GraphView(g, efilt=1-g.ep.self_loop.fa)
 
     return g_noself
+
+
+def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, min_common_edges=1):
+    # Setup
+    assert graphs is not None or concatenated_graph is not None
+    if graphs is not None: concatenated_graph = concatenate_graphs(*graphs)
+
+    # Format edge weights
+    df = pd.DataFrame(columns=['Edge'] + subject_ids)
+    for e in concatenated_graph.edges():
+        edge_name = get_edge_string(concatenated_graph, e)
+        coefs = concatenated_graph.ep.coefs[e]
+        # Take only edges which are common between two or more graphs
+        if sum([c!=0 for c in coefs]) >= min_common_edges:
+            df.loc[df.shape[0]] = [edge_name] + list(coefs)
+
+    # Find variance and mean
+    df['Variance'] = np.var(df.iloc[:, 1:1+len(coefs)], axis=1)
+    df['Mean'] = np.mean(df.iloc[:, 1:1+len(coefs)], axis=1)
+    # df = df.sort_values(['Variance', 'Mean'], ascending=[True, False])
+    # df['index'] = list(range(len(df)))  # Store sort
+
+    return df, concatenated_graph
+
+
+def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=20):
+    # For each subgroup of the contrast
+    contrast_concatenated_graphs = {}; contrast_concatenated_subject_ids = {}
+    for key, subject_ids in contrast_subject_ids.items():
+        # Get concatenated graph
+        graphs = []; sids = []
+        for sid in tqdm(np.random.choice(subject_ids, len(subject_ids), replace=False)):  # , total=len(subject_ids)
+            try: graphs.append(compute_graph(load_graph_by_id(sid, column=column)))
+            except: continue
+            sids.append(sid)
+            if len(sids) >= max_graphs: break
+        concatenated_graph = concatenate_graphs(*graphs)
+        contrast_concatenated_graphs[key] = concatenated_graph
+        contrast_concatenated_subject_ids[key] = sids
+
+        # Cleanup
+        del graphs
+
+    return contrast_concatenated_graphs, contrast_concatenated_subject_ids
