@@ -8,6 +8,7 @@
 - Many new plots, including enrichment and individual edge comparison
 - New strategy for plot exporting
 - Refactored computation section
+- Update figures
 
 ### 2023-08-01 (1-3)
 - Add coloration option to graph combination
