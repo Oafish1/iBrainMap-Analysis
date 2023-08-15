@@ -2,6 +2,7 @@ import colorsys
 
 import graph_tool.all as gt
 import numpy as np
+from tqdm import tqdm
 
 from .file import *
 
@@ -157,7 +158,7 @@ def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
     )
 
 
-def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
+def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inplace=True):
     """
     Concatenate all graphs provided, assesses duplicates by IDs
     """
@@ -217,7 +218,7 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
                 (g.vp.text_synthetic, gc.vp.text_synthetic),
                 (g.ep.coef, gc.ep.coef),
             ],
-            include=True)
+            include=inplace)
         g.vp.color, g.vp.shape, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
 
     # Label self loops
@@ -225,7 +226,7 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
     gt.label_self_loops(g, eprop=g.ep.self_loop)
 
     # Remove duplicate edges
-    g = _remove_duplicate_edges(g)
+    g = remove_duplicate_edges(g)
 
     # Add processed attributes
     g.vp.self_loop_value = g.new_vertex_property('double')
@@ -245,7 +246,7 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True):
         color[:3] = _determine_color(g, e)
 
         # Set alpha
-        color[3] = get_alpha(present_coef)
+        color[3] = get_alpha(present_coef) / len(graphs)**(1/2)
 
         # Write
         g.ep.color[e] = color
@@ -283,13 +284,20 @@ def _determine_color(g, e, method='presence'):
             hue = 0.
     else:
         hue = cindex * (1. / (2**len(coefs) - 2))
-    color = colorsys.hsv_to_rgb(hue, 1, .75)
+    color = colorsys.hsv_to_rgb(hue, 1, .5)
 
     return color
 
 
+def get_alpha(coef):
+    x = np.log10(1+coef)  # Log scaling
+    alpha = x / (1+x)
+    alpha = .05 + .6 * alpha  # Add floor and ceiling
+    return alpha
+
+
 def get_edge_string(g, e):
-    return f'{g.vp.ids[e.source()]}-{g.vp.ids[e.target()]}'
+    return f'{g.vp.ids[e.source()]}--{g.vp.ids[e.target()]}'
 
 
 def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
@@ -316,18 +324,6 @@ def _normalize_dict_item_length(dict, length, default=0):
             dict[k] += [default for _ in range(length - len(dict[k]))]
 
 
-def get_graph_pos(g, scale=None):
-    # Compute scale
-    if not scale:
-        scale = 20 * np.sqrt(g.num_vertices())
-
-    # Compute layout
-    # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
-    # return gt.sfdp_layout(g, eweight=g.ep.coef)
-    # return gt.arf_layout(g, weight=g.ep.coef)
-    return gt.fruchterman_reingold_layout(g, weight=g.ep.coef, grid=False, scale=scale)
-
-
 def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
     # NOTE: Probably a way to do this without `source_graph`
     converted_map = target_graph.new_vertex_property('vector<double>')
@@ -349,30 +345,26 @@ def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
     return converted_map
 
 
-def get_alpha(coef):
-    x = np.log10(1+coef)  # Log scaling
-    # x = x**(1/3)  # Power scaling
-    alpha = x / (1+x)
-    alpha = .05 + .95 * alpha  # Add floor
-    return alpha
-
-
-def remove_text_by_centrality(g, percentile=95, eps=1e-10):
+def remove_text_by_centrality(g, preserve_synthetic=True, percentile=90, eps=1e-10):
     # Calculate betweenness
-    vertex_betweenness, _ = gt.betweenness(g)
+    vertex_centrality, _ = gt.betweenness(g)
+    # vertex_centrality = gt.pagerank(g)
 
     # Get no synthetic view
-    g_nosynthetic = gt.GraphView(
-        g,
-        vfilt=[g.vp.text_synthetic[v] == '' for v in g.vertices()],
-    )
-    threshold = np.percentile([vertex_betweenness[v] for v in g_nosynthetic.vertices()], percentile)
+    if preserve_synthetic:
+        g_view = gt.GraphView(
+            g,
+            vfilt=lambda v: g.vp.text_synthetic[v] == '',
+        )
+    else: g_view = g
+    threshold = np.percentile([vertex_centrality[v] for v in g_view.vertices()], percentile)
     threshold = max(eps, threshold)  # Use eps as min threshold
+    # print(sum([vertex_centrality[v] >= threshold for v in g_view.vertices()]))
 
     # Remove text
-    for v in g_nosynthetic.vertices():
-        if vertex_betweenness[v] < threshold:
-            g_nosynthetic.vp.text[v] = ''
+    for v in g_view.vertices():
+        if vertex_centrality[v] < threshold:
+            g_view.vp.text[v] = ''
 
     return g
 
@@ -385,17 +377,42 @@ def get_intersection(g):
 
 
 def cull_isolated_leaves(g):
-    # Remove nodes which aren't connected to a synthetic node
-    return gt.GraphView(
-        g,
-        vfilt=lambda v: (g.vp.text_synthetic[v] != '') or (len([n for n in v.all_neighbors() if g.vp.text_synthetic[n]]) > 0),
-    )
+    # Extract largest component
+    return gt.extract_largest_component(g, directed=False)
+
+    # # Return maximal clique
+    # largest_clique = []
+    # for clique in gt.max_cliques(g):
+    #     if len(clique) > len(largest_clique):
+    #         largest_clique = clique
+    # print(f'Largest Clique: {len(largest_clique)}')
+
+    # return gt.GraphView(g, vfilt=lambda v: int(v) in list(largest_clique))
+
+    # # Remove nodes which aren't connected to a synthetic node
+    # return gt.GraphView(
+    #     g,
+    #     vfilt=lambda v: (g.vp.text_synthetic[v] != '') or (len([n for n in v.all_neighbors() if g.vp.text_synthetic[n]]) > 0),
+    # )
 
 
-def _remove_duplicate_edges(g):
+def remove_duplicate_edges(g):
+    # Detect duplicates
+    is_duplicate = g.new_edge_property('bool')
+    seen = []
+    print('Removing duplicate edges...')
+    for e in (pb := tqdm(g.edges(), total=g.num_edges())):
+        # pb.set_description('Removing duplicate edges')
+        hashObject = (int(e.source()), int(e.target()))
+        if hashObject in seen: is_duplicate[e] = True
+        else:
+            is_duplicate[e] = False
+            seen.append(hashObject)
+
+    # Filter
     return gt.GraphView(
         g,
-        efilt=lambda e: not _is_duplicate_edge(g, e),
+        efilt=lambda e: not is_duplicate[e],
     )
 
 
@@ -405,8 +422,6 @@ def _is_duplicate_edge(g, e):
     target = e.target()
 
     # Detect matches
-    matches = []
-    priority = False
     for f in g.edges():
         if e == f:
             # Return false if duplicate but first instance
@@ -445,3 +460,27 @@ def color_by_significance(g):
 
 def get_default_scale(g):
     return .01 * (1 + np.log(g.num_vertices()))
+
+
+def transfer_text_labels(g, gc):
+    "Transfer text labels from `g` to `gc` inplace."
+    for v in gc.vertices():
+        matches = gt.find_vertex(g, g.vp.ids, gc.vp.ids[v])
+        if matches: gc.vp.text[v] = g.vp.text[matches[0]]
+
+    return gc
+
+
+def scale_edge_coefs(g, scale):
+    "Scale edge coefs in `g` by `scale`."
+    for e in g.edges():
+        g.ep.coef[e] *= scale
+
+    return g
+
+
+def scale_edge_coefs_list(graph, scale):
+    "Scale edge coefs in `g` by `scale`."
+    graph['coef'] *= scale
+
+    return graph

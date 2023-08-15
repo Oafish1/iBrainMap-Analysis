@@ -361,7 +361,7 @@ def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_
     # Aggregate and calculate node positions
     if concatenated_graph is None:
         concatenated_graph = concatenate_graphs(*graphs)
-        concatenated_graph = remove_text_by_centrality(concatenated_graph)
+    concatenated_graph = remove_text_by_centrality(concatenated_graph.copy())
     if concatenated_pos is None:
         concatenated_pos = get_graph_pos(concatenated_graph)
 
@@ -376,19 +376,20 @@ def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_
             gt.GraphView(concatenated_graph, efilt=[False for e in concatenated_graph.edges()]),
             pos=concatenated_pos,
             vertex_text_position=-2,
-            vertex_font_size=1,
-            ink_scale=1,
+            # vertex_font_size=0,
             mplfig=ax)
         visualize_graph_base(
-            g,
+            transfer_text_labels(concatenated_graph, g),
             pos=convert_vertex_map(concatenated_graph, g, concatenated_pos),
             vertex_text_position=-2,
-            vertex_font_size=1,
+            # vertex_font_size=.5*20/g.num_vertices()**(1/2),
             ink_scale=1,
             mplfig=ax)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_title(sid)
+
+    return g
 
 
 def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges=1, num_x_labels=15):
@@ -398,13 +399,18 @@ def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges
 
     # Melt by subject ID
     df_long = pd.melt(df, id_vars=['Edge', 'Variance', 'Mean'], var_name='Subject ID', value_name='Weight')
-    df_long = df_long.sort_values(['Variance', 'Mean'], ascending=[True, False])
+    df_long = df_long.sort_values(['Variance'], ascending=[True])
 
     # Don't plot zero values
     df_long = df_long.loc[df_long['Weight']!=0]
 
     # Plot
-    lp = sns.lineplot(data=df_long, x='Edge', y='Weight', hue='Subject ID', ax=ax)
+    lp = sns.lineplot(
+        data=df_long,
+        x='Edge', y='Weight', hue='Subject ID',
+        alpha=.5,
+        errorbar=None, estimator=None, n_boot=0,
+        ax=ax)
     plt.xlabel(None)
     plt.xticks(rotation=90)
 
@@ -431,14 +437,43 @@ def plot_aggregate_edge_summary(contrast_subject_ids=None, *, contrast=None, col
     unique, counts = np.unique(aggregate_df['Edge'], return_counts=True)
     aggregate_df = aggregate_df.loc[aggregate_df['Edge'].isin(unique[counts >= min_common_edges])]
 
+    # Get mean difference
+    # TODO: Plot mean difference
+
     # Sort
-    aggregate_df = aggregate_df.sort_values(['Variance', 'Mean'], ascending=[True, False])
+    aggregate_df = aggregate_df.sort_values(['Variance'], ascending=[True])
 
     # Plot
-    lp = sns.lineplot(data=aggregate_df, x='Edge', y='Variance', hue='Subgroup', ax=ax)
+    lp = sns.lineplot(  # Takes a while
+        data=aggregate_df,
+        x='Edge', y='Mean', hue='Subgroup',
+        alpha=.5,
+        errorbar=None, estimator=None, n_boot=0,
+        ax=ax)
     plt.xlabel(None)
     plt.xticks(rotation=90)
 
     # Only show `num_x_labels` x labels
+    len_loop = len(lp.get_xticklabels())
     for i, label in enumerate(lp.get_xticklabels()):
-        if i % int(len(df)/num_x_labels) != 0: label.set_visible(False)
+        if i % int(len_loop/num_x_labels) != 0: label.set_visible(False)
+
+    return aggregate_df
+
+
+def get_graph_pos(g, scale=None):
+    # Compute scale
+    # if not scale:
+    #     scale = 20 * np.sqrt(g.num_vertices())
+
+    # Compute layout
+    print('Calculating positions...')
+    # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
+    return gt.sfdp_layout(g, eweight=g.ep.coef)
+    # return gt.arf_layout(g, weight=g.ep.coef)
+    # return gt.fruchterman_reingold_layout(
+    #     g,
+    #     weight=g.ep.coef,
+    #     grid=False,
+    #     scale=scale,
+    #     n_iter=100)

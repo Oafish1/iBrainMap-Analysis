@@ -1,3 +1,15 @@
+### 2023-08-15 (3)
+- Add new protocol for `cull_isolated_leaves`
+- Fix for gene prioritization cell gene isolation
+- Fix `num_x_labels` bug
+- Fix `remove_text_by_centrality` `efilt` bug
+- Full runs for aggregate comparisons
+- Greatly optimize `concatenate_graphs` through `_remove_duplicate_edges`
+- Many small optimizations and visualizations
+- Optimize `compute_edge_summary`
+- Optimize `plot_aggregate_edge_summary`
+- Visibility updates
+
 ### 2023-08-15 (1-2)
 - Added function to compare individual and aggregate graphs
 - Move figure code to notebooks for the future

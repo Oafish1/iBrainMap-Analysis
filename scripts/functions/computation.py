@@ -21,6 +21,7 @@ def compute_statistics(meta, x, x_sub, filter=.8, **kwargs):
     unique_x_sub = meta[x_sub].unique()
 
     # Calculate per graph
+    print('Calculating statistics...')
     for val, val_sub in tqdm(it.product(unique_x, unique_x_sub), total=len(unique_x)*len(unique_x_sub)):
         graph_ids = list(meta[(meta[x]==val)*(meta[x_sub]==val_sub)]['SubID'])
 
@@ -174,13 +175,19 @@ def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, m
     if graphs is not None: concatenated_graph = concatenate_graphs(*graphs)
 
     # Format edge weights
-    df = pd.DataFrame(columns=['Edge'] + subject_ids)
-    for e in concatenated_graph.edges():
+    # df = pd.DataFrame(columns=['Edge']+subject_ids)
+    df = {k: [] for k in ['Edge']+subject_ids}
+    print('Collecting edges...')
+    for e in tqdm(concatenated_graph.edges(), total=concatenated_graph.num_edges()):
         edge_name = get_edge_string(concatenated_graph, e)
         coefs = concatenated_graph.ep.coefs[e]
         # Take only edges which are common between two or more graphs
         if sum([c!=0 for c in coefs]) >= min_common_edges:
-            df.loc[df.shape[0]] = [edge_name] + list(coefs)
+            row = [edge_name] + list(coefs)
+            # df.loc[df.shape[0]] = row  # Slow
+            for k, v in zip(df, row):
+                df[k].append(v)
+    df = pd.DataFrame(df)
 
     # Find variance and mean
     df['Variance'] = np.var(df.iloc[:, 1:1+len(coefs)], axis=1)
@@ -191,10 +198,10 @@ def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, m
     return df, concatenated_graph
 
 
-def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=20):
+def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=np.inf):
     # For each subgroup of the contrast
     contrast_concatenated_graphs = {}; contrast_concatenated_subject_ids = {}
-    for key, subject_ids in tqdm(contrast_subject_ids.items(), total=len(contrast_subject_ids)):
+    for key, subject_ids in contrast_subject_ids.items():  # , total=len(contrast_subject_ids)
         # Get concatenated graph
         graphs = []; sids = []
         for sid in np.random.choice(subject_ids, len(subject_ids), replace=False):  # , total=len(subject_ids)
