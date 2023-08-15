@@ -194,10 +194,10 @@ def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, m
 def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=20):
     # For each subgroup of the contrast
     contrast_concatenated_graphs = {}; contrast_concatenated_subject_ids = {}
-    for key, subject_ids in contrast_subject_ids.items():
+    for key, subject_ids in tqdm(contrast_subject_ids.items(), total=len(contrast_subject_ids)):
         # Get concatenated graph
         graphs = []; sids = []
-        for sid in tqdm(np.random.choice(subject_ids, len(subject_ids), replace=False)):  # , total=len(subject_ids)
+        for sid in np.random.choice(subject_ids, len(subject_ids), replace=False):  # , total=len(subject_ids)
             try: graphs.append(compute_graph(load_graph_by_id(sid, column=column)))
             except: continue
             sids.append(sid)

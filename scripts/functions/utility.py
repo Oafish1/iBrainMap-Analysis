@@ -283,7 +283,7 @@ def _determine_color(g, e, method='presence'):
             hue = 0.
     else:
         hue = cindex * (1. / (2**len(coefs) - 2))
-    color = colorsys.hsv_to_rgb(hue, 1, 1)
+    color = colorsys.hsv_to_rgb(hue, 1, .75)
 
     return color
 

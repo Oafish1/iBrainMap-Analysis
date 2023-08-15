@@ -1,7 +1,8 @@
-### 2023-08-15
+### 2023-08-15 (1-2)
 - Added function to compare individual and aggregate graphs
 - Move figure code to notebooks for the future
 - New graph comparison plots
+- Visibility updates
 
 ### 2023-08-08 (1-2)
 - Changed the majority of plots
