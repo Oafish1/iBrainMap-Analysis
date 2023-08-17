@@ -191,9 +191,12 @@ def visualize_graph_base(g, **kwargs):
         g,
         vertex_fill_color=g.vp.color,
         vertex_shape=g.vp.shape,
+        vertex_size=g.vp.size,  # vertex_size uses absolute units
         vertex_text=g.vp.text,
         edge_color=g.ep.color,
-        edge_end_marker='none',
+        edge_end_marker='arrow',
+        ink_scale=1,
+        fit_view=.95,
         **kwargs,
     )
 
@@ -357,14 +360,14 @@ def get_mosaic(mosaic, scale=3):
     return fig, axs
 
 
-def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_pos=None, axs, subject_ids):
+def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_pos=None, axs, subject_ids, **kwargs):
     # Aggregate and calculate node positions
+    # NOTE: Supplied concatenated graph must not be pruned
     if concatenated_graph is None:
-        concatenated_graph = concatenate_graphs(*graphs)
+        concatenated_graph = concatenate_graphs(*graphs, threshold=False)
     concatenated_graph = remove_text_by_centrality(concatenated_graph.copy())
     if concatenated_pos is None:
         concatenated_pos = get_graph_pos(concatenated_graph)
-
 
     # Plot
     for i, (g, sid) in enumerate(zip(graphs, subject_ids)):
@@ -372,24 +375,24 @@ def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_
         if i:
             axs[0].get_shared_x_axes().join(axs[0], ax)
             axs[0].get_shared_y_axes().join(axs[0], ax)
+        inverse_graph = make_vertices_white(get_inverse_graph(remove_edges(concatenated_graph.copy()), g))
         visualize_graph_base(
-            gt.GraphView(concatenated_graph, efilt=[False for e in concatenated_graph.edges()]),
-            pos=concatenated_pos,
+            inverse_graph,
+            pos=convert_vertex_map(concatenated_graph, inverse_graph, concatenated_pos),
             vertex_text_position=-2,
-            # vertex_font_size=0,
-            mplfig=ax)
+            vertex_font_size=0,
+            mplfig=ax,
+            **kwargs)
         visualize_graph_base(
             transfer_text_labels(concatenated_graph, g),
             pos=convert_vertex_map(concatenated_graph, g, concatenated_pos),
             vertex_text_position=-2,
             # vertex_font_size=.5*20/g.num_vertices()**(1/2),
-            ink_scale=1,
-            mplfig=ax)
+            mplfig=ax,
+            **kwargs)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_title(sid)
-
-    return g
 
 
 def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges=1, num_x_labels=15):
@@ -469,11 +472,36 @@ def get_graph_pos(g, scale=None):
     # Compute layout
     print('Calculating positions...')
     # sfdp_layout(g), gt.arf_layout(g, max_iter=1000), radial_tree_layout(g, root), random_layout(g)
-    return gt.sfdp_layout(g, eweight=g.ep.coef)
+    # return gt.random_layout(g)
     # return gt.arf_layout(g, weight=g.ep.coef)
-    # return gt.fruchterman_reingold_layout(
+
+    # Random
+    # pos = gt.random_layout(g)
+
+    # SFDP
+    pos = gt.sfdp_layout(
+        g,
+        # vweight=g.vp.self_loop_value,
+        # eweight=g.ep.coef,
+        # kappa=.5, gamma=.1, r=2,
+        # r=50,
+        # p=4,  # Fewer stragglers very far away
+    )
+
+    # Fruchterman Reingold
+    # pos = gt.fruchterman_reingold_layout(
     #     g,
-    #     weight=g.ep.coef,
-    #     grid=False,
-    #     scale=scale,
-    #     n_iter=100)
+    #     # weight=g.ep.coef,
+    #     # grid=False,
+    #     # scale=scale,
+    #     # n_iter=100,
+    # )
+
+    # Debug
+    # for v in g.vertices():
+    #     print(pos[v])
+
+    pos = scale_pos_to_range(g, pos)
+    pos = scale_pos_by_distance(g, pos)
+    pos = scale_pos_to_range(g, pos)
+    return pos

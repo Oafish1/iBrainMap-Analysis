@@ -1,6 +1,7 @@
 import colorsys
 
 import graph_tool.all as gt
+import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
@@ -105,18 +106,27 @@ def detect_synthetic_vertices_list(graph, hub_present=False):
         synthetic_vertices = list(graph[graph['TG'] == 'hub']['TF'])
     else:
         synthetic_vertices = [
-            s for s in np.unique(graph['TG'])
-            if (
-                s != s.upper()
-                or s in ['EN', 'IN', 'OPC', 'PC', 'VLMC', 'PVM', 'SMC']
-                or sum([s.startswith(t) for t in ['EN_', 'IN_', 'CD8_']])
-            )]
+            s for s in np.unique(list(graph['TG']) + list(graph['TF']))
+            if string_is_synthetic(s)]
         synthetic_vertices += ['EN', 'IN', 'OPC', 'PC']
     return synthetic_vertices
 
 
+def string_is_synthetic(s):
+    "Detect synthetic node ids"
+    if (
+        s != s.upper()
+        or s in ['EN', 'IN', 'OPC', 'PC', 'VLMC', 'PVM', 'SMC']
+        or sum([s.startswith(t) for t in ['EN_', 'IN_', 'CD8_']])
+    ): return True
+
+
 def detect_synthetic_vertices_graph(g):
-    return [g.vp.ids[v] for v in g.vertices() if g.vp.text_synthetic[v]]
+    # If has g.vp.ids
+    return [g.vp.ids[v] for v in g.vertices() if string_is_synthetic(g.vp.ids[v])]
+
+    # If has g.vp.text_synthetic[v]
+    # return [g.vp.ids[v] for v in g.vertices() if g.vp.text_synthetic[v]]
 
 
 def subset_graph(source, target):
@@ -158,10 +168,14 @@ def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
     )
 
 
-def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inplace=True):
-    """
-    Concatenate all graphs provided, assesses duplicates by IDs
-    """
+def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inplace=True, threshold=None):
+    "Concatenate all graphs provided, assesses duplicates by IDs"
+    # Default parameters
+    if threshold is None:
+        threshold = len(graphs)**(1/4 - 1)
+        # threshold = np.log(1+len(graphs)) / len(graphs)
+
+    # Start aggregating
     g = None
     g_coefs = {}
     for i, gc in enumerate(graphs):
@@ -216,10 +230,17 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
                 (g.vp.ids, gc.vp.ids),
                 (g.vp.text, gc.vp.text),
                 (g.vp.text_synthetic, gc.vp.text_synthetic),
+                (g.vp.self_loop_value, gc.vp.self_loop_value),
                 (g.ep.coef, gc.ep.coef),
+                (g.ep.self_loop, gc.ep.self_loop),
             ],
             include=inplace)
-        g.vp.color, g.vp.shape, g.vp.ids, g.vp.text, g.vp.text_synthetic, g.ep.coef = props
+        (
+            g.vp.color, g.vp.shape, g.vp.ids,
+            g.vp.text, g.vp.text_synthetic,
+            g.vp.self_loop_value, g.ep.coef,
+            g.ep.self_loop,
+        ) = props
 
     # Label self loops
     g.ep.self_loop = g.new_edge_property('bool')
@@ -246,12 +267,29 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
         color[:3] = _determine_color(g, e)
 
         # Set alpha
-        color[3] = get_alpha(present_coef) / len(graphs)**(1/2)
+        color[3] = get_alpha(present_coef) / len(graphs)**(1/4)
 
         # Write
         g.ep.color[e] = color
         if g.ep.self_loop:
             g.vp.self_loop_value[e.source()] = present_coef
+
+    # Reassign TF-TG text/shape/color
+    # NOTE: This is calculated before edge filtering for more informative coloration,
+    #  this might not match exactly with the output graph edges, but instead implies
+    #  that SOME combination of graphs found node X to be of type Y
+    g = assign_vertex_properties(g)
+
+    # Remove infrequent edges
+    if threshold:
+        num_vertices = g.num_vertices()
+        num_edges = g.num_edges()
+        g = filter_to_common_edges(g, threshold=threshold)
+        g = cull_isolated_leaves(g)
+        print(
+            f'Filtered from {num_vertices} vertices and {num_edges} edges '
+            f'to {g.num_vertices()} vertices and {g.num_edges()} edges via '
+            f'common edge filtering.')
 
     return g
 
@@ -292,7 +330,7 @@ def _determine_color(g, e, method='presence'):
 def get_alpha(coef):
     x = np.log10(1+coef)  # Log scaling
     alpha = x / (1+x)
-    alpha = .05 + .6 * alpha  # Add floor and ceiling
+    alpha = .1 + .2 * alpha  # Add floor and ceiling
     return alpha
 
 
@@ -324,8 +362,17 @@ def _normalize_dict_item_length(dict, length, default=0):
             dict[k] += [default for _ in range(length - len(dict[k]))]
 
 
-def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
+def convert_vertex_map(source_graph, target_graph, vertex_map):
+    "Convert pos to another graph"
     # NOTE: Probably a way to do this without `source_graph`
+    # SECOND NOTE: Probably not
+    # Debug
+    # tg = [target_graph.vp.ids[v] for v in target_graph.vertices()]
+    # sg = [source_graph.vp.ids[v] for v in source_graph.vertices()]
+    # tg_in_sg = [vid in sg for vid in tg]
+    # print(sum(tg_in_sg) / len(tg))  # Should be 1.0 if all values of `target_graph` are in `source_graph`
+
+    # Find corresponding values and record
     converted_map = target_graph.new_vertex_property('vector<double>')
     for v in source_graph.vertices():
         # Find corresponding v in target_graph
@@ -337,10 +384,10 @@ def convert_vertex_map(source_graph, target_graph, vertex_map, debug=False):
             if len(idx) > 1: raise LookupError(f'ID \'{vid}\' has duplicate entries in \'g\'.')
             converted_map[idx[0]] = vertex_map[v]
 
-    if debug:
-        for v in target_graph.vertices():
-            if not converted_map[v]:
-                print(f'\'{target_graph.vp.ids[v]}\' not defined in `vertex_map`.')
+    # Debug
+    # for v in target_graph.vertices():
+    #     if not converted_map[v]:
+    #         print(f'\'{target_graph.vp.ids[v]}\' not defined in `vertex_map`.')
 
     return converted_map
 
@@ -484,3 +531,190 @@ def scale_edge_coefs_list(graph, scale):
     graph['coef'] *= scale
 
     return graph
+
+
+def filter_to_common_edges(g, threshold=.6):
+    "Filter concatenated graph `g` to edges common among `threshold` of generating graphs."
+    # Find edges under threshold
+    to_remove = []
+    for e in g.edges():
+        coefs = g.ep.coefs[e]
+        if len(coefs) < 1:
+            print('asdf')
+        present = sum([c!=0 for c in coefs]) / len(coefs)
+        if present < threshold:
+            to_remove.append(e)
+
+    # Remove matching edges
+    for e in to_remove: g.remove_edge(e)
+
+    return g
+
+
+def get_inverse_graph(g, subgraph):
+    "Get all nodes and edges in `g` but not in `subgraph`"
+    # Find edges and vertices to remove
+    vertices_to_remove = []; edges_to_remove = []
+    for v in g.vertices():
+        query = gt.find_vertex(subgraph, subgraph.vp.ids, g.vp.ids[v])
+        if len(query) > 0: vertices_to_remove.append(v)
+    subgraph_edges = [get_edge_string(subgraph, e) for e in subgraph.edges()]  # Naive method, vulnerable to double-hyphen ids
+    for e in g.edges():
+        query = get_edge_string(g, e) in subgraph_edges
+        if query: edges_to_remove.append(e)
+
+    # Remove matching vertices and edges
+    # NOTE: Actually removing vertices invalidates descriptors and vertex properties
+    # for e in edges_to_remove: g.remove_edge(e)  # Need to remove edges first because of below
+    # g.remove_vertex(vertices_to_remove)  # NOTE: Must be done this way or removed in descending order
+
+    return gt.GraphView(
+        g,
+        vfilt=lambda v: v not in vertices_to_remove,
+        efilt=lambda e: e not in edges_to_remove,
+    )
+
+
+def remove_edges(g):
+    "Remove all edges from `g`"
+    edges = [e for e in g.edges()]
+    for e in edges: g.remove_edge(e)
+
+    return g
+
+
+def assign_vertex_properties(g):
+    # Parameters
+    # sizes = [1.2, 1., .75, .5]
+    sizes = np.array(list(range(4))[::-1])
+    sizes = (sizes - sizes.min()) / (sizes.max() - sizes.min())
+    sizes = sizes * .5 + .25
+
+    # Detect synthetic vertices
+    synthetic_vertices = detect_synthetic_vertices_graph(g)
+
+    # View without synthetic nodes or self loops
+    # Need to do `vfilt` slowly bc `g.vp.ids.fa` doesn't work with string
+    # DO NOT use [... for ... in g.vertices/edges()] as the ordering is not the same
+    g_nosynthetic = gt.GraphView(
+        g,
+        vfilt=lambda v: g.vp.ids[v] not in synthetic_vertices,
+        efilt=lambda e: not g.ep.self_loop[e],
+    )
+
+    g.vp.color = g.new_vertex_property('string')  # Can't show with text if set to `vector<double>``
+    g.vp.shape = g.new_vertex_property('string')
+    g.vp.size = g.new_vertex_property('double')
+    g.vp.text_synthetic = g.new_vertex_property('string')
+    g.vp.text = g.new_vertex_property('string')
+    for v in g.vertices():
+        # assert g.vp.ids[v] == g_nosynthetic.vp.ids[v]  # Works!
+        v_id = g.vp.ids[v]
+        palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        # Hub
+        if v_id in ['hub']:
+            g.vp.color[v] = rgba_to_hex(palette[0])
+            g.vp.text_synthetic[v] = v_id
+            g.vp.text[v] = v_id
+            g.vp.shape[v] = 'hexagon'
+            g.vp.size[v] = sizes[0]
+            # root = v
+        # Cell-type
+        elif v_id in synthetic_vertices:  # NOTE: This does not include 'hub'
+            g.vp.color[v] = rgba_to_hex(palette[1])
+            g.vp.text_synthetic[v] = v_id
+            g.vp.text[v] = v_id
+            g.vp.shape[v] = 'pentagon'
+            g.vp.size[v] = sizes[1]
+        # Default
+        else:
+            is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
+            is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
+            if is_tf and not is_tg:
+                g.vp.color[v] = rgba_to_hex(palette[2])
+                g.vp.shape[v] = 'triangle'
+                g.vp.size[v] = sizes[2]
+            elif not is_tf and is_tg:
+                g.vp.color[v] = rgba_to_hex(palette[3])
+                g.vp.shape[v] = 'circle'
+                g.vp.size[v] = sizes[3]
+            elif is_tf and is_tg:
+                g.vp.color[v] = rgba_to_hex(palette[4])
+                g.vp.shape[v] = 'triangle'  # Same as just tf
+                g.vp.size[v] = sizes[2]
+            else:
+                # Only connections from synthetic node
+                g.vp.color[v] = '#FFFFFF'
+                g.vp.shape[v] = 'circle'  # Default
+                g.vp.size[v] = sizes[3]
+            # Add text to outer nodes (optional)
+            g.vp.text[v] = v_id
+
+    return g
+
+
+def make_vertices_white(g):
+    for v in g.vertices():
+        g.vp.color[v] = '#FFFFFF'
+
+    return g
+
+
+def has_duplicate_vertex_ids(g):
+    seen = []
+    for v in g.vertices():
+        if g.vp.ids[v] in seen: return True
+        seen.append(g.vp.ids[v])
+
+    return False
+
+
+def scale_pos_to_range(g, pos, box_size=None):
+    "Scale `pos` vertex attribute to reasonable range, used to combat auto-scaling"
+    # Get ranges
+    max_values = [-np.inf, -np.inf]
+    min_values = [+np.inf, +np.inf]
+    for i, v in enumerate(g.vertices()):
+        for j, val in enumerate(pos[v]):
+            if val < min_values[j]:
+                min_values[j] = val
+            if val > max_values[j]:
+                max_values[j] = val
+    num_vertices = i
+
+    # Calculate box size
+    if box_size is None:
+        box_size = num_vertices**(1/2)
+
+    # Set new sizes
+    for v in g.vertices():
+        pos[v] = [
+            box_size * (pos[v][j] - min_values[j]) / (max_values[j] - min_values[j]) - (box_size / 2)
+            for j in range(2)
+        ]
+
+    return pos
+
+
+def scale_pos_by_distance(g, pos, exponent=10):
+    "Scale pos by location from center"
+    for i, v in enumerate(g.vertices()):
+        # Pure transform
+        x, y = pos[v]
+        distance = (x**2 + y**2)**(1/2)
+        angle = np.arctan2(y, x)  # `arctan2` keeps quadrants in mind
+
+        # Get new distance
+        if exponent < 1:
+            new_distance = distance**exponent
+        else:
+            new_distance = np.log(1+distance) / np.log(exponent)
+
+        x = new_distance * np.cos(angle)
+        y = new_distance * np.sin(angle)
+        pos[v] = [x, y]
+
+        # Square transform
+        # pos[v] = [np.sign(x) * np.abs(x)**exponent for x in pos[v]]
+
+    return pos

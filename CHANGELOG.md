@@ -1,3 +1,15 @@
+### 2023-08-16
+- Add common edge detection, and set as default for concatenation
+- Change isolated node visualization for `plot_graph_comparison`
+- Everything generally looks better
+- Fix scaling issues with position calculations
+- Fix vertex attribute updating upon concatenation
+- General bugfixes
+- Make graph computation more modular
+- Make node sizes vary by type
+- New custom plot scaling methods to counter auto-scaling by `graph-tool`
+- New synthetic node detection
+
 ### 2023-08-15 (3)
 - Add new protocol for `cull_isolated_leaves`
 - Fix for gene prioritization cell gene isolation

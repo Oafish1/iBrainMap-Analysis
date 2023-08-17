@@ -1,7 +1,6 @@
 import itertools as it
 
 import graph_tool.all as gt
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -86,10 +85,6 @@ def compute_statistics(meta, x, x_sub, filter=.8, **kwargs):
 
 
 def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something more interesting than cutting off `filter`
-    # Detect synthetic vertices
-    synthetic_vertices = detect_synthetic_vertices_list(graph, hub_present=hub_present)
-    cell_vertices = [v for v in synthetic_vertices if v != 'hub']
-
     # Filter to high-valued edges
     if filter:
         graph = graph[graph['coef'] >= graph['coef'].quantile(filter)]
@@ -100,71 +95,23 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
 
     # Label self loops and add color
     g.ep.self_loop = g.new_edge_property('bool')
-    gt.label_self_loops(g, eprop=g.ep.self_loop)
+    gt.label_self_loops(g, eprop=g.ep.self_loop, mark_only=True)
     g.vp.self_loop_value = g.new_vertex_property('double')
     g.ep.color = g.new_edge_property('vector<double>')
     for e in g.edges():
         # Label self-loops
-        if g.ep.self_loop:
+        if g.ep.self_loop[e]:
             g.vp.self_loop_value[e.source()] = g.ep.coef[e]
 
         # Add color to edges
         alpha = get_alpha(g.ep.coef[e])
         g.ep.color[e] = [0, 0, 0, alpha]
 
-    # View without synthetic nodes or self loops
-    # Need to do `vfilt` slowly bc `g.vp.ids.fa` doesn't work with string
-    # DO NOT use [... for ... in g.vertices/edges()] as the ordering is not the same
-    g_nosynthetic = gt.GraphView(
-        g,
-        vfilt=lambda v: g.vp.ids[v] not in synthetic_vertices,
-        efilt=1-g.ep.self_loop.fa,
-    )
-
     # Determine color and flavor text
-    # g.vp.color = g.new_vertex_property('vector<double>')
-    g.vp.color = g.new_vertex_property('string')  # Can't show with text if set to `vector<double>``
-    g.vp.shape = g.new_vertex_property('string')
-    g.vp.text_synthetic = g.new_vertex_property('string')
-    g.vp.text = g.new_vertex_property('string')
-    for v in g.vertices():
-        v_id = g.vp.ids[v]
-        palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
-        # Hub
-        if v_id in ['hub']:
-            g.vp.color[v] = rgba_to_hex(palette[0])
-            g.vp.text_synthetic[v] = v_id
-            g.vp.text[v] = v_id
-            g.vp.shape[v] = 'hexagon'
-            # root = v
-        # Cell-type
-        elif v_id in cell_vertices:
-            g.vp.color[v] = rgba_to_hex(palette[1])
-            g.vp.text_synthetic[v] = v_id
-            g.vp.text[v] = v_id
-            g.vp.shape[v] = 'pentagon'
-        # Default
-        else:
-            is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
-            is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
-            if is_tf and not is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[2])
-                g.vp.shape[v] = 'triangle'
-            elif not is_tf and is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[3])
-                g.vp.shape[v] = 'circle'
-            elif is_tf and is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[4])
-                g.vp.shape[v] = 'triangle'  # Same as just tf
-            else:
-                # Only connections from synthetic node
-                g.vp.color[v] = '#FFFFFF'
-                g.vp.shape[v] = 'circle'  # Default
-            # Add text to outer nodes (optional)
-            g.vp.text[v] = v_id
+    g = assign_vertex_properties(g)
 
     # View without self-loops
-    g_noself = gt.GraphView(g, efilt=1-g.ep.self_loop.fa)
+    g_noself = gt.GraphView(g, efilt=lambda e: not g.ep.self_loop[e])
 
     return g_noself
 
