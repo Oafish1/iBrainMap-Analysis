@@ -1,5 +1,6 @@
 import itertools
 
+from brokenaxes import brokenaxes
 import graph_tool.all as gt
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
@@ -187,16 +188,18 @@ def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
 
 
 def visualize_graph_base(g, **kwargs):
+    min_size = 3*g.num_vertices()**(-5/6)
     gt.graph_draw(
         g,
         vertex_fill_color=g.vp.color,
         vertex_shape=g.vp.shape,
-        vertex_size=g.vp.size,  # vertex_size uses absolute units
+        vertex_size=gt.prop_to_size(g.vp.size, min_size, min_size),  # vertex_size uses absolute units
         vertex_text=g.vp.text,
+        vertex_text_position=-2,
         edge_color=g.ep.color,
-        edge_end_marker='arrow',
-        ink_scale=1,
-        fit_view=.95,
+        edge_end_marker='none',
+        # ink_scale=1,
+        fit_view=1.1,
         **kwargs,
     )
 
@@ -319,7 +322,8 @@ def plot_enrichment(df, ax=None):
     plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
 
 
-def plot_individual_edge_comparison(g, sample_ids, ax=None):
+def plot_individual_edge_comparison(g, sample_ids, broken=False, ax=None):
+    "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
     # Assemble dataframe
@@ -331,24 +335,61 @@ def plot_individual_edge_comparison(g, sample_ids, ax=None):
             df[sample_id].append(coefs[i])
     df = pd.DataFrame(df)
 
-    # Plot
-    sns.scatterplot(
-        data=df,
-        x=sample_ids[0],
-        y=sample_ids[1],
-        color='black',
-        ax=ax,
-    )
 
-    # Plot y=x
-    lims = [
+
+    # Plot
+    if not broken:
+        sns.scatterplot(
+            data=df,
+            x=sample_ids[0],
+            y=sample_ids[1],
+            color='black',
+            ax=ax,
+        )
+
+        # Plot y=x
+        lims = [
             max(ax.get_xlim()[0], ax.get_ylim()[0]),
             min(ax.get_xlim()[1], ax.get_ylim()[1])]
-    ax.plot(lims, lims, '-', color='black', alpha=0.3)
+        ax.plot(lims, lims, '-', color='black', alpha=0.3)
 
-    # Formatting
-    # ax.set_xscale('log')
-    # ax.set_yscale('log')
+        # Formatting
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+    else:
+        # Calculate discontinuities (From JAMIE)
+        max_dist = .2; pad = 1e-3
+        bounds = []
+        for vals in [df[sample_ids[0]], df[sample_ids[1]]]:
+            bounds.append([])
+
+            sorted_vals = np.sort(vals)
+            min_val = sorted_vals[0]
+            max_val = sorted_vals[0]
+            for val in sorted_vals[1:]:
+                if val - max_val > max_dist:
+                    bounds[-1].append((min_val - pad, max_val + pad))
+                    min_val = max_val = val
+                else:
+                    max_val = val
+            bounds[-1].append((min_val - pad, max_val + pad))
+
+        # Make broken plot
+        bax = brokenaxes(
+            xlims=bounds[0],
+            ylims=bounds[1],
+            hspace=.15,
+            wspace=.15,
+        )
+
+        # Get y=x
+        lims = [
+            max(bounds[0][0][0], bounds[1][0][0]),
+            min(bounds[0][-1][1], bounds[1][-1][1])]
+
+        # Plot everything
+        bax.plot(lims, lims, '-', color='black', alpha=0.3)
+        bax.scatter(df[sample_ids[0]], df[sample_ids[1]], color='black', edgecolors='white')
 
     return df
 
@@ -379,14 +420,13 @@ def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_
         visualize_graph_base(
             inverse_graph,
             pos=convert_vertex_map(concatenated_graph, inverse_graph, concatenated_pos),
-            vertex_text_position=-2,
+
             vertex_font_size=0,
             mplfig=ax,
             **kwargs)
         visualize_graph_base(
             transfer_text_labels(concatenated_graph, g),
             pos=convert_vertex_map(concatenated_graph, g, concatenated_pos),
-            vertex_text_position=-2,
             # vertex_font_size=.5*20/g.num_vertices()**(1/2),
             mplfig=ax,
             **kwargs)
@@ -505,3 +545,76 @@ def get_graph_pos(g, scale=None):
     pos = scale_pos_by_distance(g, pos)
     pos = scale_pos_to_range(g, pos)
     return pos
+
+
+def plot_contrast_curve(
+    df_subgroup: pd.DataFrame,
+    *,
+    sorting_subgroup: str='Individual',
+    filter_common: bool=None,
+    ax=None,
+    **kwargs):
+    """
+    Plot the variance curve for subgroups in `df_subgroup`.
+
+    `sorting_subgroup`: Subgroup to sort by.  If 'Individual',
+      Sort each subgroup on its own.
+    `filter_common`: Filter to common edges between all subgroups.
+      Necessary for comparability.
+    """
+    # TODO: Add filter_super option which filters only to sorting group
+    # Defaults
+    if filter_common is None: filter_common = sorting_subgroup != 'Population'
+    if ax is None: _, axs = get_mosaic([list(range(1))], scale=9); ax=axs[0]
+
+    # Merge and format dfs
+    df_concat = pd.concat([df_subgroup[k] for k in df_subgroup])
+    df_concat.index = df_concat['Edge']
+
+    # Filter to only common edges if sorting subgroup is not population, for comparability
+    if filter_common:
+        unique, count = np.unique(df_concat['Edge'], return_counts=True)
+        edges_to_keep = unique[count >= len(df_subgroup)]
+        df_concat = df_concat.loc[[s in edges_to_keep for s in df_concat['Edge']]]
+
+    # Sort
+    # Have each line individually sorted
+    if sorting_subgroup == 'Individual':
+        df_concat = df_concat.sort_values(['Variance'], ascending=[True])
+        df_concat['Sort'] = 0
+        for subgroup in df_subgroup:
+            length = len(df_concat.loc[df_concat['Subgroup'] == subgroup, 'Sort'])
+            df_concat.loc[df_concat['Subgroup'] == subgroup, 'Sort'] = (
+                np.array(list(range(length))) / (length - 1))
+        x = 'Sort'
+        xlabel = 'Percentile'
+    else:
+        # Prepare for join
+        to_join = df_subgroup[sorting_subgroup]
+        to_join.index = to_join['Edge']
+        # Join and sort
+        df_concat = df_concat.join(to_join, how='right', rsuffix='_sort')  # Filter to and sort by subgroup
+        df_concat = df_concat.sort_values(['Variance_sort'], ascending=[True])
+        x = 'Edge'
+        xlabel = 'Edge'
+
+    # Plot
+    plt.sca(ax)
+    lp = sns.lineplot(
+        data=df_concat,
+        x=x, y='Variance', hue='Subgroup',
+        hue_order=np.unique(df_concat['Subgroup']),
+        alpha=.65,
+        errorbar=None, estimator=None, n_boot=0,
+        ax=ax,
+        **kwargs)
+    plt.yscale('log')
+    plt.xlabel(xlabel)
+    plt.xticks(rotation=90)
+
+    # Only show `num_x_labels` x labels
+    num_x_labels = 20
+    len_loop = len(lp.get_xticklabels())
+    if len_loop > num_x_labels:
+        for i, label in enumerate(lp.get_xticklabels()):
+            if i % int(len_loop/num_x_labels) != 0: label.set_visible(False)

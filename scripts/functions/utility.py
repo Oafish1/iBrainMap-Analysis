@@ -335,7 +335,7 @@ def get_alpha(coef):
 
 
 def get_edge_string(g, e):
-    return f'{g.vp.ids[e.source()]}--{g.vp.ids[e.target()]}'
+    return f'{g.vp.ids[e.source()]} -- {g.vp.ids[e.target()]}'
 
 
 def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
@@ -394,8 +394,8 @@ def convert_vertex_map(source_graph, target_graph, vertex_map):
 
 def remove_text_by_centrality(g, preserve_synthetic=True, percentile=90, eps=1e-10):
     # Calculate betweenness
-    vertex_centrality, _ = gt.betweenness(g)
-    # vertex_centrality = gt.pagerank(g)
+    # vertex_centrality, _ = gt.betweenness(g)
+    vertex_centrality = gt.pagerank(g)
 
     # Get no synthetic view
     if preserve_synthetic:
@@ -405,8 +405,11 @@ def remove_text_by_centrality(g, preserve_synthetic=True, percentile=90, eps=1e-
         )
     else: g_view = g
     threshold = np.percentile([vertex_centrality[v] for v in g_view.vertices()], percentile)
-    threshold = max(eps, threshold)  # Use eps as min threshold
+    if percentile:
+        threshold = max(eps, threshold)  # Use eps as min threshold
     # print(sum([vertex_centrality[v] >= threshold for v in g_view.vertices()]))
+    # print([vertex_centrality[v] for v in g_view.vertices()])
+    # print(threshold)
 
     # Remove text
     for v in g_view.vertices():
@@ -669,7 +672,7 @@ def has_duplicate_vertex_ids(g):
     return False
 
 
-def scale_pos_to_range(g, pos, box_size=None):
+def scale_pos_to_range(g, pos, box_size=2):
     "Scale `pos` vertex attribute to reasonable range, used to combat auto-scaling"
     # Get ranges
     max_values = [-np.inf, -np.inf]
@@ -718,3 +721,56 @@ def scale_pos_by_distance(g, pos, exponent=10):
         # pos[v] = [np.sign(x) * np.abs(x)**exponent for x in pos[v]]
 
     return pos
+
+
+def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1):
+    """
+    Filter graph by synthetic vertices `vertex_ids` with `max_tf` tfs and `max_tf` tgs
+
+    `max_tfs` and `max_tgs`: -1 indicates unlimited
+    """
+    # Check that all provided vertices are synthetic
+    assert np.array([string_is_synthetic(s) for s in vertex_ids]).all()
+
+    # Setup
+    vertices_to_keep = []
+
+    # Detect synthetic nodes and propagate
+    for v in g.vertices():
+        ## Record synthetic nodes
+        if g.vp.ids[v] not in vertex_ids:  # Only continue if specified synthetic node
+            continue
+        vertices_to_keep += [v for v in g.vertices() if g.vp.ids[v] in vertex_ids]
+
+        ## Record top TFs
+        # Get all TFs
+        tf_edges = list(v.in_edges())
+        tf_edges = np.array([e for e in tf_edges if not string_is_synthetic(g.vp.ids[e.source()])])
+
+        # Rank order
+        weights = [g.ep.coef[e] for e in tf_edges]
+        top_tfs = [e.source() for e in tf_edges[np.argsort(weights)[::-1][:max_tfs]]]
+
+        # Record
+        vertices_to_keep += top_tfs
+
+        ## Record top TGs
+        for w in top_tfs:
+            # Get all TGs
+            tg_edges = list(w.out_edges())
+            tg_edges = np.array([e for e in tg_edges if not string_is_synthetic(g.vp.ids[e.source()])])
+
+            # Rank order
+            weights = [g.ep.coef[e] for e in tg_edges]
+            top_tgs = [e.source() for e in tg_edges[np.argsort(weights)[::-1][:max_tgs]]]
+
+            # Record
+            vertices_to_keep += top_tgs
+
+    # Filter
+    g = gt.GraphView(
+        g,
+        vfilt=lambda v: v in vertices_to_keep
+    )
+
+    return cull_isolated_leaves(g)

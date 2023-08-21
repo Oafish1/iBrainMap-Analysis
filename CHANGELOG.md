@@ -1,3 +1,16 @@
+### 2023-08-21
+- Add features and automatic culling to `compute_aggregate_edge_summary` and `compute_edge_summary`
+- Add function to filter graph based on synthetic vertices
+- Add individual plot visualizations for specific subjects
+- Add new plots and computations for characterization of contrast subgroups
+- Additional plotting functionality for `plot_individual_edge_comparison`, allowing for broken axes
+- Fix individual edge comparison plot bug causing common edges to be excluded
+- Update edge text translation
+
+### 2023-08-17
+- Additional automated filtering capabilities
+- New scaling strategy, should be more consistent
+
 ### 2023-08-16
 - Add common edge detection, and set as default for concatenation
 - Change isolated node visualization for `plot_graph_comparison`

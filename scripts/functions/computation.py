@@ -116,10 +116,10 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
     return g_noself
 
 
-def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, min_common_edges=1):
+def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, min_common_edges=1, threshold=None):
     # Setup
     assert graphs is not None or concatenated_graph is not None
-    if graphs is not None: concatenated_graph = concatenate_graphs(*graphs)
+    if graphs is not None: concatenated_graph = concatenate_graphs(*graphs, threshold=threshold)
 
     # Format edge weights
     # df = pd.DataFrame(columns=['Edge']+subject_ids)
@@ -145,7 +145,8 @@ def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, m
     return df, concatenated_graph
 
 
-def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=np.inf):
+def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=np.inf, threshold=None):
+    # TODO: Add list input for `contrast_subject_ids`
     # For each subgroup of the contrast
     contrast_concatenated_graphs = {}; contrast_concatenated_subject_ids = {}
     for key, subject_ids in contrast_subject_ids.items():  # , total=len(contrast_subject_ids)
@@ -156,7 +157,10 @@ def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=n
             except: continue
             sids.append(sid)
             if len(sids) >= max_graphs: break
-        concatenated_graph = concatenate_graphs(*graphs)
+        # Skip if no graphs found
+        if len(sids) == 0:
+            continue
+        concatenated_graph = concatenate_graphs(*graphs, threshold=threshold)
         contrast_concatenated_graphs[key] = concatenated_graph
         contrast_concatenated_subject_ids[key] = sids
 
@@ -164,3 +168,30 @@ def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=n
         del graphs
 
     return contrast_concatenated_graphs, contrast_concatenated_subject_ids
+
+
+def compute_contrast_summary(contrast, *, column):
+    "Return dataframe with edge mean and variance for all subgroups in contrast"
+    # TODO: Allow for multiple columns at the same time, requires overhaul of multiple functions, including concat...
+    # Get subgroup variance
+    contrast_concatenated_graphs, contrast_concatenated_subject_ids = compute_aggregate_edge_summary(
+        contrast_subject_ids=contrast, column=column)  # Threshold included for reliable variance calculation
+    df_subgroup = {}
+    for subgroup in contrast_concatenated_graphs:
+        df, concatenated_graph = compute_edge_summary(
+            concatenated_graph=contrast_concatenated_graphs[subgroup], subject_ids=contrast_concatenated_subject_ids[subgroup])
+        df = df[['Edge', 'Mean', 'Variance']]
+        df['Subgroup'] = subgroup
+        df_subgroup[subgroup] = df
+
+    # Get population variance
+    sample_ids = {'Population': sum([contrast[k] for k in contrast], [])}
+    contrast_concatenated_graphs, contrast_concatenated_subject_ids = compute_aggregate_edge_summary(
+        contrast_subject_ids=sample_ids, column=column)  # Threshold included here for filtering
+    df, concatenated_graph = compute_edge_summary(
+        concatenated_graph=contrast_concatenated_graphs['Population'], subject_ids=contrast_concatenated_subject_ids['Population'])
+    df = df[['Edge', 'Mean', 'Variance']]
+    df['Subgroup'] = 'Population'
+    df_subgroup['Population'] = df  # Add population as subgroup
+
+    return df_subgroup
