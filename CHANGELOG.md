@@ -1,4 +1,4 @@
-### 2023-08-21
+### 2023-08-21 (1-2)
 - Add features and automatic culling to `compute_aggregate_edge_summary` and `compute_edge_summary`
 - Add function to filter graph based on synthetic vertices
 - Add individual plot visualizations for specific subjects
