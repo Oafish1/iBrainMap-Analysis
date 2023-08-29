@@ -75,3 +75,16 @@ def get_contrast(contrast):
         library[sub] = list(contrast_table['SubID'].loc[contrast_table[contrast]==sub])
 
     return library
+
+
+def load_many_graphs(subject_ids, **kwargs):
+    "Load as many graphs from `subject_ids` as available"
+    graphs = []
+    sids = []
+    for sid in subject_ids:
+        try:
+            graphs.append(load_graph_by_id(sid, **kwargs))
+            sids.append(sid)
+        except: pass
+
+    return graphs, sids

@@ -168,7 +168,14 @@ def subset_by_hub(g, vertices, verticies_are_ids=True, include_synthetic=False):
     )
 
 
-def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inplace=True, threshold=None):
+def concatenate_graphs(
+        *graphs,
+        color_by_source=True,
+        recolor=True,
+        exclude_zeroes_from_mean=True,
+        remove_duplicate_edge=True,
+        recalculate=True,
+        threshold=None):
     "Concatenate all graphs provided, assesses duplicates by IDs"
     # Default parameters
     if threshold is None:
@@ -189,7 +196,10 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
                 default=lambda: [0 for _ in range(len(graphs))],
                 index=i,
             )
-            g = gc.copy()
+            # Convert view to graph
+            # NOTE: Union does not play nicely with views in the first argument,
+            #   hence, why we have to do this on the first graph
+            g = gt.graph_union(gt.Graph(), gc, include=True, internal_props=True)
             continue
 
         # Get common vertices
@@ -220,38 +230,25 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
 
         # Concatenate (assumes all vertex and edge properties are the same)
         # TODO: Other props, add coef averaging
-        g, props = gt.graph_union(
+        # g, props = gt.graph_union(
+        g = gt.graph_union(
             g,
             gc,
             intersection=vertex_map,
-            props=[
-                (g.vp.color, gc.vp.color),
-                (g.vp.shape, gc.vp.shape),
-                (g.vp.ids, gc.vp.ids),
-                (g.vp.text, gc.vp.text),
-                (g.vp.text_synthetic, gc.vp.text_synthetic),
-                (g.vp.self_loop_value, gc.vp.self_loop_value),
-                (g.ep.coef, gc.ep.coef),
-                (g.ep.self_loop, gc.ep.self_loop),
-            ],
-            include=inplace)
-        (
-            g.vp.color, g.vp.shape, g.vp.ids,
-            g.vp.text, g.vp.text_synthetic,
-            g.vp.self_loop_value, g.ep.coef,
-            g.ep.self_loop,
-        ) = props
+            include=True,
+            internal_props=True)
 
     # Label self loops
     g.ep.self_loop = g.new_edge_property('bool')
     gt.label_self_loops(g, eprop=g.ep.self_loop)
 
     # Remove duplicate edges
-    g = remove_duplicate_edges(g)
+    if remove_duplicate_edge:
+        g = remove_duplicate_edges(g)
 
     # Add processed attributes
     g.vp.self_loop_value = g.new_vertex_property('double')
-    g.ep.color = g.new_edge_property('vector<double>')
+    # g.ep.color = g.new_edge_property('vector<double>')
     g.ep.coefs = g.new_edge_property('vector<double>')
     for e in g.edges():
         # Get coefs
@@ -264,13 +261,15 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
         color = [0 for _ in range(4)]
 
         # Set color
-        color[:3] = _determine_color(g, e)
+        if color_by_source:
+            color[:3] = _determine_color(g, e)
 
         # Set alpha
         color[3] = get_alpha(present_coef) / len(graphs)**(1/4)
 
         # Write
-        g.ep.color[e] = color
+        if recolor:
+            g.ep.color[e] = color
         if g.ep.self_loop:
             g.vp.self_loop_value[e.source()] = present_coef
 
@@ -278,7 +277,8 @@ def concatenate_graphs(*graphs, color=True, exclude_zeroes_from_mean=True, inpla
     # NOTE: This is calculated before edge filtering for more informative coloration,
     #  this might not match exactly with the output graph edges, but instead implies
     #  that SOME combination of graphs found node X to be of type Y
-    g = assign_vertex_properties(g)
+    if recalculate:
+        g = assign_vertex_properties(g)
 
     # Remove infrequent edges
     if threshold:
@@ -390,6 +390,22 @@ def convert_vertex_map(source_graph, target_graph, vertex_map):
     #         print(f'\'{target_graph.vp.ids[v]}\' not defined in `vertex_map`.')
 
     return converted_map
+
+
+def remove_text(g, preserve_synthetic=False):
+    # Get no synthetic view
+    if preserve_synthetic:
+        g_view = gt.GraphView(
+            g,
+            vfilt=lambda v: g.vp.text_synthetic[v] == '',
+        )
+    else: g_view = g
+
+    # Remove text
+    for v in g_view.vertices():
+        g_view.vp.text[v] = ''
+
+    return g
 
 
 def remove_text_by_centrality(g, preserve_synthetic=True, percentile=90, eps=1e-10):
@@ -543,7 +559,7 @@ def filter_to_common_edges(g, threshold=.6):
     for e in g.edges():
         coefs = g.ep.coefs[e]
         if len(coefs) < 1:
-            print('asdf')
+            print('Edge found with no coefs.')
         present = sum([c!=0 for c in coefs]) / len(coefs)
         if present < threshold:
             to_remove.append(e)
@@ -774,3 +790,37 @@ def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1)
     )
 
     return cull_isolated_leaves(g)
+
+
+def join_df_subgroup(
+        df_subgroup,
+        column='Variance',
+        sort_column='Difference--Population',
+        num_sort=20,
+        filter_to_common=True):
+    "Join all keys of `df_subgroup`"
+    # Construct
+    df = pd.DataFrame()
+    for key, df_sub in df_subgroup.items():
+        # Destructive
+        df_sub.index = df_sub['Edge']
+        df_sub = df_sub.rename(columns={column: key})
+        df = df.join(df_sub[[key]], how='outer')
+
+    # Filter to edges included in all contrasts
+    if filter_to_common:
+        df = df.dropna()
+
+    # Sort
+    sort_methods = sort_column.split('--')
+    for sort_column in sort_methods:
+        if sort_column == 'Difference':
+            df['Difference'] = np.var(df[[c for c in df.columns if c != 'Population']].to_numpy(), axis=1)
+            df = df.sort_values(by=sort_column, ascending=False)
+            df = df[[c for c in df.columns if c != 'Difference']]
+            if len(sort_methods) > 1:
+                df = df.iloc[:num_sort]
+        elif sort_column:
+            df = df.sort_values(by=sort_column, ascending=False)
+
+    return df

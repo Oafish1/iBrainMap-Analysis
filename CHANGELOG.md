@@ -1,3 +1,11 @@
+### 2023-08-28
+- Add many utility functions
+- Implement new figure plots
+- Label plots in notebook
+- Many more arguments for a variety of functions
+- Many alternative new plots and layouts
+- `concatenate_graphs` bugfixes and optimizations
+
 ### 2023-08-23
 - Figure updates
 

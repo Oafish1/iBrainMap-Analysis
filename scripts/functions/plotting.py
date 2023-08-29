@@ -322,7 +322,7 @@ def plot_enrichment(df, ax=None):
     plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
 
 
-def plot_individual_edge_comparison(g, sample_ids, broken=False, ax=None):
+def plot_individual_edge_comparison(g, sample_ids, broken=False, suffix='Attention Weights', ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
@@ -346,6 +346,12 @@ def plot_individual_edge_comparison(g, sample_ids, broken=False, ax=None):
             color='black',
             ax=ax,
         )
+        xlabel = sample_ids[0]
+        if suffix: xlabel += ' ' + suffix
+        ax.set_xlabel(xlabel)
+        ylabel = sample_ids[1]
+        if suffix: ylabel += ' ' + suffix
+        ax.set_ylabel(ylabel)
 
         # Plot y=x
         lims = [
@@ -401,12 +407,22 @@ def get_mosaic(mosaic, scale=3):
     return fig, axs
 
 
-def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_pos=None, axs, subject_ids, **kwargs):
+def plot_graph_comparison(
+        graphs=None,
+        *,
+        concatenated_graph=None,
+        concatenated_pos=None,
+        axs,
+        subject_ids,
+        filter_text=False,
+        show_null_nodes=True,
+        **kwargs):
     # Aggregate and calculate node positions
     # NOTE: Supplied concatenated graph must not be pruned
     if concatenated_graph is None:
         concatenated_graph = concatenate_graphs(*graphs, threshold=False)
-    concatenated_graph = remove_text_by_centrality(concatenated_graph.copy())
+        if filter_text:
+            concatenated_graph = remove_text_by_centrality(concatenated_graph.copy())
     if concatenated_pos is None:
         concatenated_pos = get_graph_pos(concatenated_graph)
 
@@ -416,23 +432,25 @@ def plot_graph_comparison(graphs=None, *, concatenated_graph=None, concatenated_
         if i:
             axs[0].get_shared_x_axes().join(axs[0], ax)
             axs[0].get_shared_y_axes().join(axs[0], ax)
-        inverse_graph = make_vertices_white(get_inverse_graph(remove_edges(concatenated_graph.copy()), g))
+        if show_null_nodes:
+            inverse_graph = make_vertices_white(get_inverse_graph(remove_edges(remove_text(concatenated_graph.copy())), g))
+            plot_graph = concatenate_graphs(
+                inverse_graph,
+                transfer_text_labels(concatenated_graph, g),
+                recolor=False,
+                threshold=False,
+                recalculate=False)
+        else: plot_graph = transfer_text_labels(concatenated_graph, g)
         visualize_graph_base(
-            inverse_graph,
-            pos=convert_vertex_map(concatenated_graph, inverse_graph, concatenated_pos),
-
-            vertex_font_size=0,
-            mplfig=ax,
-            **kwargs)
-        visualize_graph_base(
-            transfer_text_labels(concatenated_graph, g),
-            pos=convert_vertex_map(concatenated_graph, g, concatenated_pos),
+            plot_graph,
+            pos=convert_vertex_map(concatenated_graph, plot_graph, concatenated_pos),
             # vertex_font_size=.5*20/g.num_vertices()**(1/2),
             mplfig=ax,
             **kwargs)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_title(sid)
+        ax.axis('off')
 
 
 def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges=1, num_x_labels=15):
@@ -618,3 +636,8 @@ def plot_contrast_curve(
     if len_loop > num_x_labels:
         for i, label in enumerate(lp.get_xticklabels()):
             if i % int(len_loop/num_x_labels) != 0: label.set_visible(False)
+
+
+def plot_subgroup_heatmap(df_subgroup, *, ax=None):
+    sns.heatmap(data=join_df_subgroup(df_subgroup), ax=ax)
+    ax.set_xlabel('Group')
