@@ -650,8 +650,8 @@ def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None,
 
     # Plot
     sns.violinplot(data=df, hue=target, y='Attention', x='Edge', ax=ax)
-    sns.despine(offset=10, trim=True, ax=ax)
     plt.yscale('log')  # Could this misfire?
+    sns.despine(offset=10, trim=True, ax=ax)
 
     return df
 
