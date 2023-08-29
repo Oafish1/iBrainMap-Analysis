@@ -4,6 +4,10 @@ import graph_tool.all as gt
 import networkx as nx
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import SGDClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from .file import *
@@ -195,3 +199,81 @@ def compute_contrast_summary(contrast, *, column):
     df_subgroup['Population'] = df  # Add population as subgroup
 
     return df_subgroup
+
+
+def compute_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', edge_percentile=90, num_edges=5):
+    # Calculate
+    sids = sum([sids for _, sids in contrast.items()], [])
+    all_graphs, sids = load_many_graphs(sids, column=column)
+    all_graphs = [compute_graph(graph) for graph in all_graphs]
+    df, _ = compute_edge_summary(graphs=all_graphs, subject_ids=sids)
+
+    # Process
+    df = df.drop(columns=['Variance', 'Mean'])
+    df = pd.melt(df, id_vars=['Edge'], var_name='Subject ID', value_name='Attention')
+    df.index = df['Subject ID']
+    df_meta = meta.copy()[[target]]
+    df_meta.index = meta['SubID']
+    df = df.join(df_meta, how='left').reset_index(drop=True)
+
+    # Format
+    df = df.loc[df['Attention'] != 0]  # Remove 0 attention
+    all_possible_edges, counts = np.unique(df['Edge'], return_counts=True)
+    all_possible_edges = all_possible_edges[counts > np.percentile(counts, edge_percentile)]
+    edges_include = np.random.choice(all_possible_edges, num_edges, replace=False)
+    df = df.loc[[e in edges_include for e in df['Edge']]]
+
+    return df
+
+
+def compute_prediction_confusion(
+        contrast,
+        *,
+        meta,
+        column,
+        target='BRAAK_AD',
+        classifier_type='SGD',
+        prioritized_edges):
+    # Calculate
+    sids = sum([sids for _, sids in contrast.items()], [])  # All sids in contrast
+    all_graphs, sids = load_many_graphs(sids, column=column)
+    all_graphs = [compute_graph(graph) for graph in all_graphs]
+    df, concatenated_graph = compute_edge_summary(graphs=all_graphs, subject_ids=sids)
+
+    # Filter
+    df = df.drop(columns=['Variance', 'Mean'])
+    df = df.loc[[e in prioritized_edges for e in df['Edge']]]
+
+    # Format
+    X = np.array(df)[:, 1:].T
+    df_meta = meta.copy()
+    df_meta.index = df_meta['SubID']
+    df_meta = df_meta.loc[list(df.columns)[1:]].reset_index(drop=True)
+    names, y = np.unique(df_meta[target], return_inverse=True)
+    names = names[~pd.isna(names)]
+
+    # Remove nan
+    is_nan = pd.isna(df_meta[target])
+    X = X[~is_nan]
+    y = y[~is_nan]
+
+    # Predict
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
+    if classifier_type == 'SGD':
+        classifier = SGDClassifier().fit(X_train, y_train)
+    elif classifier_type == 'MLP':
+        classifier = MLPClassifier().fit(X_train, y_train)
+    else:
+        raise ValueError(f'Classifier type {classifier_type} not found.')
+    accuracy = classifier.score(X_test, y_test)
+
+    # Evaluate
+    confusion_matrix = metrics.confusion_matrix(y_test, classifier.predict(X_test))
+    row_sum = confusion_matrix.sum(axis=1)
+    row_acc = np.diag(confusion_matrix) / row_sum
+    df = pd.DataFrame(
+        confusion_matrix,
+        columns=names,
+        index=[f'{name} (n={int(n)}, acc={racc:.3f})' for name, n, racc in zip(names, row_sum, row_acc)])
+
+    return df, accuracy

@@ -640,4 +640,34 @@ def plot_contrast_curve(
 
 def plot_subgroup_heatmap(df_subgroup, *, ax=None):
     sns.heatmap(data=join_df_subgroup(df_subgroup), ax=ax)
-    ax.set_xlabel('Group')
+    # ax.set_xlabel('Group')
+
+
+def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None, ax=None, **kwargs):
+    # Compute
+    if df is None:
+        df = compute_BRAAK_comparison(contrast, meta=meta, column=column, target=target, **kwargs)
+
+    # Plot
+    sns.violinplot(data=df, hue=target, y='Attention', x='Edge', ax=ax)
+    sns.despine(offset=10, trim=True, ax=ax)
+    plt.yscale('log')  # Could this misfire?
+
+    return df
+
+
+def plot_prediction_confusion(contrast, *, meta, column, target='BRAAK_AD', prioritized_edges, ax=None, **kwargs):
+    # Compute
+    df, acc = compute_prediction_confusion(contrast, meta=meta, column=column, target=target, prioritized_edges=prioritized_edges, **kwargs)
+
+    # Row scale df
+    # df = ( df.T / df.sum(axis=1) ).T  # Kind of hacky, works because columns are default divide
+
+    # Plot
+    sns.heatmap(data=df, vmin=0, cmap='crest', cbar=True, ax=ax)
+    if ax is None: ax = plt.gca()
+    ax.set_title(f'Acc = {acc:.3f}')
+    ax.set_xlabel(f'{target} (Predicted)')
+    ax.set_ylabel(f'{target} (True)')
+
+    return df, acc

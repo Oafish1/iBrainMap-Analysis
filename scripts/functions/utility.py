@@ -178,8 +178,9 @@ def concatenate_graphs(
         threshold=None):
     "Concatenate all graphs provided, assesses duplicates by IDs"
     # Default parameters
-    if threshold is None:
+    if threshold is None or threshold == True:
         threshold = len(graphs)**(1/4 - 1)
+        print(f'No threshold provided, using threshold of {threshold}.')
         # threshold = np.log(1+len(graphs)) / len(graphs)
 
     # Start aggregating

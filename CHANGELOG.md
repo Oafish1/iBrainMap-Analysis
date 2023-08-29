@@ -1,3 +1,11 @@
+### 2023-08-29
+- Add more objectives for figure 4 plots
+- Added filtering for aggregate graphs
+- Fixed `concatenate_graphs` bug with `threshold=True` filtering out all edges
+- Increase flexibility for many (previously) BRAAK calculations in figure 4
+- New plot computations
+- Place new plots into functions
+
 ### 2023-08-28
 - Add many utility functions
 - Implement new figure plots
