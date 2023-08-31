@@ -1,8 +1,9 @@
-### 2023-08-31
+### 2023-08-31 (1-2)
 - Adapt `plot_contrast_curve` to additional DataFrame-type arguments
 - Add batch graph loading with `get_graphs_from_sids`
 - Additional arguments for many functions
 - Additional population analysis plots
+- Individual figure updates
 - SNP analysis plot framework and dummy figure
 
 ### 2023-08-30 (1-2)
