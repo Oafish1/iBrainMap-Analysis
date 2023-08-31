@@ -1,4 +1,4 @@
-### 2023-08-30
+### 2023-08-30 (1-2)
 - Add general-purpose circle-style heatmap plotting with `plot_circle_heatmap`
 - Add head comparison plot, `plot_head_comparison`
 - Add many utility functions
@@ -9,6 +9,7 @@
 - Change filename structure
 - Change plot ordering and grouping
 - Change several plot styles
+- Figure updates
 - Fix several small bugs and unoptimal behaviors
 - Flip enrichment plot
 - Implement `mean` sorting method for `plot_contrast_curve`
