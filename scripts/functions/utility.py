@@ -174,12 +174,12 @@ def concatenate_graphs(
         recolor=True,
         exclude_zeroes_from_mean=True,
         remove_duplicate_edge=True,
-        recalculate=True,
+        recalculate='After',  # Can be 'Before', 'After', or False
         threshold=None):
     "Concatenate all graphs provided, assesses duplicates by IDs"
     # Default parameters
     if threshold is None or threshold == True:
-        threshold = len(graphs)**(1/4 - 1)
+        threshold = len(graphs)**(1/3 - 1)
         print(f'No threshold provided, using threshold of {threshold}.')
         # threshold = np.log(1+len(graphs)) / len(graphs)
 
@@ -275,10 +275,10 @@ def concatenate_graphs(
             g.vp.self_loop_value[e.source()] = present_coef
 
     # Reassign TF-TG text/shape/color
-    # NOTE: This is calculated before edge filtering for more informative coloration,
+    # NOTE: This can be calculated before edge filtering for more informative coloration,
     #  this might not match exactly with the output graph edges, but instead implies
     #  that SOME combination of graphs found node X to be of type Y
-    if recalculate:
+    if recalculate == 'Before':
         g = assign_vertex_properties(g)
 
     # Remove infrequent edges
@@ -291,6 +291,10 @@ def concatenate_graphs(
             f'Filtered from {num_vertices} vertices and {num_edges} edges '
             f'to {g.num_vertices()} vertices and {g.num_edges()} edges via '
             f'common edge filtering.')
+
+    # Reassign TF-TG text/shape/color
+    if recalculate == 'After':
+        g = assign_vertex_properties(g)
 
     return g
 
@@ -335,8 +339,16 @@ def get_alpha(coef):
     return alpha
 
 
-def get_edge_string(g, e):
-    return f'{g.vp.ids[e.source()]} -- {g.vp.ids[e.target()]}'
+def get_edge_string(g, e=None):
+    # If g is a list
+    if type(g) == type([]):
+        source_str, target_str = g
+    # If g is a graph
+    else:
+        assert e is not None, 'If a graph is provided, `e` must not be None'
+        source_str, target_str = g.vp.ids[e.source()], g.vp.ids[e.target()]
+
+    return f'{source_str} -- {target_str}'
 
 
 def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
@@ -466,15 +478,14 @@ def cull_isolated_leaves(g):
 def remove_duplicate_edges(g):
     # Detect duplicates
     is_duplicate = g.new_edge_property('bool')
-    seen = []
+    seen = {}
     print('Removing duplicate edges...')
-    for e in (pb := tqdm(g.edges(), total=g.num_edges())):
-        # pb.set_description('Removing duplicate edges')
+    for e in tqdm(g.edges(), total=g.num_edges()):
         hashObject = (int(e.source()), int(e.target()))
         if hashObject in seen: is_duplicate[e] = True
         else:
             is_duplicate[e] = False
-            seen.append(hashObject)
+            seen[hashObject] = True
 
     # Filter
     return gt.GraphView(
@@ -636,7 +647,7 @@ def assign_vertex_properties(g):
             g.vp.color[v] = rgba_to_hex(palette[0])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
-            g.vp.shape[v] = 'hexagon'
+            g.vp.shape[v] = 'octagon'
             g.vp.size[v] = sizes[0]
             # root = v
         # Cell-type
@@ -644,7 +655,7 @@ def assign_vertex_properties(g):
             g.vp.color[v] = rgba_to_hex(palette[1])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
-            g.vp.shape[v] = 'pentagon'
+            g.vp.shape[v] = 'hexagon'
             g.vp.size[v] = sizes[1]
         # Default
         else:
@@ -825,3 +836,43 @@ def join_df_subgroup(
             df = df.sort_values(by=sort_column, ascending=False)
 
     return df
+
+
+def get_many_graph_lists(subject_ids, columns):
+    # TODO: Implement for more than two graph lists
+    assert len(subject_ids) == 2, '`get_many_graph_lists` can only join 2 graph lists at the moment'
+
+    # Get graphs
+    graphs = []
+    for sid in subject_ids:
+        ## Format and append graph DataFrames
+        # Load graph
+        graph = load_graph_by_id(sid, column=columns)
+        # Remove self loops
+        graph = graph.loc[graph.apply(lambda d: d['TF'] != d['TG'], axis=1)]
+        # Apply edge strings
+        graph['Edge'] = graph.apply(lambda d: get_edge_string([d['TF'], d['TG']]), axis=1)
+        graph = graph.drop(columns=['TF', 'TG'])
+        # Format
+        graph.set_index('Edge')
+        # Record
+        graphs.append(graph)
+
+    # Join graphs
+    graph_1, graph_2 = graphs
+    joined_graphs = graph_1.join(graph_2, how='inner', lsuffix='_s1', rsuffix='_s2')  # Only take edge intersections
+    joined_graphs = joined_graphs.drop(columns='Edge_s2').rename(columns={'Edge_s1': 'Edge'}).set_index('Edge')
+
+    return joined_graphs
+
+
+def get_top_idx(df, columns, num_edges_per_head=2):
+    # Get greatest idx for each
+    idx_to_include = []
+    for column in columns:
+        # Get *new* top edges for each head
+        top_edges = df[column].argsort()[::-1]
+        top_edges = list([idx for idx in top_edges if idx not in idx_to_include][:num_edges_per_head])
+        idx_to_include += top_edges
+
+    return idx_to_include

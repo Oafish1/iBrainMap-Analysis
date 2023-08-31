@@ -295,34 +295,20 @@ def visualize_graph_state(g, scale=.01, highlight=False, ax=None):
 
 
 def plot_enrichment(df, ax=None):
-    if not ax: ax = plt.gca()
-
-    # Plot
-    sns.scatterplot(
-        data=df,
-        x='Disease',
-        y='Cell Type',
-        size='-log10(p)',
-        color='black',
-        sizes=(10, 200),
-        ax=ax,
-    )
-    # Zoom X
-    margin = .5
-    min_xlim, max_xlim = ax.get_xlim()
-    min_xlim -= margin; max_xlim += margin
-    # Zoom Y
-    max_ylim, min_ylim = ax.get_ylim()
-    min_ylim -= margin; max_ylim += margin
-    ax.set(xlim=(min_xlim, max_xlim), ylim=(max_ylim, min_ylim))
-    # Formatting
-    plt.grid()
-    plt.xticks(rotation=90)
-    # Legend
-    plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
+    "Macro for `plot_circle_heatmap` for enrichment results"
+    plot_circle_heatmap(
+        df,
+        index_name='Disease',
+        column_name='Cell Type',
+        value_name='-log10(p)',
+        color='Black',
+        transform=False,
+        ax=ax)
+    ax.set_xlabel(None)
+    ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, broken=False, suffix='Attention Weights', ax=None):
+def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
@@ -335,67 +321,66 @@ def plot_individual_edge_comparison(g, sample_ids, broken=False, suffix='Attenti
             df[sample_id].append(coefs[i])
     df = pd.DataFrame(df)
 
-
-
     # Plot
-    if not broken:
-        sns.scatterplot(
-            data=df,
-            x=sample_ids[0],
-            y=sample_ids[1],
-            color='black',
-            ax=ax,
-        )
-        xlabel = sample_ids[0]
-        if suffix: xlabel += ' ' + suffix
-        ax.set_xlabel(xlabel)
-        ylabel = sample_ids[1]
-        if suffix: ylabel += ' ' + suffix
-        ax.set_ylabel(ylabel)
+    sns.scatterplot(
+        data=df,
+        x=sample_ids[0],
+        y=sample_ids[1],
+        color='black',
+        # linewidth=0,
+        ax=ax,
+    )
+    xlabel = sample_ids[0]
+    if suffix: xlabel += ' ' + suffix
+    ax.set_xlabel(xlabel)
+    ylabel = sample_ids[1]
+    if suffix: ylabel += ' ' + suffix
+    ax.set_ylabel(ylabel)
 
-        # Plot y=x
-        lims = [
-            max(ax.get_xlim()[0], ax.get_ylim()[0]),
-            min(ax.get_xlim()[1], ax.get_ylim()[1])]
-        ax.plot(lims, lims, '-', color='black', alpha=0.3)
+    # Plot y=x
+    lims = [
+        max(ax.get_xlim()[0], ax.get_ylim()[0]),
+        min(ax.get_xlim()[1], ax.get_ylim()[1])]
+    ax.plot(lims, lims, '-', color='black', alpha=0.3)
 
-        # Formatting
-        ax.set_xscale('log')
-        ax.set_yscale('log')
-    else:
-        # Calculate discontinuities (From JAMIE)
-        max_dist = .2; pad = 1e-3
-        bounds = []
-        for vals in [df[sample_ids[0]], df[sample_ids[1]]]:
-            bounds.append([])
+    # Formatting
+    ax.set_xscale('log')
+    ax.set_yscale('log')
 
-            sorted_vals = np.sort(vals)
-            min_val = sorted_vals[0]
-            max_val = sorted_vals[0]
-            for val in sorted_vals[1:]:
-                if val - max_val > max_dist:
-                    bounds[-1].append((min_val - pad, max_val + pad))
-                    min_val = max_val = val
-                else:
-                    max_val = val
-            bounds[-1].append((min_val - pad, max_val + pad))
+    # Broken
+    # # Calculate discontinuities (From JAMIE)
+    # max_dist = .2; pad = 1e-3
+    # bounds = []
+    # for vals in [df[sample_ids[0]], df[sample_ids[1]]]:
+    #     bounds.append([])
 
-        # Make broken plot
-        bax = brokenaxes(
-            xlims=bounds[0],
-            ylims=bounds[1],
-            hspace=.15,
-            wspace=.15,
-        )
+    #     sorted_vals = np.sort(vals)
+    #     min_val = sorted_vals[0]
+    #     max_val = sorted_vals[0]
+    #     for val in sorted_vals[1:]:
+    #         if val - max_val > max_dist:
+    #             bounds[-1].append((min_val - pad, max_val + pad))
+    #             min_val = max_val = val
+    #         else:
+    #             max_val = val
+    #     bounds[-1].append((min_val - pad, max_val + pad))
 
-        # Get y=x
-        lims = [
-            max(bounds[0][0][0], bounds[1][0][0]),
-            min(bounds[0][-1][1], bounds[1][-1][1])]
+    # # Make broken plot
+    # bax = brokenaxes(
+    #     xlims=bounds[0],
+    #     ylims=bounds[1],
+    #     hspace=.15,
+    #     wspace=.15,
+    # )
 
-        # Plot everything
-        bax.plot(lims, lims, '-', color='black', alpha=0.3)
-        bax.scatter(df[sample_ids[0]], df[sample_ids[1]], color='black', edgecolors='white')
+    # # Get y=x
+    # lims = [
+    #     max(bounds[0][0][0], bounds[1][0][0]),
+    #     min(bounds[0][-1][1], bounds[1][-1][1])]
+
+    # # Plot everything
+    # bax.plot(lims, lims, '-', color='black', alpha=0.3)
+    # bax.scatter(df[sample_ids[0]], df[sample_ids[1]], color='black', edgecolors='white')
 
     return df
 
@@ -596,8 +581,8 @@ def plot_contrast_curve(
         df_concat = df_concat.loc[[s in edges_to_keep for s in df_concat['Edge']]]
 
     # Sort
-    # Have each line individually sorted
     if sorting_subgroup == 'Individual':
+        # Have each line individually sorted
         df_concat = df_concat.sort_values(['Variance'], ascending=[True])
         df_concat['Sort'] = 0
         for subgroup in df_subgroup:
@@ -606,7 +591,20 @@ def plot_contrast_curve(
                 np.array(list(range(length))) / (length - 1))
         x = 'Sort'
         xlabel = 'Percentile'
+    elif sorting_subgroup == 'Mean':
+        # Sort by mean of all except population
+        df_concat_edge_mean = (
+            df_concat
+                .loc[df_concat['Subgroup'] != 'Population', ['Variance']]
+                .groupby(['Edge'])
+                .mean()
+        )
+        df_concat = df_concat.join(df_concat_edge_mean, how='right', rsuffix='_sort')
+        df_concat = df_concat.sort_values(['Variance_sort'], ascending=[True])
+        x = 'Edge'
+        xlabel = None
     else:
+        # Sort by a single column
         # Prepare for join
         to_join = df_subgroup[sorting_subgroup]
         to_join.index = to_join['Edge']
@@ -614,7 +612,7 @@ def plot_contrast_curve(
         df_concat = df_concat.join(to_join, how='right', rsuffix='_sort')  # Filter to and sort by subgroup
         df_concat = df_concat.sort_values(['Variance_sort'], ascending=[True])
         x = 'Edge'
-        xlabel = 'Edge'
+        xlabel = None
 
     # Plot
     plt.sca(ax)
@@ -639,11 +637,17 @@ def plot_contrast_curve(
 
 
 def plot_subgroup_heatmap(df_subgroup, *, ax=None):
-    sns.heatmap(data=join_df_subgroup(df_subgroup), ax=ax)
-    # ax.set_xlabel('Group')
+    # Regular heatmap
+    # sns.heatmap(data=join_df_subgroup(df_subgroup), ax=ax)
+
+    # Circle heatmap
+    plot_circle_heatmap(join_df_subgroup(df_subgroup), ax=ax)
+    ax.set_xlabel(None)
+    ax.set_ylabel(None)
 
 
 def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None, ax=None, **kwargs):
+    # TODO: Rename?  It can do more than BRAAK
     # Compute
     if df is None:
         df = compute_BRAAK_comparison(contrast, meta=meta, column=column, target=target, **kwargs)
@@ -651,23 +655,128 @@ def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None,
     # Plot
     sns.violinplot(data=df, hue=target, y='Attention', x='Edge', ax=ax)
     plt.yscale('log')  # Could this misfire?
-    sns.despine(offset=10, trim=True, ax=ax)
+    sns.despine(offset=10, ax=ax)  # trim=True
 
     return df
 
 
-def plot_prediction_confusion(contrast, *, meta, column, target='BRAAK_AD', prioritized_edges, ax=None, **kwargs):
+def plot_prediction_confusion(
+        contrast,
+        *,
+        meta,
+        column,
+        target='BRAAK_AD',
+        prioritized_edges,
+        row_normalize=True,
+        ax=None,
+        **kwargs):
     # Compute
     df, acc = compute_prediction_confusion(contrast, meta=meta, column=column, target=target, prioritized_edges=prioritized_edges, **kwargs)
 
+    # Get num samples
+    n = df.to_numpy().sum()
+
     # Row scale df
-    # df = ( df.T / df.sum(axis=1) ).T  # Kind of hacky, works because columns are default divide
+    if row_normalize:
+        df = ( df.T / df.sum(axis=1) ).T  # Kind of hacky, works because columns are default divide
 
     # Plot
-    sns.heatmap(data=df, vmin=0, cmap='crest', cbar=True, ax=ax)
+    sns.heatmap(data=df, vmin=0, cmap='crest', cbar=not row_normalize, ax=ax)
     if ax is None: ax = plt.gca()
-    ax.set_title(f'Acc = {acc:.3f}')
+    ax.set_title(f'n={n}, acc={acc:.3f}')
     ax.set_xlabel(f'{target} (Predicted)')
     ax.set_ylabel(f'{target} (True)')
 
     return df, acc
+
+
+def plot_circle_heatmap(
+    df,
+    *,
+    index_name=None,
+    column_name='Group',
+    value_name='Variance',
+    sign_name='Sign',
+    color='Red',
+    size_max=200,
+    multicolor=None,
+    multicolor_labels=['Positive', 'Negative'],
+    transform=True,
+    ax=None,
+    **kwargs):
+    "Plot a heatmap with circles, like some corrplots in R"
+    # TODO: Set up custom colors with multicolor
+    # For color, generally, Significance=Black, Variance=Red, Raw Difference=Blue
+    # Setup
+    if ax is None: ax = plt.gca()
+    else: plt.sca(ax)
+    if transform and multicolor is None: multicolor = df.to_numpy().min() < 0
+    if transform and multicolor is None: multicolor = df.to_numpy().min() < 0
+
+    # Melt and format heatmap df (like `sns.heatmap` input) for scatter
+    if transform:
+        # Make copies
+        df = df.copy()
+
+        # Format data
+        if index_name is None: index_name = df.index.name
+        df = df.reset_index(names=index_name)
+        df = pd.melt(df, id_vars=[index_name], var_name=column_name, value_name=value_name)
+
+    ## Get metadata
+    # Split by positive/negative
+    if multicolor:
+        df[sign_name] = list(df[value_name].apply(lambda x: multicolor_labels[0] if x > 0 else multicolor_labels[1]))
+        df[value_name] = df[value_name].abs()
+
+    # Plot
+    # TODO: Set min size to represent true 0, get constant scaling
+    scp = sns.scatterplot(
+        data=df,
+        x=column_name,
+        y=index_name,
+        hue=sign_name if multicolor else None,
+        size=value_name,
+        sizes=(0, size_max),
+        color=color,
+        ax=ax,
+    )
+    # Formatting
+    plt.grid()
+    plt.xticks(rotation=90)
+    h, l = scp.axes.get_legend_handles_labels()
+    scp.axes.legend_.remove()
+    plt.legend(h, l, ncol=2)
+    # ax.axis('equal')
+    ax.set_aspect('equal', 'box')
+    # Zoom X
+    margin = .5
+    min_xlim, max_xlim = ax.get_xlim()
+    min_xlim -= margin; max_xlim += margin
+    # Zoom Y
+    max_ylim, min_ylim = ax.get_ylim()
+    min_ylim -= margin; max_ylim += margin
+    ax.set(xlim=(min_xlim, max_xlim), ylim=(max_ylim, min_ylim))
+    # Legend
+    plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
+
+
+def plot_head_comparison(subject_id_1, subject_id_2, *, ax=None, **kwargs):
+    # Setup
+    if ax is None: ax = plt.gca()
+
+    # Compute
+    individual_head_difference = compute_head_comparison((subject_id_1, subject_id_2), **kwargs)
+
+    # Plot
+    plot_circle_heatmap(
+        individual_head_difference.T,
+        index_name='Head',
+        column_name='Edge',
+        value_name='Difference',
+        sign_name='Subject',
+        color='Blue',  # Fallback color
+        multicolor_labels=[subject_id_1, subject_id_2],
+        ax=ax)
+    ax.set_xlabel(None)
+    ax.set_ylabel(None)

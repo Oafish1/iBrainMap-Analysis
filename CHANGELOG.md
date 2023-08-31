@@ -1,3 +1,23 @@
+### 2023-08-30
+- Add general-purpose circle-style heatmap plotting with `plot_circle_heatmap`
+- Add head comparison plot, `plot_head_comparison`
+- Add many utility functions
+- Add multi-column capability to `load_graph_by_id`
+- Add supplemental figures
+- Add utility function `get_attention_columns`
+- Change default TF-TG recalculation timing in `concatenate_graphs` to `after`, also add configurable option
+- Change filename structure
+- Change plot ordering and grouping
+- Change several plot styles
+- Fix several small bugs and unoptimal behaviors
+- Flip enrichment plot
+- Implement `mean` sorting method for `plot_contrast_curve`
+- Manual plot adjustments
+- Optimize `remove_duplicate_edges` by using hash table for duplicate edges (I am dumb)
+- Revise automatic threshold for `concatenate_graphs`
+- Revised individual loading structure for `graph_analysis` notebook
+- Small plot revisions for readability
+
 ### 2023-08-29 (1-3)
 - Add more objectives for figure 4 plots
 - Added filtering for aggregate graphs

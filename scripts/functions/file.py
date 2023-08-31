@@ -13,9 +13,13 @@ FREEZE25_ATT = FREEZE25_ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_g
 FREEZE25_GE = FREEZE25_ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
 FREEZE25_SID = FREEZE25_ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
 
-
 ### File Functions
-graphs_pkl = None
+def get_attention_columns():
+    graphs_pkl = get_graphs_pkl()
+    graph = graphs_pkl[list(graphs_pkl.keys())[0]]
+    return [c for c in graph.columns if c not in ['from', 'to', 'from_gene', 'to_gene', 'att_mean', 'att_max']]
+
+
 def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
     # From individual graphs
     if source == 'coexpression':
@@ -32,14 +36,17 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
         # 'att_D_no_prior_0', 'att_D_no_prior_1', 'att_D_no_prior_2', 'att_D_no_prior_3'
         column = 'att_mean' if column is None else column
 
-        # Load pkl if not already loaded
-        global graphs_pkl
-        if not graphs_pkl:
-            with open(FREEZE25_ATT, 'rb') as f:
-                graphs_pkl = pickle.load(f)
+        # Load pkl
+        graphs_pkl = get_graphs_pkl()
+
         # Get graph
-        graph = graphs_pkl[graph_id][['from_gene', 'to_gene', column]]
-        graph = graph.rename(columns={'from_gene': 'TF', 'to_gene': 'TG', column: 'coef'})  # TF, TG, coef
+        if type(column) == type([]):
+            # If list, keep many columns and don't standardize name
+            graph = graphs_pkl[graph_id][['from_gene', 'to_gene'] + column]
+            graph = graph.rename(columns={'from_gene': 'TF', 'to_gene': 'TG'})
+        else:
+            graph = graphs_pkl[graph_id][['from_gene', 'to_gene', column]]
+            graph = graph.rename(columns={'from_gene': 'TF', 'to_gene': 'TG', column: 'coef'})  # TF, TG, coef
 
     # Exception
     else:
@@ -55,6 +62,16 @@ def load_graph_embeddings():
         graph_embeddings = pickle.load(f)
     library = {sid: ge.detach().flatten().numpy() for sid, ge in zip(graph_sids, graph_embeddings)}
     return library
+
+
+graphs_pkl = None
+def get_graphs_pkl():
+    # Load pkl if not already loaded
+    global graphs_pkl
+    if not graphs_pkl:
+        with open(FREEZE25_ATT, 'rb') as f:
+            graphs_pkl = pickle.load(f)
+    return graphs_pkl
 
 
 def get_meta():

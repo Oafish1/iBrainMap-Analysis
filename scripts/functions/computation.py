@@ -121,6 +121,8 @@ def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something m
 
 
 def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, min_common_edges=1, threshold=None):
+    "Return edge x subject dataframe for all graphs"
+    # TODO: Make `subject_ids` not required
     # Setup
     assert graphs is not None or concatenated_graph is not None
     if graphs is not None: concatenated_graph = concatenate_graphs(*graphs, threshold=threshold)
@@ -150,6 +152,7 @@ def compute_edge_summary(graphs=None, concatenated_graph=None, *, subject_ids, m
 
 
 def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=np.inf, threshold=None):
+    "Return concatenated graphs for a contrast"
     # TODO: Add list input for `contrast_subject_ids`
     # For each subgroup of the contrast
     contrast_concatenated_graphs = {}; contrast_concatenated_subject_ids = {}
@@ -277,3 +280,27 @@ def compute_prediction_confusion(
         index=[f'{name} (n={int(n)}, acc={racc:.3f})' for name, n, racc in zip(names, row_sum, row_acc)])
 
     return df, accuracy
+
+
+def compute_head_comparison(subject_ids, **kwargs):
+    "Return edge x head difference DataFrame"
+    # Setup
+    all_columns = get_attention_columns()
+
+    # Get graphs
+    joined_graphs = get_many_graph_lists(subject_ids, all_columns)
+
+    # CLI
+    print(f'{joined_graphs.shape[0]} common edges found')
+
+    # Calculate differences
+    for column in all_columns:
+        joined_graphs[column] = joined_graphs[column+'_s1'] - joined_graphs[column+'_s2']
+
+    # Get top idx
+    idx_to_include = get_top_idx(joined_graphs.abs(), all_columns, **kwargs)
+
+    # Filter
+    joined_graphs = joined_graphs.iloc[idx_to_include][all_columns]
+
+    return joined_graphs
