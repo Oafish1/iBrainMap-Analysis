@@ -553,7 +553,11 @@ def get_graph_pos(g, scale=None):
 def plot_contrast_curve(
     df_subgroup: pd.DataFrame,
     *,
+    index_name: str='Edge',
+    subgroup_name: str='Subgroup',
+    value_name: str='Variance',
     sorting_subgroup: str='Individual',
+    concatenate: bool=True,
     filter_common: bool=None,
     ax=None,
     **kwargs):
@@ -571,23 +575,26 @@ def plot_contrast_curve(
     if ax is None: _, axs = get_mosaic([list(range(1))], scale=9); ax=axs[0]
 
     # Merge and format dfs
-    df_concat = pd.concat([df_subgroup[k] for k in df_subgroup])
-    df_concat.index = df_concat['Edge']
+    if concatenate:
+        df_concat = pd.concat([df_subgroup[k] for k in df_subgroup])
+    else:
+        df_concat = df_subgroup
+    df_concat = df_concat.set_index(index_name)
 
     # Filter to only common edges if sorting subgroup is not population, for comparability
     if filter_common:
-        unique, count = np.unique(df_concat['Edge'], return_counts=True)
-        edges_to_keep = unique[count >= len(df_subgroup)]
-        df_concat = df_concat.loc[[s in edges_to_keep for s in df_concat['Edge']]]
+        unique, count = np.unique(df_concat.index, return_counts=True)
+        edges_to_keep = unique[count >= len(np.unique(df_concat[subgroup_name]))]
+        df_concat = df_concat.loc[[s in edges_to_keep for s in df_concat.index]]
 
     # Sort
     if sorting_subgroup == 'Individual':
         # Have each line individually sorted
-        df_concat = df_concat.sort_values(['Variance'], ascending=[True])
+        df_concat = df_concat.sort_values([value_name], ascending=[True])
         df_concat['Sort'] = 0
-        for subgroup in df_subgroup:
-            length = len(df_concat.loc[df_concat['Subgroup'] == subgroup, 'Sort'])
-            df_concat.loc[df_concat['Subgroup'] == subgroup, 'Sort'] = (
+        for subgroup in np.unique(df_concat[subgroup_name]):
+            length = len(df_concat.loc[df_concat[subgroup_name] == subgroup, 'Sort'])
+            df_concat.loc[df_concat[subgroup_name] == subgroup, 'Sort'] = (
                 np.array(list(range(length))) / (length - 1))
         x = 'Sort'
         xlabel = 'Percentile'
@@ -595,31 +602,31 @@ def plot_contrast_curve(
         # Sort by mean of all except population
         df_concat_edge_mean = (
             df_concat
-                .loc[df_concat['Subgroup'] != 'Population', ['Variance']]
-                .groupby(['Edge'])
+                .loc[df_concat[subgroup_name] != 'Population', [value_name]]
+                .groupby([index_name])
                 .mean()
         )
         df_concat = df_concat.join(df_concat_edge_mean, how='right', rsuffix='_sort')
-        df_concat = df_concat.sort_values(['Variance_sort'], ascending=[True])
-        x = 'Edge'
+        df_concat = df_concat.sort_values([f'{value_name}_sort'], ascending=[True])
+        x = index_name
         xlabel = None
     else:
         # Sort by a single column
         # Prepare for join
-        to_join = df_subgroup[sorting_subgroup]
-        to_join.index = to_join['Edge']
+        to_join = df_concat.loc[df_concat[subgroup_name] == sorting_subgroup]
+        # to_join.index = to_join[index_name]
         # Join and sort
         df_concat = df_concat.join(to_join, how='right', rsuffix='_sort')  # Filter to and sort by subgroup
-        df_concat = df_concat.sort_values(['Variance_sort'], ascending=[True])
-        x = 'Edge'
+        df_concat = df_concat.sort_values([f'{value_name}_sort'], ascending=[True])
+        x = index_name
         xlabel = None
 
     # Plot
     plt.sca(ax)
     lp = sns.lineplot(
         data=df_concat,
-        x=x, y='Variance', hue='Subgroup',
-        hue_order=np.unique(df_concat['Subgroup']),
+        x=x, y=value_name, hue=subgroup_name,
+        hue_order=np.unique(df_concat[subgroup_name]),
         alpha=.65,
         errorbar=None, estimator=None, n_boot=0,
         ax=ax,

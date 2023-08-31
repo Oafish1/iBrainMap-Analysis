@@ -1,3 +1,10 @@
+### 2023-08-31
+- Adapt `plot_contrast_curve` to additional DataFrame-type arguments
+- Add batch graph loading with `get_graphs_from_sids`
+- Additional arguments for many functions
+- Additional population analysis plots
+- SNP analysis plot framework and dummy figure
+
 ### 2023-08-30 (1-2)
 - Add general-purpose circle-style heatmap plotting with `plot_circle_heatmap`
 - Add head comparison plot, `plot_head_comparison`

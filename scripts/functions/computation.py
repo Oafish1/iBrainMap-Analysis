@@ -177,7 +177,7 @@ def compute_aggregate_edge_summary(contrast_subject_ids, *, column, max_graphs=n
     return contrast_concatenated_graphs, contrast_concatenated_subject_ids
 
 
-def compute_contrast_summary(contrast, *, column):
+def compute_contrast_summary(contrast, *, column, population=True):
     "Return dataframe with edge mean and variance for all subgroups in contrast"
     # TODO: Allow for multiple columns at the same time, requires overhaul of multiple functions, including concat...
     # Get subgroup variance
@@ -192,14 +192,15 @@ def compute_contrast_summary(contrast, *, column):
         df_subgroup[subgroup] = df
 
     # Get population variance
-    sample_ids = {'Population': sum([contrast[k] for k in contrast], [])}
-    contrast_concatenated_graphs, contrast_concatenated_subject_ids = compute_aggregate_edge_summary(
-        contrast_subject_ids=sample_ids, column=column)  # Threshold included here for filtering
-    df, concatenated_graph = compute_edge_summary(
-        concatenated_graph=contrast_concatenated_graphs['Population'], subject_ids=contrast_concatenated_subject_ids['Population'])
-    df = df[['Edge', 'Mean', 'Variance']]
-    df['Subgroup'] = 'Population'
-    df_subgroup['Population'] = df  # Add population as subgroup
+    if population:
+        sample_ids = {'Population': sum([contrast[k] for k in contrast], [])}
+        contrast_concatenated_graphs, contrast_concatenated_subject_ids = compute_aggregate_edge_summary(
+            contrast_subject_ids=sample_ids, column=column)  # Threshold included here for filtering
+        df, concatenated_graph = compute_edge_summary(
+            concatenated_graph=contrast_concatenated_graphs['Population'], subject_ids=contrast_concatenated_subject_ids['Population'])
+        df = df[['Edge', 'Mean', 'Variance']]
+        df['Subgroup'] = 'Population'
+        df_subgroup['Population'] = df  # Add population as subgroup
 
     return df_subgroup
 
@@ -304,3 +305,20 @@ def compute_head_comparison(subject_ids, **kwargs):
     joined_graphs = joined_graphs.iloc[idx_to_include][all_columns]
 
     return joined_graphs
+
+
+def get_graphs_from_sids(subject_ids, *, method='attention', column=None):
+    # TODO: Add try, except
+    if method == 'coex':
+        return [
+            cull_isolated_leaves(
+                compute_graph(
+                    scale_edge_coefs_list(
+                        load_graph_by_id(
+                            sid,
+                            source='coexpression'),
+                        1./60),
+                    filter=.9))
+            for sid in subject_ids]
+    elif method == 'attention':
+        return [compute_graph(load_graph_by_id(sid, column=column)) for sid in subject_ids]

@@ -838,7 +838,7 @@ def join_df_subgroup(
     return df
 
 
-def get_many_graph_lists(subject_ids, columns):
+def get_many_graph_lists(subject_ids, columns, join_type='inner'):
     # TODO: Implement for more than two graph lists
     assert len(subject_ids) == 2, '`get_many_graph_lists` can only join 2 graph lists at the moment'
 
@@ -860,7 +860,7 @@ def get_many_graph_lists(subject_ids, columns):
 
     # Join graphs
     graph_1, graph_2 = graphs
-    joined_graphs = graph_1.join(graph_2, how='inner', lsuffix='_s1', rsuffix='_s2')  # Only take edge intersections
+    joined_graphs = graph_1.join(graph_2, how=join_type, lsuffix='_s1', rsuffix='_s2')  # Only take edge intersections
     joined_graphs = joined_graphs.drop(columns='Edge_s2').rename(columns={'Edge_s1': 'Edge'}).set_index('Edge')
 
     return joined_graphs
