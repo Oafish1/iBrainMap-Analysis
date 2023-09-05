@@ -1,4 +1,4 @@
-### 2023-08-05 (1-3)
+### 2023-08-05 (1-4)
 - Add `get_node_attributes` function to sync color/shape/size changes between plots
 - Figure layout and plot format updates
 - Legend recalculation
