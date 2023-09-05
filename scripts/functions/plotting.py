@@ -184,7 +184,7 @@ def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
         mplfig=ax,
     )
 
-    if legend: plot_legend
+    if legend: plot_legend()
 
 
 def visualize_graph_base(g, **kwargs):
@@ -208,15 +208,15 @@ def plot_legend(hub=False, ax=None):
     if not ax: ax = plt.gca()
 
     # Custom Legend
-    palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    # NOTE: Unfortunately, shapes need to be changed manually
     legend_elements = [
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='p', markerfacecolor=palette[1], label='Cell Type'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=palette[4], label='TF+TG'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=palette[2], label='TF'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='o', markerfacecolor=palette[3], label='TG'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='h', markerfacecolor=get_node_appearance('celltype')[0], label='Cell Type'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tftg')[0], label='TF+TG'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tf')[0], label='TF'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='o', markerfacecolor=get_node_appearance('tg')[0], label='TG'),
     ]
     if hub:
-        legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='h', markerfacecolor=palette[1], label='Hub'),] + legend_elements
+        legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='8', markerfacecolor=get_node_appearance('hub')[0], label='Hub'),] + legend_elements
     ax.legend(handles=legend_elements, loc='best')
 
 

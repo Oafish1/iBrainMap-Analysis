@@ -614,13 +614,51 @@ def remove_edges(g):
     return g
 
 
-def assign_vertex_properties(g):
+def get_node_appearance(node_type=None):
+    "Returns color for corresponding node type"
     # Parameters
     # sizes = [1.2, 1., .75, .5]
     sizes = np.array(list(range(4))[::-1])
     sizes = (sizes - sizes.min()) / (sizes.max() - sizes.min())
     sizes = sizes * .5 + .25
 
+    # Get correct values
+    if node_type.upper() == 'HUB':
+        # color = rgba_to_hex(palette[0])
+        color = '#000000'
+        shape = 'octagon'
+        size = sizes[0]
+    elif node_type.upper() == 'CELLTYPE':
+        # g.vp.color[v] = rgba_to_hex(palette[1])
+        color = '#65CA5C'
+        shape = 'hexagon'
+        size = sizes[1]
+    elif node_type.upper() == 'TFTG':
+        # g.vp.color[v] = rgba_to_hex(palette[4])
+        color = '#47653A'
+        shape = 'triangle'  # Same as just tf
+        size = sizes[2]
+    elif node_type.upper() == 'TF':
+        # g.vp.color[v] = rgba_to_hex(palette[2])
+        color = '#A3D83E'
+        shape = 'triangle'
+        size = sizes[2]
+    elif node_type.upper() == 'TG':
+        # g.vp.color[v] = rgba_to_hex(palette[3])
+        color = '#A7C69D'
+        shape = 'circle'
+        size = sizes[3]
+    elif node_type is None:
+        color = '#FFFFFF'
+        shape = 'circle'  # Default
+        size = sizes[3]
+    else:
+        raise ValueError(f'No node type \'{node_type}\' found.')
+
+    return color, shape, size
+
+
+def assign_vertex_properties(g):
     # Detect synthetic vertices
     synthetic_vertices = detect_synthetic_vertices_graph(g)
 
@@ -644,45 +682,29 @@ def assign_vertex_properties(g):
         palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
         # Hub
         if v_id in ['hub']:
-            # g.vp.color[v] = rgba_to_hex(palette[0])
-            g.vp.color[v] = '#000000'
+            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('hub')
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
-            g.vp.shape[v] = 'octagon'
-            g.vp.size[v] = sizes[0]
             # root = v
         # Cell-type
         elif v_id in synthetic_vertices:  # NOTE: This does not include 'hub'
-            # g.vp.color[v] = rgba_to_hex(palette[1])
-            g.vp.color[v] = '#65CA5C'
+            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('celltype')
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
-            g.vp.shape[v] = 'hexagon'
-            g.vp.size[v] = sizes[1]
         # Default
         else:
             is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
             is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
-            if is_tf and not is_tg:
-                # g.vp.color[v] = rgba_to_hex(palette[2])
-                g.vp.color[v] = '#A3D83E'
-                g.vp.shape[v] = 'triangle'
-                g.vp.size[v] = sizes[2]
+            if is_tf and is_tg:
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tftg')
+            elif is_tf and not is_tg:
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tf')
             elif not is_tf and is_tg:
-                # g.vp.color[v] = rgba_to_hex(palette[3])
-                g.vp.color[v] = '#A7C69D'
-                g.vp.shape[v] = 'circle'
-                g.vp.size[v] = sizes[3]
-            elif is_tf and is_tg:
-                # g.vp.color[v] = rgba_to_hex(palette[4])
-                g.vp.color[v] = '#47653A'
-                g.vp.shape[v] = 'triangle'  # Same as just tf
-                g.vp.size[v] = sizes[2]
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tg')
             else:
                 # Only connections from synthetic node
-                g.vp.color[v] = '#FFFFFF'
-                g.vp.shape[v] = 'circle'  # Default
-                g.vp.size[v] = sizes[3]
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance()
+
             # Add text to outer nodes (optional)
             g.vp.text[v] = v_id
 
