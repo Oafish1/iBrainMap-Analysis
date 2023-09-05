@@ -644,7 +644,8 @@ def assign_vertex_properties(g):
         palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
         # Hub
         if v_id in ['hub']:
-            g.vp.color[v] = rgba_to_hex(palette[0])
+            # g.vp.color[v] = rgba_to_hex(palette[0])
+            g.vp.color[v] = '#000000'
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
             g.vp.shape[v] = 'octagon'
@@ -652,7 +653,8 @@ def assign_vertex_properties(g):
             # root = v
         # Cell-type
         elif v_id in synthetic_vertices:  # NOTE: This does not include 'hub'
-            g.vp.color[v] = rgba_to_hex(palette[1])
+            # g.vp.color[v] = rgba_to_hex(palette[1])
+            g.vp.color[v] = '#65CA5C'
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
             g.vp.shape[v] = 'hexagon'
@@ -662,15 +664,18 @@ def assign_vertex_properties(g):
             is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
             is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
             if is_tf and not is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[2])
+                # g.vp.color[v] = rgba_to_hex(palette[2])
+                g.vp.color[v] = '#A3D83E'
                 g.vp.shape[v] = 'triangle'
                 g.vp.size[v] = sizes[2]
             elif not is_tf and is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[3])
+                # g.vp.color[v] = rgba_to_hex(palette[3])
+                g.vp.color[v] = '#A7C69D'
                 g.vp.shape[v] = 'circle'
                 g.vp.size[v] = sizes[3]
             elif is_tf and is_tg:
-                g.vp.color[v] = rgba_to_hex(palette[4])
+                # g.vp.color[v] = rgba_to_hex(palette[4])
+                g.vp.color[v] = '#47653A'
                 g.vp.shape[v] = 'triangle'  # Same as just tf
                 g.vp.size[v] = sizes[2]
             else:
