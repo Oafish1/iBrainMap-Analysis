@@ -1,5 +1,6 @@
-### 2023-08-05
-- Update graph node colors
+### 2023-08-05 (1-2)
+- Figure layout and plot format updates
+- Update graph node colors to match color dictionary
 
 ### 2023-08-31 (1-2)
 - Adapt `plot_contrast_curve` to additional DataFrame-type arguments
