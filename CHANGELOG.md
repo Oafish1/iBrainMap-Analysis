@@ -10,7 +10,7 @@
 - More organization for notebook
 - Several small formatting fixes
 
-### 2023-09-05 (1-3)
+### 2023-09-05 (1-4)
 - Add `get_node_attributes` function to sync color/shape/size changes between plots
 - Figure layout and plot format updates
 - Legend recalculation
