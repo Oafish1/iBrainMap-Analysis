@@ -1,5 +1,6 @@
 import itertools
 
+from adjustText import adjust_text
 from brokenaxes import brokenaxes
 import graph_tool.all as gt
 from matplotlib.lines import Line2D
@@ -166,6 +167,7 @@ def plot_sankey(meta, flow, order=None, use_nan=False):
 
 ### Graph visualizations
 def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
+    "Plotting with additional parameters, unused"
     if not scale: scale = get_default_scale(g)
     if not ax: ax = plt.gca()
     if not pos: pos = get_graph_pos(g)
@@ -188,6 +190,7 @@ def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
 
 
 def visualize_graph_base(g, **kwargs):
+    "Basic graph visualization"
     min_size = 3*g.num_vertices()**(-5/6)
     gt.graph_draw(
         g,
@@ -196,6 +199,7 @@ def visualize_graph_base(g, **kwargs):
         vertex_size=gt.prop_to_size(g.vp.size, min_size, min_size),  # vertex_size uses absolute units
         vertex_text=g.vp.text,
         vertex_text_position=-2,
+        vertex_text_color='black',
         edge_color=g.ep.color,
         edge_end_marker='none',
         # ink_scale=1,
@@ -308,7 +312,7 @@ def plot_enrichment(df, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', ax=None):
+def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', highlight_outliers=True, ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
@@ -321,11 +325,52 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', a
             df[sample_id].append(coefs[i])
     df = pd.DataFrame(df)
 
+    # Highlight outliers
+    if highlight_outliers:
+        # Get outliers
+        difference = (df[sample_ids[1]] - df[sample_ids[0]]).to_numpy()
+        outlier_idx, outlier_mask = get_outlier_idx(difference, return_mask=True)
+        # Record
+        df['outlier'] = outlier_mask
+        # Annotate
+        annotations = []
+        for idx in outlier_idx:
+            # `ax.annotate` doesn't work with `adjust_text`
+            # upper = difference[idx] > 0  # Is the point above or below y=x?
+            # ann = ax.annotate(
+            #     df.loc[idx, 'id'].item(),
+            #     (df.loc[idx, sample_ids[0]].item(), df.loc[idx, sample_ids[1]].item()),
+            #     # Away from y=x
+            #     # horizontalalignment='right' if upper else 'left',
+            #     # verticalalignment='bottom' if upper else 'top',
+            #     horizontalalignment='center',
+            #     verticalalignment='center',
+            #     # Formatting
+            #     fontsize=10,
+            # )
+            ann = plt.text(
+                df.loc[idx, sample_ids[0]].item(), df.loc[idx, sample_ids[1]].item(),
+                df.loc[idx, 'id'].item(),
+                # Away from y=x
+                # horizontalalignment='right' if upper else 'left',
+                # verticalalignment='bottom' if upper else 'top',
+                ha='center',
+                va='center',
+                # Formatting
+                fontsize=10,
+            )
+            annotations.append(ann)
+        # Make sure text doesn't overlap points or other text
+        # NOTE: Doesn't work with plt.text right now
+        # TODO: Tune for clearer visualization, perhaps figure out why arrows don't work
+
     # Plot
     sns.scatterplot(
         data=df,
         x=sample_ids[0],
         y=sample_ids[1],
+        hue='outlier' if highlight_outliers else None,
+        palette=['black', 'red'],
         color='black',
         # linewidth=0,
         ax=ax,
@@ -336,6 +381,12 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', a
     ylabel = sample_ids[1]
     if suffix: ylabel += ' ' + suffix
     ax.set_ylabel(ylabel)
+    plot_remove_legend(ax=ax)
+
+    # Formatting
+    # NOTE: Do before y=x for tighter boundaries
+    # ax.set_xscale('log')
+    # ax.set_yscale('log')
 
     # Plot y=x
     lims = [
@@ -343,9 +394,16 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', a
         min(ax.get_xlim()[1], ax.get_ylim()[1])]
     ax.plot(lims, lims, '-', color='black', alpha=0.3)
 
-    # Formatting
-    ax.set_xscale('log')
-    ax.set_yscale('log')
+    # Adjust text positions to avoid overlap
+    # NOTE: Must be done after axis limit/scale changes
+    if highlight_outliers:
+        adjust_text(
+            annotations,
+            df[sample_ids[0]].to_numpy(),
+            df[sample_ids[1]].to_numpy(),
+            arrowprops=dict(arrowstyle='-', color='black', lw=.0001),
+        )
+
 
     # Broken
     # # Calculate discontinuities (From JAMIE)
@@ -653,18 +711,20 @@ def plot_subgroup_heatmap(df_subgroup, *, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None, ax=None, **kwargs):
+def plot_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', df=None, legend=True, ax=None, **kwargs):
     # TODO: Rename?  It can do more than BRAAK
     # Compute
     if df is None:
-        df = compute_BRAAK_comparison(contrast, meta=meta, column=column, target=target, **kwargs)
+        df, edges_include = compute_BRAAK_comparison(contrast, meta=meta, column=column, target=target, **kwargs)
 
     # Plot
     sns.violinplot(data=df, hue=target, y='Attention', x='Edge', ax=ax)
-    plt.yscale('log')  # Could this misfire?
-    sns.despine(offset=10, ax=ax)  # trim=True
+    # plt.yscale('log')  # Could this misfire?
+    # sns.despine(offset=10, ax=ax)  # trim=True
+    if legend: plot_outside_legend(title=target, ax=ax)
+    else: plot_remove_legend(ax=ax)
 
-    return df
+    return df, edges_include
 
 
 def plot_prediction_confusion(
@@ -747,6 +807,7 @@ def plot_circle_heatmap(
         sizes=(0, size_max),
         color=color,
         ax=ax,
+        **kwargs,
     )
     # Formatting
     plt.grid()
@@ -765,10 +826,23 @@ def plot_circle_heatmap(
     min_ylim -= margin; max_ylim += margin
     ax.set(xlim=(min_xlim, max_xlim), ylim=(max_ylim, min_ylim))
     # Legend
-    plt.legend(bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=False)  # Legend to middle-right outside
+    plot_outside_legend(title=value_name if not multicolor else None, ax=ax)
 
 
-def plot_head_comparison(subject_id_1, subject_id_2, *, ax=None, **kwargs):
+def plot_outside_legend(title=None, frameon=False, ax=None):
+    "Plot a legend to the right of plot"
+    # TODO: Add title to legend
+    if ax is not None: plt.sca(ax)
+    plt.legend(title=title, bbox_to_anchor=(1.02, .7), loc='upper left', borderaxespad=0, frameon=frameon)  # Legend to middle-right outside
+
+
+def plot_remove_legend(ax=None):
+    "Remove legend on the provided plot"
+    if ax is not None: plt.sca(ax)
+    plt.legend([],[], frameon=False)
+
+
+def plot_head_comparison(subject_id_1, subject_id_2, *, colors=None, ax=None, **kwargs):
     # Setup
     if ax is None: ax = plt.gca()
 
@@ -784,6 +858,9 @@ def plot_head_comparison(subject_id_1, subject_id_2, *, ax=None, **kwargs):
         sign_name='Subject',
         color='Blue',  # Fallback color
         multicolor_labels=[subject_id_1, subject_id_2],
-        ax=ax)
+        ax=ax,
+        hue_order=[subject_id_1, subject_id_2],
+        palette=colors,
+    )
     ax.set_xlabel(None)
     ax.set_ylabel(None)

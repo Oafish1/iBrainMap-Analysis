@@ -1,4 +1,16 @@
-### 2023-08-05 (1-3)
+### 2023-09-06
+- Add legend titles
+- Additional formatting for `plot_BRAAK_comparison`
+- Additional utility plotting functions for legend, including `plot_remove_legend` and `plot_outside_legend`
+- Consistent coloration in figure 3
+- Fix bug in new node attribute calculation function
+- Fix zoom in `plot_individual_edge_comparison`
+- Fixed text coloration in graph plotting
+- Highlight outliers in `plot_individual_edge_comparison`
+- More organization for notebook
+- Several small formatting fixes
+
+### 2023-09-05 (1-3)
 - Add `get_node_attributes` function to sync color/shape/size changes between plots
 - Figure layout and plot format updates
 - Legend recalculation

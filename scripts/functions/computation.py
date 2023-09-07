@@ -205,7 +205,21 @@ def compute_contrast_summary(contrast, *, column, population=True):
     return df_subgroup
 
 
-def compute_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', edge_percentile=90, num_edges=5):
+def compute_BRAAK_comparison(
+        contrast,
+        *,
+        meta,
+        column,
+        target='BRAAK_AD',
+        edges_include=None,
+        edge_percentile=90,
+        num_edges=5,
+        seed=42):
+    """
+    Compute df with attention scores of `num_edges` random edges with edge commonality in the
+    `edge_percentile` percentile annotated by `target` in `meta` over all individuals in the
+    contrast.
+    """
     # Calculate
     sids = sum([sids for _, sids in contrast.items()], [])
     all_graphs, sids = load_many_graphs(sids, column=column)
@@ -222,12 +236,15 @@ def compute_BRAAK_comparison(contrast, *, meta, column, target='BRAAK_AD', edge_
 
     # Format
     df = df.loc[df['Attention'] != 0]  # Remove 0 attention
-    all_possible_edges, counts = np.unique(df['Edge'], return_counts=True)
-    all_possible_edges = all_possible_edges[counts > np.percentile(counts, edge_percentile)]
-    edges_include = np.random.choice(all_possible_edges, num_edges, replace=False)
+    if edges_include is None:
+        all_possible_edges, counts = np.unique(df['Edge'], return_counts=True)
+        all_possible_edges = all_possible_edges[counts > np.percentile(counts, edge_percentile)]
+        # TODO: Use highest variance or similar rather than random edges
+        np.random.seed(seed)
+        edges_include = np.random.choice(all_possible_edges, num_edges, replace=False)
     df = df.loc[[e in edges_include for e in df['Edge']]]
 
-    return df
+    return df, edges_include
 
 
 def compute_prediction_confusion(

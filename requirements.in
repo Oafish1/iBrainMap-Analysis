@@ -1,4 +1,5 @@
 # graph-tool  # conda install -c conda-forge graph-tool
+adjustText
 brokenaxes
 hiveplotlib
 ipywidgets

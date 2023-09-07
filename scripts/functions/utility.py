@@ -10,6 +10,7 @@ from .file import *
 
 ### Utility functions
 def rgba_to_hex(rgba):
+    # No alpha included
     int_rgba = [int(255*i) for i in rgba]
     return '#{:02x}{:02x}{:02x}'.format(*int_rgba)
 
@@ -621,9 +622,14 @@ def get_node_appearance(node_type=None):
     sizes = np.array(list(range(4))[::-1])
     sizes = (sizes - sizes.min()) / (sizes.max() - sizes.min())
     sizes = sizes * .5 + .25
+    # palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
     # Get correct values
-    if node_type.upper() == 'HUB':
+    if node_type is None:
+        color = '#FFFFFF'
+        shape = 'circle'  # Default
+        size = sizes[3]
+    elif node_type.upper() == 'HUB':
         # color = rgba_to_hex(palette[0])
         color = '#000000'
         shape = 'octagon'
@@ -647,10 +653,6 @@ def get_node_appearance(node_type=None):
         # g.vp.color[v] = rgba_to_hex(palette[3])
         color = '#A7C69D'
         shape = 'circle'
-        size = sizes[3]
-    elif node_type is None:
-        color = '#FFFFFF'
-        shape = 'circle'  # Default
         size = sizes[3]
     else:
         raise ValueError(f'No node type \'{node_type}\' found.')
@@ -679,7 +681,6 @@ def assign_vertex_properties(g):
     for v in g.vertices():
         # assert g.vp.ids[v] == g_nosynthetic.vp.ids[v]  # Works!
         v_id = g.vp.ids[v]
-        palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
         # Hub
         if v_id in ['hub']:
             g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('hub')
@@ -894,6 +895,7 @@ def get_many_graph_lists(subject_ids, columns, join_type='inner'):
 
 
 def get_top_idx(df, columns, num_edges_per_head=2):
+    "Return top `num_edges_per_head` idx in df for each column in `columns` with NO OVERLAP, aggregated"
     # Get greatest idx for each
     idx_to_include = []
     for column in columns:
@@ -903,3 +905,24 @@ def get_top_idx(df, columns, num_edges_per_head=2):
         idx_to_include += top_edges
 
     return idx_to_include
+
+
+def format_return(ret):
+    if len(ret) == 1:
+        return ret[0]
+    return ret
+
+
+def get_outlier_idx(data, num_std_from_mean=3, return_mask=False):
+    "Get outliers (`num_std_from_mean` standard deviations from mean) from `data`"
+    data = np.array(data)
+    mean = np.mean(data)
+    std = np.std(data)
+    lower, upper = mean - num_std_from_mean * std, mean + num_std_from_mean * std
+
+    mask = (data <= lower) + (data >= upper)
+    idx = np.argwhere(mask)
+
+    ret = (idx,)
+    if return_mask: ret += (mask,)
+    return ret
