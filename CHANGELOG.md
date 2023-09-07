@@ -1,8 +1,9 @@
-### 2023-09-06
+### 2023-09-06 (1-2)
 - Add legend titles
 - Additional formatting for `plot_BRAAK_comparison`
 - Additional utility plotting functions for legend, including `plot_remove_legend` and `plot_outside_legend`
 - Consistent coloration in figure 3
+- Figure updates
 - Fix bug in new node attribute calculation function
 - Fix zoom in `plot_individual_edge_comparison`
 - Fixed text coloration in graph plotting
