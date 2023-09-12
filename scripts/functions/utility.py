@@ -926,3 +926,26 @@ def get_outlier_idx(data, num_std_from_mean=3, return_mask=False):
     ret = (idx,)
     if return_mask: ret += (mask,)
     return ret
+
+
+def get_genomic_coordinates(snp_ids):
+    "Get genomic coordinate(s) of `snp_ids`.  If str, will return str.  Otherwise, list"
+    # Parameters
+    string_return = type(snp_ids) == str
+    if string_return:
+        snp_ids = [snp_ids]
+
+    # Get coordinates
+    # TODO: Check if correct
+    # chromosome, coord, first, second = snp_id.split(':')
+    ret = []
+    for snp_id in snp_ids:
+        separated = snp_id.split(':')
+        assert len(separated) == 4, print(f'Entry {snp_id} has incorrect format')
+        separated[1] = int(separated[1])
+        ret.append(separated)
+
+    # Return
+    if string_return:
+        return ret[0]
+    return ret

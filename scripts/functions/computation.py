@@ -252,9 +252,10 @@ def compute_prediction_confusion(
         *,
         meta,
         column,
+        prioritized_edges,
         target='BRAAK_AD',
         classifier_type='SGD',
-        prioritized_edges):
+        random_state=42):
     # Calculate
     sids = sum([sids for _, sids in contrast.items()], [])  # All sids in contrast
     all_graphs, sids = load_many_graphs(sids, column=column)
@@ -270,32 +271,49 @@ def compute_prediction_confusion(
     df_meta = meta.copy()
     df_meta.index = df_meta['SubID']
     df_meta = df_meta.loc[list(df.columns)[1:]].reset_index(drop=True)
-    names, y = np.unique(df_meta[target], return_inverse=True)
-    names = names[~pd.isna(names)]
+    y = df_meta[target].to_numpy().astype(str)
 
     # Remove nan
     is_nan = pd.isna(df_meta[target])
-    X = X[~is_nan]
-    y = y[~is_nan]
+    X, y = X[~is_nan], y[~is_nan]
+
+    # Remove classes with too few samples
+    # NOTE: This prevents an error with multiclass prediction for sklearn
+    min_samples = 2
+    y_unique, y_counts = np.unique(y, return_counts=True)
+    indices_to_include = sum([y==val for val, count in zip(y_unique, y_counts) if count >= min_samples])
+    indices_to_include = np.array(indices_to_include).astype(bool)
+    X, y = X[indices_to_include], y[indices_to_include]
+
+    # Formatting and object standardization
+    names = np.unique(y)
 
     # Predict
-    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=random_state)
     if classifier_type == 'SGD':
-        classifier = SGDClassifier().fit(X_train, y_train)
+        classifier = SGDClassifier(random_state=random_state).fit(X_train, y_train)
     elif classifier_type == 'MLP':
-        classifier = MLPClassifier().fit(X_train, y_train)
+        classifier = MLPClassifier(random_state=random_state).fit(X_train, y_train)
     else:
         raise ValueError(f'Classifier type {classifier_type} not found.')
     accuracy = classifier.score(X_test, y_test)
 
     # Evaluate
-    confusion_matrix = metrics.confusion_matrix(y_test, classifier.predict(X_test))
+    confusion_matrix = metrics.confusion_matrix(y_test, classifier.predict(X_test), labels=names)
     row_sum = confusion_matrix.sum(axis=1)
     row_acc = np.diag(confusion_matrix) / row_sum
+    col_sum = confusion_matrix.sum(axis=0)
+    col_acc = np.diag(confusion_matrix) / col_sum
     df = pd.DataFrame(
         confusion_matrix,
-        columns=names,
-        index=[f'{name} (n={int(n)}, acc={racc:.3f})' for name, n, racc in zip(names, row_sum, row_acc)])
+        # Predicted names
+        columns=[
+            f'Predicted {name} (n={int(n)}, acc={racc:.3f})'
+            for name, n, racc in zip(names, col_sum, col_acc)],
+        # True names
+        index=[
+            f'{name} (n={int(n)}, acc={racc:.3f})'
+            for name, n, racc in zip(names, row_sum, row_acc)])
 
     return df, accuracy
 

@@ -401,7 +401,7 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', h
             annotations,
             df[sample_ids[0]].to_numpy(),
             df[sample_ids[1]].to_numpy(),
-            arrowprops=dict(arrowstyle='-', color='black', lw=.0001),
+            arrowprops=dict(arrowstyle='-', color='black', lw=.01),
         )
 
 
@@ -734,9 +734,15 @@ def plot_prediction_confusion(
         column,
         target='BRAAK_AD',
         prioritized_edges,
-        row_normalize=True,
+        plot_type='Barplot',
+        row_normalize: bool = None,
         ax=None,
         **kwargs):
+    # Parameters
+    if ax is None: ax = plt.gca()
+    if row_normalize is None:
+        row_normalize = plot_type.upper() == 'HEATMAP'
+
     # Compute
     df, acc = compute_prediction_confusion(contrast, meta=meta, column=column, target=target, prioritized_edges=prioritized_edges, **kwargs)
 
@@ -748,11 +754,24 @@ def plot_prediction_confusion(
         df = ( df.T / df.sum(axis=1) ).T  # Kind of hacky, works because columns are default divide
 
     # Plot
-    sns.heatmap(data=df, vmin=0, cmap='crest', cbar=not row_normalize, ax=ax)
-    if ax is None: ax = plt.gca()
-    ax.set_title(f'n={n}, acc={acc:.3f}')
-    ax.set_xlabel(f'{target} (Predicted)')
-    ax.set_ylabel(f'{target} (True)')
+    if plot_type.upper() == 'HEATMAP':
+        sns.heatmap(data=df, vmin=0, cmap='crest', cbar=not row_normalize, ax=ax)
+        ax.set_title(f'n={n}, acc={acc:.3f}')
+        ax.set_xlabel(f'{target} (Predicted)')
+        ax.set_ylabel(f'{target} (True)')
+
+    elif plot_type.upper() == 'BARPLOT':
+        # df_bar = df.reset_index(names='True').melt(
+        #     id_vars='True',
+        #     value_vars=df.columns,
+        #     value_name='Count',
+        #     var_name='Predicted')
+        df.plot(kind='bar', stacked=True, ax=ax)
+        ax.set_title(f'n={n}, acc={acc:.3f}')
+        ax.set_xlabel(f'{target}')
+        ax.set_ylabel(f'Count')
+
+
 
     return df, acc
 

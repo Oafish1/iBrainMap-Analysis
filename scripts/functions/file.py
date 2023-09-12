@@ -3,15 +3,22 @@ import pickle
 import pandas as pd
 
 
+# Locations
 DATA_FOLDER = '../../data/'
 META = DATA_FOLDER + 'syn26527784_latest.csv'
 CONTRAST = DATA_FOLDER + 'contrasts.csv'
+DOSAGE = DATA_FOLDER + 'PsychAD_Dosage/genotype_varThresh0.5.csv'
 COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
-FREEZE2_ATT = DATA_FOLDER + 'freeze2/attention/homo_5TF_1Tar_graph_with_edgeW_att.pkl'
-FREEZE25_ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
-FREEZE25_ATT = FREEZE25_ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
-FREEZE25_GE = FREEZE25_ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
-FREEZE25_SID = FREEZE25_ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
+
+# Freeze 2
+# ATT = DATA_FOLDER + 'freeze2/attention/homo_5TF_1Tar_graph_with_edgeW_att.pkl'
+
+# Freeze 2.5
+ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
+ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
+GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
+SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
+
 
 ### File Functions
 def get_attention_columns():
@@ -21,6 +28,7 @@ def get_attention_columns():
 
 
 def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
+    "Given a subject id `graph_id`, will return dataframe with column(s) `column` from `source`"
     # From individual graphs
     if source == 'coexpression':
         column = 'CoexWeight' if column is None else column
@@ -34,7 +42,7 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
         # 'att_mean', 'att_max',
         # 'att_D_AD_0_1', 'att_D_AD_0_3', 'att_D_AD_0_5', 'att_D_AD_0_7',
         # 'att_D_no_prior_0', 'att_D_no_prior_1', 'att_D_no_prior_2', 'att_D_no_prior_3'
-        column = 'att_mean' if column is None else column
+        column = 'att_max' if column is None else column  # Max for retention of head-specific prioritization
 
         # Load pkl
         graphs_pkl = get_graphs_pkl()
@@ -56,9 +64,9 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
 
 
 def load_graph_embeddings():
-    with open(FREEZE25_SID, 'rb') as f:
+    with open(SID, 'rb') as f:
         graph_sids = pickle.load(f)
-    with open(FREEZE25_GE, 'rb') as f:
+    with open(GE, 'rb') as f:
         graph_embeddings = pickle.load(f)
     library = {sid: ge.detach().flatten().numpy() for sid, ge in zip(graph_sids, graph_embeddings)}
     return library
@@ -69,13 +77,17 @@ def get_graphs_pkl():
     # Load pkl if not already loaded
     global graphs_pkl
     if not graphs_pkl:
-        with open(FREEZE25_ATT, 'rb') as f:
+        with open(ATT, 'rb') as f:
             graphs_pkl = pickle.load(f)
     return graphs_pkl
 
 
 def get_meta():
     return pd.read_csv(META)
+
+
+def get_dosage():
+    return pd.read_csv(DOSAGE)
 
 
 contrast_table = None
