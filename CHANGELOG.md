@@ -1,7 +1,8 @@
-### 2023-09-12
+### 2023-09-12 (1-2)
 - Add gene prioritization for group analyses
 - Add framework for dosage correlation analysis
 - Add stacked barchart visualization for `plot_prediction_confusion`
+- Figure revisions
 - Sanitize input and optimize processing for `compute_prediction_confusion`
 - Separate combined figures into individual elements
 - Small logic and formatting changes
