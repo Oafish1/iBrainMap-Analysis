@@ -1,9 +1,11 @@
 import itertools as it
+import warnings
 
 import graph_tool.all as gt
 import networkx as nx
 import numpy as np
 import pandas as pd
+import scipy.stats
 from sklearn.linear_model import SGDClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
@@ -357,3 +359,118 @@ def get_graphs_from_sids(subject_ids, *, method='attention', column=None):
             for sid in subject_ids]
     elif method == 'attention':
         return [compute_graph(load_graph_by_id(sid, column=column)) for sid in subject_ids]
+
+
+def compute_attention_dosage_correlation(
+        dosage,
+        *,
+        meta,
+        subject_ids,
+        column=None,
+        target_edge=None,
+        return_target_edge=None):
+    "Computes attention-dosage correlation across many subjects and SNPs"
+    # Parameters
+    if return_target_edge is None: return_target_edge = target_edge is None
+
+    # Non-destructive
+    dosage = dosage.copy()
+
+    # Convert dosage ids to subjects
+    print('Converting dosage ids to subject ids...')
+    dosage_ids = np.array(dosage.columns)
+    meta_snp_columns = [s for s in meta.columns if 'SNP' in s.upper()]
+    dosage_subject_ids = []
+    snp_type = []
+    for dosage_id in dosage_ids:
+        # Find idx and column
+        for col in meta_snp_columns:
+            idx = np.argwhere(meta[col] == dosage_id)
+            if len(idx) > 0: break
+        # Error on completion
+        else:
+            warnings.warn(f'Unable to find SNP \'{dosage_id}\' in metadata')
+            dosage_subject_ids.append(None)
+            snp_type.append(None)
+            continue
+        assert len(idx) == 1, f'Duplicate SNPs \'{dosage_id}\' found in metadata'
+        idx = idx[0][0]
+
+        # Record
+        subject_id = meta['SubID'].iloc[idx]
+        dosage_subject_ids.append(subject_id)
+        snp_type.append(col)
+    dosage.columns = dosage_subject_ids
+
+    # Find intersection
+    intersection_ids = list(set(subject_ids).intersection(set(dosage.columns)))
+    dosage = dosage[intersection_ids]
+
+    # Load graphs based on intersection
+    # TODO: Use something like `compute_edge_summary(graphs=get_graphs_from_sids(graph_sids, column=column), subject_ids=graph_sids)[0]`
+    #   to get full array
+    graphs, graph_sids = load_many_graphs(intersection_ids, column=column)
+
+    # Get edge to use for correlation analysis
+    # TODO: Replace this with something meaningful
+    if target_edge is None:
+        print('Selecting target edge...')
+        ## First edge
+        # target_edge = get_edge_string(list(graphs[0][0].loc[0, ['TF', 'TG']]))
+        ## Most variant edge
+        variance = compute_edge_summary(graphs=get_graphs_from_sids(graph_sids, column=column), subject_ids=graph_sids)[0]
+        variance = variance.set_index('Edge')
+        variance = variance.std(axis=1)
+        target_edge = variance.index[np.argmax(variance)]
+    target_edge = target_edge.split(get_edge_string(['', '']))
+
+    # Get attention for the edge over all subject ids in `intersection_ids`
+    attention, attention_sids = [], []
+    for graph, sid in zip(graphs, graph_sids):
+        # Find target edge
+        mask = graph.apply(lambda x: (x['TF'] == target_edge[0]) * (x['TG'] == target_edge[1]), axis=1)
+        idx = np.argwhere(mask)
+
+        # If not found, skip graph
+        if len(idx) < 1: continue
+        idx = idx[0][0]
+
+        # Record
+        value = graph['coef'].iloc[idx]
+        attention.append(value)
+        attention_sids.append(sid)
+    attention = np.array(attention)
+    attention_sids = np.array(attention_sids)
+
+    # Compute correlation over all SNPs
+    print('Computing correlations...')
+    chrs = []
+    coords = []
+    corrs = []
+    for snp_id in tqdm(dosage.index):
+        # Format dosage for correlation analysis
+        snp_dosage = dosage.loc[snp_id, attention_sids].to_numpy().astype(float)
+
+        # Compute correlation between attention and dosage
+        ## Numpy
+        # corr = np.corrcoef(attention, snp_dosage)[0, 1]
+        ## Scipy
+        corr = scipy.stats.pearsonr(attention, snp_dosage)[1]
+        corr = -np.log(corr)  # -log(p)
+
+        # Record
+        chr, coord, _, _ = get_genomic_coordinates(snp_id)
+        chrs.append(chr)
+        coords.append(coord + get_chromosome_coordinate(chr[3:]))  # Get absolute coordinate
+        corrs.append(corr)
+
+    # Format
+    df = pd.DataFrame({
+        'Chromosome': chrs,
+        'Coordinate': coords,
+        '-log(Correlation p-value)': corrs})
+
+    # Return
+    ret = (df,)
+    if return_target_edge: ret += (get_edge_string(target_edge),)
+    return format_return(ret)

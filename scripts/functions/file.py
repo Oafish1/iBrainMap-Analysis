@@ -87,7 +87,10 @@ def get_meta():
 
 
 def get_dosage():
-    return pd.read_csv(DOSAGE)
+    dosage = pd.read_csv(DOSAGE)
+    dosage = dosage.set_index('snp_id')
+    dosage = dosage.loc[dosage.index != 'snp_id']
+    return dosage
 
 
 contrast_table = None

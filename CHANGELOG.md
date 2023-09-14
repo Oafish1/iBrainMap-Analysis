@@ -1,3 +1,7 @@
+### 2023-09-13
+- Add various utility functions
+- Implement dosage analysis
+
 ### 2023-09-12 (1-2)
 - Add gene prioritization for group analyses
 - Add framework for dosage correlation analysis

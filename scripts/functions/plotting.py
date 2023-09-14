@@ -883,3 +883,41 @@ def plot_head_comparison(subject_id_1, subject_id_2, *, colors=None, ax=None, **
     )
     ax.set_xlabel(None)
     ax.set_ylabel(None)
+
+
+def plot_attention_dosage_correlation(
+        dosage,
+        *,
+        meta,
+        subject_ids,
+        column=None,
+        n=None,
+        random_state=42,
+        ax=None,
+        **kwargs):
+    # Parameters
+    if ax is None: ax = plt.gca()
+
+    # Compute correlations
+    df, target_edge = compute_attention_dosage_correlation(
+        dosage if n is None else dosage.sample(n=n, random_state=random_state),
+        meta=meta,
+        subject_ids=subject_ids,
+        column=column,
+        **kwargs)
+
+    # Plot
+    plt.sca(ax)
+    ax.axhline(y=-np.log(.05))
+    sns.scatterplot(
+        data=df,
+        x='Coordinate',
+        y='-log(Correlation p-value)',
+        hue='Chromosome',
+        hue_order=['chr'+s for s in get_chromosome_order()],
+        edgecolor='none',
+        ax=ax)
+    ax.set_title(target_edge)
+    plot_remove_legend(ax=ax)
+
+    return df, target_edge

@@ -785,6 +785,7 @@ def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1)
 
     `max_tfs` and `max_tgs`: -1 indicates unlimited
     """
+    # TODO: Filter recursively rather than only two layers deep
     # Check that all provided vertices are synthetic
     assert np.array([string_is_synthetic(s) for s in vertex_ids]).all()
 
@@ -925,7 +926,7 @@ def get_outlier_idx(data, num_std_from_mean=3, return_mask=False):
 
     ret = (idx,)
     if return_mask: ret += (mask,)
-    return ret
+    return format_return(ret)
 
 
 def get_genomic_coordinates(snp_ids):
@@ -949,3 +950,84 @@ def get_genomic_coordinates(snp_ids):
     if string_return:
         return ret[0]
     return ret
+
+
+def get_chromosome_lengths():
+    # TODO: Find out why there are gaps
+    return {
+        '1': 247_249_719,
+        '2': 242_951_149,
+        '3': 199_501_827,
+        '4': 191_273_063,
+        '5': 180_857_866,
+        '6': 170_899_992,
+        '7': 158_821_424,
+        '8': 146_274_826,
+        '9': 140_273_252,
+        '10': 135_374_737,
+        '11': 134_452_384,
+        '12': 132_349_534,
+        '13': 114_142_980,
+        '14': 106_368_585,
+        '15': 100_338_915,
+        '16': 88_827_254,
+        '17': 78_774_742,
+        '18': 76_117_153,
+        '19': 63_811_651,
+        '20': 62_435_964,
+        '21': 46_944_323,
+        '22': 49_691_432,
+        'X': 154_913_754,
+        'Y': 57_772_954,
+    }
+
+
+def get_chromosome_length(chromosome):
+    "Return chromosome length"
+    length_dictionary = get_chromosome_lengths()
+
+    return length_dictionary[chromosome]
+
+
+def get_chromosome_order():
+    return [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        'X',
+        'Y',
+    ]
+
+
+def get_chromosome_coordinate(chromosome):
+    "Return start coordinate of chromosome"
+    chromosome_order = get_chromosome_order()
+    chromosome_order = np.array(chromosome_order)
+
+    # Sum previous chromosome lengths
+    idx = np.argwhere(chromosome_order==chromosome)
+    assert len(idx) > 0, f'Chromosome {chromosome} not found'
+    running_sum = 0
+    for chromosome in chromosome_order[:idx[0][0]]:
+        running_sum += get_chromosome_length(chromosome)
+
+    return running_sum
