@@ -1,5 +1,6 @@
-### 2023-09-19
+### 2023-09-19 (1-2)
 - Additional plot input sanitization
+- Figure revisions
 - Fix enrichment plot scaling to start from zero
 - New FREEZE and graphs with corresponding reading adjustments
 - Recalculation of manual notebook parameters
