@@ -1,3 +1,14 @@
+### 2023-09-18
+- Add FDR correction to SNP analysis
+- Add eQTL SNP visualization to individual plots
+- Calculate and read real enrichments
+- New pathway enrichment for individual comparisons
+- Refine SNP analysis and add utility arguments
+- Swap enrichment axes
+
+### 2023-09-15
+- Add multiple Manhattan plots
+
 ### 2023-09-13
 - Add various utility functions
 - Implement dosage analysis

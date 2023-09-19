@@ -340,7 +340,7 @@ def get_alpha(coef):
     return alpha
 
 
-def get_edge_string(g, e=None):
+def get_edge_string(g=['', ''], e=None):
     # If g is a list
     if type(g) == type([]):
         source_str, target_str = g
@@ -619,9 +619,9 @@ def get_node_appearance(node_type=None):
     "Returns color for corresponding node type"
     # Parameters
     # sizes = [1.2, 1., .75, .5]
-    sizes = np.array(list(range(4))[::-1])
+    sizes = np.array(list(range(5))[::-1])
     sizes = (sizes - sizes.min()) / (sizes.max() - sizes.min())
-    sizes = sizes * .5 + .25
+    sizes = sizes * .8 + .1
     # palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
     # Get correct values
@@ -654,6 +654,10 @@ def get_node_appearance(node_type=None):
         color = '#A7C69D'
         shape = 'circle'
         size = sizes[3]
+    elif node_type.upper() == 'SNP':
+        color = '#000000'
+        shape = 'circle'
+        size = sizes[4]
     else:
         raise ValueError(f'No node type \'{node_type}\' found.')
 
@@ -678,18 +682,21 @@ def assign_vertex_properties(g):
     g.vp.size = g.new_vertex_property('double')
     g.vp.text_synthetic = g.new_vertex_property('string')
     g.vp.text = g.new_vertex_property('string')
+    g.vp.node_type = g.new_vertex_property('string')
     for v in g.vertices():
         # assert g.vp.ids[v] == g_nosynthetic.vp.ids[v]  # Works!
         v_id = g.vp.ids[v]
         # Hub
         if v_id in ['hub']:
-            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('hub')
+            g.vp.node_type[v] = 'hub'
+            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
             # root = v
         # Cell-type
         elif v_id in synthetic_vertices:  # NOTE: This does not include 'hub'
-            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('celltype')
+            g.vp.node_type[v] = 'celltype'
+            g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
             g.vp.text_synthetic[v] = v_id
             g.vp.text[v] = v_id
         # Default
@@ -697,11 +704,14 @@ def assign_vertex_properties(g):
             is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
             is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
             if is_tf and is_tg:
-                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tftg')
+                g.vp.node_type[v] = 'tftg'
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
             elif is_tf and not is_tg:
-                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tf')
+                g.vp.node_type[v] = 'tf'
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
             elif not is_tf and is_tg:
-                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance('tg')
+                g.vp.node_type[v] = 'tg'
+                g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
             else:
                 # Only connections from synthetic node
                 g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance()
@@ -953,7 +963,6 @@ def get_genomic_coordinates(snp_ids):
 
 
 def get_chromosome_lengths():
-    # TODO: Find out why there are gaps
     return {
         '1': 247_249_719,
         '2': 242_951_149,
@@ -1031,3 +1040,50 @@ def get_chromosome_coordinate(chromosome):
         running_sum += get_chromosome_length(chromosome)
 
     return running_sum
+
+
+def add_snp_to_graph(g, *, snp_id, snp_target, silence_exception=True):
+    "Add snp to graph"
+    # Get matching ids
+    matches = gt.find_vertex(g, g.vp.ids, snp_target)
+
+    # Raise error if not found
+    if len(matches) == 0:
+        if silence_exception: return g
+        raise LookupError(f'No id \'{snp_target}\' found in `g`')
+
+    # Add node
+    v_snp = g.add_vertex()
+    g.vp.node_type[v_snp] = 'snp'
+    g.vp.color[v_snp], g.vp.shape[v_snp], g.vp.size[v_snp] = get_node_appearance(g.vp.node_type[v_snp])
+    g.vp.ids[v_snp] = snp_id
+    g.vp.text[v_snp] = snp_id
+
+    # Add edge
+    e_snp = g.add_edge(v_snp, matches[0])
+    g.ep.color[e_snp] = [0, 0, 0, 1]
+    g.ep.coef[e_snp] = 1
+
+    # Return
+    return g
+
+
+def remove_snps(g):
+    # Filter out nodes which have `node_type` 'SNP'
+    to_remove = [v for v in g.vertices() if g.vp.node_type[v].upper() == 'SNP']
+    return gt.GraphView(g, vfilt=lambda v: v not in to_remove)
+
+
+def make_snps_invisible(g):
+    # Make all nodes with `node_type` 'SNP' have transparent vertex edges
+    # Create parameter
+    try: g.vp.hide
+    except: g.vp.hide = g.new_vertex_property('bool')
+
+    # Change values
+    for v in g.vertices():
+        if g.vp.node_type[v].upper() == 'SNP':
+            g.vp.hide[v] = True
+
+    # Return
+    return g

@@ -90,7 +90,7 @@ def compute_statistics(meta, x, x_sub, filter=.8, **kwargs):
     return graph_summary
 
 
-def compute_graph(graph, filter=0, hub_present=False):  # TODO: Find something more interesting than cutting off `filter`
+def compute_graph(graph, filter=0):  # TODO: Find something more interesting than cutting off `filter`
     # Filter to high-valued edges
     if filter:
         graph = graph[graph['coef'] >= graph['coef'].quantile(filter)]
@@ -368,8 +368,14 @@ def compute_attention_dosage_correlation(
         subject_ids,
         column=None,
         target_edge=None,
-        return_target_edge=None):
-    "Computes attention-dosage correlation across many subjects and SNPs"
+        return_target_edge=None,
+        chromosomes=None):
+    """
+    Computes attention-dosage correlation across many subjects and SNPs
+
+    If `chromosomes` is included, filters visualization to chromosomes in `chromosomes`
+    """
+    # TODO: Allow for multiple target edges
     # Parameters
     if return_target_edge is None: return_target_edge = target_edge is None
 
@@ -448,6 +454,13 @@ def compute_attention_dosage_correlation(
     coords = []
     corrs = []
     for snp_id in tqdm(dosage.index):
+        # Get snp information
+        chr, coord, _, _ = get_genomic_coordinates(snp_id)
+
+        # This filtering could be done earlier, but this seemed more harmonious
+        if chromosomes is not None and chr not in [f'chr{s}' for s in chromosomes]:
+            continue
+
         # Format dosage for correlation analysis
         snp_dosage = dosage.loc[snp_id, attention_sids].to_numpy().astype(float)
 
@@ -456,19 +469,23 @@ def compute_attention_dosage_correlation(
         # corr = np.corrcoef(attention, snp_dosage)[0, 1]
         ## Scipy
         corr = scipy.stats.pearsonr(attention, snp_dosage)[1]
-        corr = -np.log(corr)  # -log(p)
 
         # Record
-        chr, coord, _, _ = get_genomic_coordinates(snp_id)
         chrs.append(chr)
         coords.append(coord + get_chromosome_coordinate(chr[3:]))  # Get absolute coordinate
         corrs.append(corr)
 
+    # Transform p values
+    ## FDR adjustment
+    corr = scipy.stats.false_discovery_control(corr)
+    ## Change scale
+    corr = -np.log(corr)  # -log(p)
+
     # Format
     df = pd.DataFrame({
         'Chromosome': chrs,
-        'Coordinate': coords,
-        '-log(Correlation p-value)': corrs})
+        'Genomic Coordinate (bp)': coords,
+        '-log(FDR-Adjusted Correlation p-value)': corrs})
 
     # Return
     ret = (df,)

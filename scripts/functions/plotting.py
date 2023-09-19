@@ -1,4 +1,5 @@
 import itertools
+import os
 
 from adjustText import adjust_text
 from brokenaxes import brokenaxes
@@ -189,14 +190,32 @@ def visualize_graph(g, pos=None, scale=None, ax=None, legend=False):
     if legend: plot_legend()
 
 
-def visualize_graph_base(g, **kwargs):
+def visualize_graph_base(g, **kwargs):  # , min_size=None
     "Basic graph visualization"
-    min_size = 3*g.num_vertices()**(-5/6)
+    # Scale size
+    # if min_size is None: min_size = 1*g.num_vertices()**(-5/6)
+    min_size = .7*g.num_vertices()**(-5/6)
+    max_size = 5*min_size
+    size = g.new_vertex_property('double')
+    for v in g.vertices():
+        size[v] = max_size * g.vp.size[v] + min_size
+
+    # Only show visible nodes
+    # This method is strange, should revise
+    outline_color = g.new_vertex_property('vector<double>')
+    for v in g.vertices():
+        try:
+            if not g.vp.hide[v]: outline_color[v] = [0, 0, 0, .2]
+        except: outline_color[v] = [0, 0, 0, .2]
+
+
+    # Draw
     gt.graph_draw(
         g,
         vertex_fill_color=g.vp.color,
+        vertex_color=outline_color,
         vertex_shape=g.vp.shape,
-        vertex_size=gt.prop_to_size(g.vp.size, min_size, min_size),  # vertex_size uses absolute units
+        vertex_size=size,  # gt.prop_to_size(g.vp.size, min_size, max_size),  # vertex_size uses absolute units
         vertex_text=g.vp.text,
         vertex_text_position=-2,
         vertex_text_color='black',
@@ -206,6 +225,8 @@ def visualize_graph_base(g, **kwargs):
         fit_view=1.1,
         **kwargs,
     )
+
+    # return min_size
 
 
 def plot_legend(hub=False, ax=None):
@@ -302,9 +323,9 @@ def plot_enrichment(df, ax=None):
     "Macro for `plot_circle_heatmap` for enrichment results"
     plot_circle_heatmap(
         df,
-        index_name='Disease',
-        column_name='Cell Type',
-        value_name='-log10(p)',
+        index_name='Cell Type',
+        column_name='Disease',
+        value_name='-log(p)',
         color='Black',
         transform=False,
         ax=ax)
@@ -463,7 +484,7 @@ def plot_graph_comparison(
     # Aggregate and calculate node positions
     # NOTE: Supplied concatenated graph must not be pruned
     if concatenated_graph is None:
-        concatenated_graph = concatenate_graphs(*graphs, threshold=False)
+        concatenated_graph = concatenate_graphs(*graphs, recalculate=False, threshold=False)
         if filter_text:
             concatenated_graph = remove_text_by_centrality(concatenated_graph.copy())
     if concatenated_pos is None:
@@ -473,10 +494,18 @@ def plot_graph_comparison(
     for i, (g, sid) in enumerate(zip(graphs, subject_ids)):
         ax = axs[i]
         if i:
-            axs[0].get_shared_x_axes().join(axs[0], ax)
-            axs[0].get_shared_y_axes().join(axs[0], ax)
+            axs[0].sharex(ax)
+            axs[0].sharey(ax)
         if show_null_nodes:
-            inverse_graph = make_vertices_white(get_inverse_graph(remove_edges(remove_text(concatenated_graph.copy())), g))
+            inverse_graph = (
+                make_vertices_white(
+                make_snps_invisible(
+                get_inverse_graph(
+                remove_edges(
+                remove_text(
+                    concatenated_graph.copy()
+                )), g)))
+            )
             plot_graph = concatenate_graphs(
                 inverse_graph,
                 transfer_text_labels(concatenated_graph, g),
@@ -888,36 +917,40 @@ def plot_head_comparison(subject_id_1, subject_id_2, *, colors=None, ax=None, **
 def plot_attention_dosage_correlation(
         dosage,
         *,
-        meta,
-        subject_ids,
-        column=None,
-        n=None,
+        n=None,  # Helps with development for shorter runtimes
         random_state=42,
+        target_edge=None,
+        chromosomes=None,
         ax=None,
         **kwargs):
     # Parameters
     if ax is None: ax = plt.gca()
 
     # Compute correlations
-    df, target_edge = compute_attention_dosage_correlation(
+    ret = compute_attention_dosage_correlation(
         dosage if n is None else dosage.sample(n=n, random_state=random_state),
-        meta=meta,
-        subject_ids=subject_ids,
-        column=column,
+        target_edge=target_edge,
+        chromosomes=chromosomes,
         **kwargs)
+    if target_edge is None:
+        df, target_edge = ret
+    else:
+        df = ret
 
     # Plot
     plt.sca(ax)
-    ax.axhline(y=-np.log(.05))
+    ax.axhline(y=-np.log(.05))  # Significance line
     sns.scatterplot(
         data=df,
-        x='Coordinate',
-        y='-log(Correlation p-value)',
+        x='Genomic Coordinate (bp)',
+        y='-log(FDR-Adjusted Correlation p-value)',
         hue='Chromosome',
-        hue_order=['chr'+s for s in get_chromosome_order()],
+        hue_order=['chr'+s for s in (get_chromosome_order() if chromosomes is None else chromosomes)],
         edgecolor='none',
         ax=ax)
+    title = target_edge
+    if chromosomes is not None: title += ' ' + ', '.join(chromosomes)
     ax.set_title(target_edge)
-    plot_remove_legend(ax=ax)
+    if chromosomes is None: plot_remove_legend(ax=ax)
 
-    return df, target_edge
+    return ret

@@ -1,3 +1,4 @@
+import os
 import pickle
 
 import pandas as pd
@@ -120,3 +121,25 @@ def load_many_graphs(subject_ids, **kwargs):
         except: pass
 
     return graphs, sids
+
+
+def get_enrichment(fname, num_diseases=10):
+    # Skip if doesn't exist
+    if not os.path.isfile(fname + '.csv'):
+        return
+
+    # Load file
+    enrichment = pd.read_csv(fname + '.csv')
+    enrichment = (
+        enrichment[['Description', '_LogP_MyList']]
+        .rename(columns={'Description': 'Disease', '_LogP_MyList': '-log(p)'})
+    )
+    enrichment['-log(p)'] *= -1
+    enrichment['Cell Type'] = 'All'
+
+    # Sort and filter to top 10
+    # TODO: Filter to common diseases across cell types
+    enrichment = enrichment.sort_values('-log(p)', ascending=False).iloc[:num_diseases]
+
+    # Return
+    return enrichment
