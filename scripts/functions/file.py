@@ -20,12 +20,29 @@ ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_at
 GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
 SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
 
+# Freeze 3
+ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_embed_09_18/'
+ATT = ATT_FOLDER + 'c15x_att.pkl'
+GE = ATT_FOLDER + 'c15_graph_embedding_all.pkl'
+# SID = NOT PROVIDED
+
 
 ### File Functions
-def get_attention_columns():
+def get_attention_columns(scaled=False, include_aggregates=False):
+    # Load data
     graphs_pkl = get_graphs_pkl()
     graph = graphs_pkl[list(graphs_pkl.keys())[0]]
-    return [c for c in graph.columns if c not in ['from', 'to', 'from_gene', 'to_gene', 'att_mean', 'att_max']]
+
+    # Remove aggregates
+    exclude = ['from', 'to', 'from_gene', 'to_gene']
+    if not include_aggregates:
+        exclude += ['att_mean', 'att_max']
+    if not scaled:
+        exclude += [c for c in graph.columns if c.endswith('_scale')]
+    else:
+        exclude += [c[:-6] for c in graph.columns if c.endswith('_scale')]
+
+    return [c for c in graph.columns if c not in exclude]
 
 
 def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
@@ -43,7 +60,7 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
         # 'att_mean', 'att_max',
         # 'att_D_AD_0_1', 'att_D_AD_0_3', 'att_D_AD_0_5', 'att_D_AD_0_7',
         # 'att_D_no_prior_0', 'att_D_no_prior_1', 'att_D_no_prior_2', 'att_D_no_prior_3'
-        column = 'att_max' if column is None else column  # Max for retention of head-specific prioritization
+        column = get_attention_columns(include_aggregates=True)[0] if column is None else column  # Max for retention of head-specific prioritization
 
         # Load pkl
         graphs_pkl = get_graphs_pkl()
@@ -65,6 +82,7 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
 
 
 def load_graph_embeddings():
+    # Currently does not work, as recent version provides no SIDs
     with open(SID, 'rb') as f:
         graph_sids = pickle.load(f)
     with open(GE, 'rb') as f:

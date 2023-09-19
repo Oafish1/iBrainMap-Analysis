@@ -1,3 +1,9 @@
+### 2023-09-19
+- Additional plot input sanitization
+- Fix enrichment plot scaling to start from zero
+- New FREEZE and graphs with corresponding reading adjustments
+- Recalculation of manual notebook parameters
+
 ### 2023-09-18 (1-2)
 - Add FDR correction to SNP analysis
 - Add eQTL SNP visualization to individual plots

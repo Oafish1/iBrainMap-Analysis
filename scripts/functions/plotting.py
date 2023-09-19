@@ -844,6 +844,9 @@ def plot_circle_heatmap(
         df[sign_name] = list(df[value_name].apply(lambda x: multicolor_labels[0] if x > 0 else multicolor_labels[1]))
         df[value_name] = df[value_name].abs()
 
+    # Scale from zero
+    size_min = size_max * df[value_name].min() / df[value_name].max()
+
     # Plot
     # TODO: Set min size to represent true 0, get constant scaling
     scp = sns.scatterplot(
@@ -852,7 +855,7 @@ def plot_circle_heatmap(
         y=index_name,
         hue=sign_name if multicolor else None,
         size=value_name,
-        sizes=(0, size_max),
+        sizes=(size_min, size_max),
         color=color,
         ax=ax,
         **kwargs,
