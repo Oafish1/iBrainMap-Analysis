@@ -1,7 +1,8 @@
-### 2023-09-18
+### 2023-09-18 (1-2)
 - Add FDR correction to SNP analysis
 - Add eQTL SNP visualization to individual plots
 - Calculate and read real enrichments
+- Figure revisions
 - New pathway enrichment for individual comparisons
 - Refine SNP analysis and add utility arguments
 - Swap enrichment axes
