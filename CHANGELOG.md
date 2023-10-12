@@ -1,3 +1,6 @@
+### 2023-10-11
+- Figure revisions
+
 ### 2023-09-19 (1-2)
 - Additional plot input sanitization
 - Figure revisions
