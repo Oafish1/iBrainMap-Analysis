@@ -194,7 +194,7 @@ def visualize_graph_base(g, **kwargs):  # , min_size=None
     "Basic graph visualization"
     # Scale size
     # if min_size is None: min_size = 1*g.num_vertices()**(-5/6)
-    min_size = .7*g.num_vertices()**(-5/6)
+    min_size = .7*g.num_vertices()**(-4/6)
     max_size = 5*min_size
     size = g.new_vertex_property('double')
     for v in g.vertices():

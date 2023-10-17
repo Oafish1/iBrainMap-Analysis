@@ -1,3 +1,8 @@
+### 2023-10-17
+- Adjust node sizes
+- Adjust heatmap size
+- Temporarily adjust heatmap scale
+
 ### 2023-10-16
 - Clarified comparisons
 - Miscellaneous bugfixes
