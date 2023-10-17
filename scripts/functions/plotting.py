@@ -333,7 +333,7 @@ def plot_enrichment(df, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, suffix='Attention Weights', highlight_outliers=True, ax=None):
+def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 

@@ -644,7 +644,8 @@ def get_node_appearance(node_type=None):
         size = sizes[1]
     elif node_type.upper() == 'TFTG':
         # g.vp.color[v] = rgba_to_hex(palette[4])
-        color = '#47653A'
+        # color = '#47653A'
+        color = '#A3D83E'
         shape = 'triangle'  # Same as just tf
         size = sizes[2]
     elif node_type.upper() == 'TF':

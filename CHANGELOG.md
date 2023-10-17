@@ -1,4 +1,7 @@
 ### 2023-10-17
+- Small figure updates
+
+### 2023-10-17
 - Adjust node sizes
 - Adjust heatmap size
 - Temporarily adjust heatmap scale
