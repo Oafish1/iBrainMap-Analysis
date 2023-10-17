@@ -1,4 +1,7 @@
 ### 2023-10-17
+- Figure changes and refresh
+
+### 2023-10-17
 - Small figure updates
 
 ### 2023-10-17
