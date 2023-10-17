@@ -1,3 +1,12 @@
+### 2023-10-16
+- Clarified comparisons
+- Miscellaneous bugfixes
+- Modified aspect ratios
+- New data
+- New individual dosage analysis
+- New visualizations for figures 3 and 4
+- Other small updates
+
 ### 2023-10-13
 - Figure revisions
 

@@ -215,7 +215,7 @@ def compute_BRAAK_comparison(
         target='BRAAK_AD',
         edges_include=None,
         edge_percentile=90,
-        num_edges=5,
+        num_edges=1,
         seed=42):
     """
     Compute df with attention scores of `num_edges` random edges with edge commonality in the

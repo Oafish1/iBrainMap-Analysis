@@ -1,4 +1,5 @@
 import colorsys
+import warnings
 
 import graph_tool.all as gt
 import matplotlib.pyplot as plt
@@ -326,6 +327,8 @@ def _determine_color(g, e, method='presence'):
             hue = 2/3.
         if cindex == 2:
             hue = 0.
+        if cindex == 0:  # Not present in any
+            hue = 1/3.
     else:
         hue = cindex * (1. / (2**len(coefs) - 2))
     color = colorsys.hsv_to_rgb(hue, 1, .5)
@@ -701,8 +704,23 @@ def assign_vertex_properties(g):
             g.vp.text[v] = v_id
         # Default
         else:
-            is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
-            is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
+            # Regular criterion
+            # is_tf = g_nosynthetic.get_out_degrees([v])[0] > 0
+            # is_tg = g_nosynthetic.get_in_degrees([v])[0] > 0
+
+            # Synthetic criterion
+            neighbors = list(v.all_neighbors())
+            is_tf = np.any([string_is_synthetic(g.vp.ids[n]) for n in neighbors])
+            second_degrees = sum([list(m.all_neighbors()) for m in neighbors if not string_is_synthetic(g.vp.ids[m])], [])
+            is_tg = np.any([string_is_synthetic(g.vp.ids[n]) for n in second_degrees])
+            # Debugging
+            # print(g.vp.ids[v])
+            # for w in second_degrees:
+            #     if string_is_synthetic(g.vp.ids[w]):
+            #         print(g.vp.ids[w])
+            # print()
+
+            # Color
             if is_tf and is_tg:
                 g.vp.node_type[v] = 'tftg'
                 g.vp.color[v], g.vp.shape[v], g.vp.size[v] = get_node_appearance(g.vp.node_type[v])
@@ -833,6 +851,54 @@ def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1)
 
             # Record
             vertices_to_keep += top_tgs
+
+    # Filter
+    g = gt.GraphView(
+        g,
+        vfilt=lambda v: v in vertices_to_keep
+    )
+
+    return cull_isolated_leaves(g)
+
+
+def filter_to_synthetic_vertices(g, vertex_ids, depth=2):
+    # Check that all provided vertices are synthetic
+    assert np.array([string_is_synthetic(s) for s in vertex_ids]).all()
+
+    # Detect synthetic nodes
+    synthetic_nodes = []
+    for v in g.vertices():
+        # Record synthetic nodes
+        if g.vp.ids[v] not in vertex_ids:  # Only continue if specified synthetic node
+            continue
+        synthetic_nodes += [v for v in g.vertices() if g.vp.ids[v] in vertex_ids]
+
+    # Recursively propagate
+    layers = [synthetic_nodes]
+    visited = {v: 0 for v in layers[-1]}
+    while depth:
+        # Get last layer
+        last_layer = layers[-1]
+
+        # Get neighbors
+        current_layer = [list(v.all_neighbors()) for v in last_layer]
+        current_layer = sum(current_layer, [])
+
+        # Exclude synthetic nodes
+        current_layer = [v for v in current_layer if not string_is_synthetic(g.vp.ids[v])]
+
+        # Clean list
+        def hash_and_return(v): visited[v] = 0; return v
+        current_layer = [hash_and_return(v) for v in current_layer if v not in visited]
+
+        # Append
+        layers.append(current_layer)
+
+        # Iterate
+        depth -= 1
+
+    # Format
+    vertices_to_keep = sum(layers, [])
 
     # Filter
     g = gt.GraphView(
@@ -1087,3 +1153,37 @@ def make_snps_invisible(g):
 
     # Return
     return g
+
+
+def convert_dosage_ids_to_subject_ids(dosage, *, meta, inplace=False):
+    if not inplace:
+        dosage = dosage.copy()
+
+    dosage_ids = np.array(dosage.columns)
+    meta_snp_columns = [s for s in meta.columns if 'SNP' in s.upper()]
+    dosage_subject_ids = []
+    snp_type = []
+    for dosage_id in dosage_ids:
+        # Find idx and column
+        for col in meta_snp_columns:
+            idx = np.argwhere(meta[col] == dosage_id)
+            if len(idx) > 0: break
+        # Error on completion
+        else:
+            warnings.warn(f'Unable to find SNP \'{dosage_id}\' in metadata')
+            dosage_subject_ids.append(None)
+            snp_type.append(None)
+            continue
+        assert len(idx) == 1, f'Duplicate SNPs \'{dosage_id}\' found in metadata'
+        idx = idx[0][0]
+
+        # Record
+        subject_id = meta['SubID'].iloc[idx]
+        dosage_subject_ids.append(subject_id)
+        snp_type.append(col)
+    dosage.columns = dosage_subject_ids
+
+    # Remove empty columns
+    dosage = dosage.loc[:, [c for c in dosage.columns if c is not None]]
+
+    return dosage

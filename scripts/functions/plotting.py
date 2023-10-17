@@ -229,7 +229,7 @@ def visualize_graph_base(g, **kwargs):  # , min_size=None
     # return min_size
 
 
-def plot_legend(hub=False, ax=None):
+def plot_legend(horizontal=True, hub=False, ax=None):
     if not ax: ax = plt.gca()
 
     # Custom Legend
@@ -242,7 +242,7 @@ def plot_legend(hub=False, ax=None):
     ]
     if hub:
         legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='8', markerfacecolor=get_node_appearance('hub')[0], label='Hub'),] + legend_elements
-    ax.legend(handles=legend_elements, loc='best')
+    ax.legend(handles=legend_elements, loc='best', ncol=None if not horizontal else len(legend_elements))
 
 
 def visualize_graph_diffusion(g, pos=None, scale=None, ax=None):
