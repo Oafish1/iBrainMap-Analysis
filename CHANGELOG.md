@@ -1,4 +1,7 @@
 ### 2023-10-16
+- Figure updates
+
+### 2023-10-16
 - Clarified comparisons
 - Miscellaneous bugfixes
 - Modified aspect ratios
