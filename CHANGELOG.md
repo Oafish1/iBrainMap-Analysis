@@ -1,4 +1,7 @@
 ### 2023-10-18
+- Figure updates
+
+### 2023-10-18
 - Add individual x edge heatmap
 - Improve recursive synthetic graph filtering to have a parameter `limit`
 - Split and update heatmap figure
