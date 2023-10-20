@@ -1,4 +1,7 @@
 ### 2023-10-19
+- Figure update
+
+### 2023-10-19
 - Bugfix for `string_is_synthetic` case of genes like 'C10orf90'
 - Revisions for individual variance heatmap, including filtering and clustering
 
