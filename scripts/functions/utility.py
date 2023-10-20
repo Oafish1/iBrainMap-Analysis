@@ -1,4 +1,5 @@
 import colorsys
+import re
 import warnings
 
 import graph_tool.all as gt
@@ -117,7 +118,7 @@ def detect_synthetic_vertices_list(graph, hub_present=False):
 def string_is_synthetic(s):
     "Detect synthetic node ids"
     if (
-        s != s.upper()
+        (s != s.upper() and not re.compile('^C\d.+$').match(s))
         or s in ['EN', 'IN', 'OPC', 'PC', 'VLMC', 'PVM', 'SMC']
         or sum([s.startswith(t) for t in ['EN_', 'IN_', 'CD8_']])
     ): return True
@@ -353,6 +354,10 @@ def get_edge_string(g=['', ''], e=None):
         source_str, target_str = g.vp.ids[e.source()], g.vp.ids[e.target()]
 
     return f'{source_str} -- {target_str}'
+
+
+def split_edge_string(s):
+    return s.split(' -- ')
 
 
 def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
