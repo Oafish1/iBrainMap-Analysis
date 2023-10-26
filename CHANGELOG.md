@@ -1,3 +1,8 @@
+### 2023-10-26
+- Heatmap visualization tweaks
+- Heatmap visualization updates
+- Linkage analysis for contrasts
+
 ### 2023-10-19
 - Figure update
 
