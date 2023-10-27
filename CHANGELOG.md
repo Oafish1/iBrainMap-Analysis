@@ -1,3 +1,6 @@
+### 2023-10-27
+- Figure plot and layout updates
+
 ### 2023-10-26 (1-2)
 - Figure changes
 - Heatmap visualization tweaks
