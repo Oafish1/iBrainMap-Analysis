@@ -1,8 +1,9 @@
-### 2023-10-30
+### 2023-10-30 (1-2)
 - Add module analysis for individual networks
 - Add real enrichments with macro `compare_graphs_enrichment` among others
 - Add significance to cluster enrichment
 - Bugfixes
+- Figure updates
 - Formatting changes
 - Improve depth of association calculation for edge variance heatmap
 - Reorganise notebook
