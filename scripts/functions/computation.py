@@ -491,3 +491,71 @@ def compute_attention_dosage_correlation(
     ret = (df,)
     if return_target_edge: ret += (get_edge_string(target_edge),)
     return format_return(ret)
+
+
+def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes):
+    def get_tfs(g, cell_type):
+        # Locate cell type vertex
+        v_cell = gt.find_vertex(g, g.vp.ids, cell_type)[0]
+
+        # Get TFs
+        tfs = [v for v in v_cell.in_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+        # Add TGs (Maybe once graph is larger this won't be needed)
+        tfs = [w  for v in tfs for w in v.out_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+        tfs = np.unique(tfs)
+
+        # Return
+        return [g.vp.ids[v] for v in tfs]
+
+    df = pd.DataFrame()
+    for cell_type in nodes:
+        tfs_1 = get_tfs(g1, cell_type)
+        tfs_2 = get_tfs(g2, cell_type)
+        unique_tfs_1 = set(tfs_1) - set(tfs_2)
+        unique_tfs_2 = set(tfs_2) - set(tfs_1)
+
+        # Save to df
+        df_new = pd.DataFrame()
+        df_new[f'{sid_1}.{cell_type}'] = list(unique_tfs_1)
+        df = df.join(df_new, how='outer')
+        df_new = pd.DataFrame()
+        df_new[f'{sid_2}.{cell_type}'] = list(unique_tfs_2)
+        df = df.join(df_new, how='outer')
+
+        # Save to file
+        # with open(f'../plots/disgenet.{cell_type}.{subject_id_1}.txt', 'w') as f:
+        #     f.write('\n'.join(list(unique_tfs_1)))
+        # with open(f'../plots/disgenet.{cell_type}.{subject_id_2}.txt', 'w') as f:
+        #     f.write('\n'.join(list(unique_tfs_2)))
+
+    return df
+
+
+def format_enrichment(enrichment, filter=True):
+    # Format
+    keep = [c for c in enrichment.columns if c.startswith('_LogP_')] + ['Description']
+    def rename(n):
+        if n.startswith('_LogP_'):
+            return n[len('_LogP_'):]
+        return n
+    enrichment = enrichment[keep].rename(columns=rename)
+    enrichment = enrichment.melt(id_vars='Description', var_name='Gene Set', value_name='-log10(p)')
+    enrichment = enrichment.join(
+        pd.DataFrame(enrichment['Gene Set'].apply(lambda x: x.split('.')).tolist(), columns=('Subject', 'Cell Type')))
+    enrichment['Gene Set'] = enrichment['Gene Set'].apply(lambda x: ' '.join(x.split('.')))
+    enrichment['-log10(p)'] = -enrichment['-log10(p)']
+    enrichment = enrichment.loc[enrichment['-log10(p)'] != 0]
+    # df = enrichment.pivot(index='Description', columns='Gene Set', values='-log10(p)').fillna(0)
+
+    # Filter to top 7 descriptions for each gene set by sum across all gene sets
+    if filter:
+        rank_by_sum = (
+            enrichment.groupby(('Description'))['-log10(p)']
+            .sum().rank(ascending=False)
+            [enrichment['Description']])
+        for gs in np.unique(enrichment['Gene Set']):
+            enrichment.loc[enrichment['Gene Set']==gs] = enrichment.loc[enrichment['Gene Set']==gs].loc[
+                list(rank_by_sum.loc[list(enrichment['Gene Set']==gs)].rank() <= 7)]
+        enrichment = enrichment.dropna()
+
+    return enrichment
