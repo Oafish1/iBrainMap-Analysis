@@ -1,7 +1,8 @@
-### 2023-11-02
+### 2023-11-02 (1-2)
 - Barplot of module discovery
 - Deprecation of population attention
 - Lineplot of per-head edge representation and enrichment to match
+- Lineplot ratio adjustment
 - Module analysis collation and reduction of whitespace
 - `attention_stack` self loop removal
 
