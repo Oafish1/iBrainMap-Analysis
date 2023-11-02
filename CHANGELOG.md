@@ -1,3 +1,6 @@
+### 2023-11-1
+- Figure layout updates and placeholders
+
 ### 2023-10-30 (1-2)
 - Add module analysis for individual networks
 - Add real enrichments with macro `compare_graphs_enrichment` among others
