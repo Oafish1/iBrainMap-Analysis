@@ -1204,3 +1204,19 @@ def convert_dosage_ids_to_subject_ids(dosage, *, meta, inplace=False):
     dosage = dosage.loc[:, [c for c in dosage.columns if c is not None]]
 
     return dosage
+
+
+def limit_labels(pl, n=10):
+    # Only show *up to* `n` x labels
+    num_labels = len(pl.get_xticklabels())
+    interval = max(1, int(num_labels/n))
+    for i, label in enumerate(pl.get_xticklabels()):
+        if i % interval != 0: label.set_visible(False)
+
+
+def get_all_synthetic_ids(g):
+    synthetic = []
+    for v in g.vertices():
+        if string_is_synthetic(g.vp.ids[v]):
+            synthetic.append(g.vp.ids[v])
+    return synthetic

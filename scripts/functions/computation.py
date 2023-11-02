@@ -493,15 +493,19 @@ def compute_attention_dosage_correlation(
     return format_return(ret)
 
 
-def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes):
+def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True):
     def get_tfs(g, cell_type):
         # Locate cell type vertex
-        v_cell = gt.find_vertex(g, g.vp.ids, cell_type)[0]
+        v_cell = gt.find_vertex(g, g.vp.ids, cell_type)
+        if len(v_cell) == 0: return []
+        v_cell = v_cell[0]
 
         # Get TFs
         tfs = [v for v in v_cell.in_neighbors() if not string_is_synthetic(g.vp.ids[v])]
         # Add TGs (Maybe once graph is larger this won't be needed)
-        tfs = [w  for v in tfs for w in v.out_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+        if include_tgs:
+            tgs = [w for v in tfs for w in v.out_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+            tfs = tfs + tgs
         tfs = np.unique(tfs)
 
         # Return
@@ -540,8 +544,8 @@ def format_enrichment(enrichment, filter=True):
         return n
     enrichment = enrichment[keep].rename(columns=rename)
     enrichment = enrichment.melt(id_vars='Description', var_name='Gene Set', value_name='-log10(p)')
-    enrichment = enrichment.join(
-        pd.DataFrame(enrichment['Gene Set'].apply(lambda x: x.split('.')).tolist(), columns=('Subject', 'Cell Type')))
+    # enrichment = enrichment.join(
+    #     pd.DataFrame(enrichment['Gene Set'].apply(lambda x: x.split('.')).tolist(), columns=('Subject', 'Cell Type')))
     enrichment['Gene Set'] = enrichment['Gene Set'].apply(lambda x: ' '.join(x.split('.')))
     enrichment['-log10(p)'] = -enrichment['-log10(p)']
     enrichment = enrichment.loc[enrichment['-log10(p)'] != 0]

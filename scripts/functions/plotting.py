@@ -548,8 +548,7 @@ def plot_edge_summary(graphs, *, df=None, ax, subject_ids=None, min_common_edges
     plt.xticks(rotation=90)
 
     # Only show `num_x_labels` x labels
-    for i, label in enumerate(lp.get_xticklabels()):
-        if i % int(len(df)/num_x_labels) != 0: label.set_visible(False)
+    limit_labels(lp, n=num_x_labels)
 
 
 def plot_aggregate_edge_summary(contrast_subject_ids=None, *, contrast=None, column=None, ax, min_common_edges=1, num_x_labels=15, **kwargs):
