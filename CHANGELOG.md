@@ -1,3 +1,6 @@
+### 2023-11-03
+- Figure amendment
+
 ### 2023-11-02 (1-2)
 - Barplot of module discovery
 - Deprecation of population attention
