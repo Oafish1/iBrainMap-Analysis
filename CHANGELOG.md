@@ -1,5 +1,6 @@
-### 2023-11-06
+### 2023-11-06 (1-2)
 - Extend individual enrichment
+- Figure updates
 - Individual coloration consistency
 - Make panels more concise
 - Module analysis criterion changes
