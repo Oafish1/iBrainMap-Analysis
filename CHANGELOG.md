@@ -1,3 +1,10 @@
+### 2023-11-06
+- Extend individual enrichment
+- Individual coloration consistency
+- Make panels more concise
+- Module analysis criterion changes
+- Shorten contrast distribution analysis and extend edge range
+
 ### 2023-11-03
 - Figure amendment
 

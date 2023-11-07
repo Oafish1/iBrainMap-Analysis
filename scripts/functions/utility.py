@@ -1220,3 +1220,7 @@ def get_all_synthetic_ids(g):
         if string_is_synthetic(g.vp.ids[v]):
             synthetic.append(g.vp.ids[v])
     return synthetic
+
+
+def hex_to_rgb(s):
+    return [int(s[i:i+2], 16) for i in range(1, 6, 2)]

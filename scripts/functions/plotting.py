@@ -333,7 +333,7 @@ def plot_enrichment(df, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, ax=None):
+def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, color_map=None, ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
@@ -351,8 +351,11 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
         # Get outliers
         difference = (df[sample_ids[1]] - df[sample_ids[0]]).to_numpy()
         outlier_idx, outlier_mask = get_outlier_idx(difference, return_mask=True)
+        # Format based on which is higher
+        # 2 if sid1 is higher, 1 otherwise
+        sid_mask = 1. * (difference > 0) + 1
         # Record
-        df['outlier'] = outlier_mask
+        df['outlier'] = sid_mask * outlier_mask
         # Annotate
         annotations = []
         for idx in outlier_idx:
@@ -391,7 +394,10 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
         x=sample_ids[0],
         y=sample_ids[1],
         hue='outlier' if highlight_outliers else None,
-        palette=['black', 'red'],
+        palette={
+            0: 'black',
+            1: color_map[sample_ids[0]] if color_map is not None else 'red',
+            2: color_map[sample_ids[1]] if color_map is not None else 'red'},
         color='black',
         # linewidth=0,
         ax=ax,

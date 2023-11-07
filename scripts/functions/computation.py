@@ -493,7 +493,7 @@ def compute_attention_dosage_correlation(
     return format_return(ret)
 
 
-def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True):
+def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, threshold=0):
     def get_tfs(g, cell_type):
         # Locate cell type vertex
         v_cell = gt.find_vertex(g, g.vp.ids, cell_type)
@@ -501,11 +501,12 @@ def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True):
         v_cell = v_cell[0]
 
         # Get TFs
-        tfs = [v for v in v_cell.in_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+        tfs = [v for v in v_cell.in_neighbors() if not string_is_synthetic(g.vp.ids[v]) and g.ep.coef[g.edge(v, v_cell)] > threshold]
         # Add TGs (Maybe once graph is larger this won't be needed)
         if include_tgs:
-            tgs = [w for v in tfs for w in v.out_neighbors() if not string_is_synthetic(g.vp.ids[v])]
+            tgs = [w for v in tfs for w in v.out_neighbors() if not string_is_synthetic(g.vp.ids[w]) and g.ep.coef[g.edge(v, w)] > threshold]
             tfs = tfs + tgs
+
         tfs = np.unique(tfs)
 
         # Return
