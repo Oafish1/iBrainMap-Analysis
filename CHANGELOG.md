@@ -1,3 +1,6 @@
+### 2023-11-07
+- Figure shading alteration
+
 ### 2023-11-06 (1-2)
 - Extend individual enrichment
 - Figure updates
