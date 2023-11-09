@@ -1,8 +1,9 @@
-### 2023-11-08
+### 2023-11-08 (1-2)
 - Adjust `plot_edge_comparison` to always have range 0-1 on both axes
-- Update to new model formatting
+- Figure updates
 - Remove training edges globally
 - Rerun all plots
+- Update to new model formatting
 
 ### 2023-11-07 (1-2)
 - Figure shading alteration
