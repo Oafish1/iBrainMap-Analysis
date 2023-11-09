@@ -416,6 +416,8 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
     # ax.set_yscale('log')
 
     # Plot y=x
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
     lims = [
         max(ax.get_xlim()[0], ax.get_ylim()[0]),
         min(ax.get_xlim()[1], ax.get_ylim()[1])]

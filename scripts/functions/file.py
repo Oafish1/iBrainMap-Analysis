@@ -15,15 +15,21 @@ COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
 # ATT = DATA_FOLDER + 'freeze2/attention/homo_5TF_1Tar_graph_with_edgeW_att.pkl'
 
 # Freeze 2.5
-ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
-ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
-GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
-SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
+# ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
+# ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
+# GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
+# SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
 
 # Freeze 3
-ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_embed_10_16/'
-ATT = ATT_FOLDER + 'c15x_att_Oct_with_edgetype.pkl'
-GE = ATT_FOLDER + 'c15_graph_embedding_all.pkl'
+# ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_embed_10_16/'
+# ATT = ATT_FOLDER + 'c15x_att_Oct_with_edgetype.pkl'
+# GE = ATT_FOLDER + 'c15_graph_embedding_all.pkl'
+##  SID = NOT PROVIDED
+
+# Freeze 3 (2023-11-06)
+ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_Nov/'
+ATT = ATT_FOLDER + 'c15x_att_10pTF_10pTG.pkl'
+# GE = NOT PROVIDED
 # SID = NOT PROVIDED
 
 
@@ -48,7 +54,7 @@ def get_attention_columns(scaled=False):
     return [c for c in graph.columns if c not in exclude]
 
 
-def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
+def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True, **kwargs):
     "Given a subject id `graph_id`, will return dataframe with column(s) `column` from `source`"
     # From individual graphs
     if source == 'coexpression':
@@ -71,11 +77,19 @@ def load_graph_by_id(graph_id, source='attention', column=None, **kwargs):
         # Get graph
         if type(column) == type([]):
             # If list, keep many columns and don't standardize name
-            graph = graphs_pkl[graph_id][['from_gene', 'to_gene'] + column]
-            graph = graph.rename(columns={'from_gene': 'TF', 'to_gene': 'TG'})
+            graph = graphs_pkl[graph_id][['from', 'to', 'edge_type'] + column]
+            graph = graph.rename(columns={'from': 'TF', 'to': 'TG'})
         else:
-            graph = graphs_pkl[graph_id][['from_gene', 'to_gene', column]]
-            graph = graph.rename(columns={'from_gene': 'TF', 'to_gene': 'TG', column: 'coef'})  # TF, TG, coef
+            graph = graphs_pkl[graph_id][['from', 'to', 'edge_type', column]]
+            graph = graph.rename(columns={'from': 'TF', 'to': 'TG', column: 'coef'})  # TF, TG, coef
+
+        # Remove training edges
+        if train_omit:
+            # Remove reverse edges
+            graph = graph.loc[graph['edge_type'].apply(lambda s: not s.startswith('rev_'))]
+            # Remove TG-celltype edges
+            graph = graph.loc[graph['edge_type'] != 'TG_celltype']
+        graph = graph.drop(columns='edge_type')
 
     # Exception
     else:

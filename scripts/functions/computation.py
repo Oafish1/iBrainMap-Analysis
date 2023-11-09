@@ -493,7 +493,7 @@ def compute_attention_dosage_correlation(
     return format_return(ret)
 
 
-def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, threshold=0):
+def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, threshold=.5):
     def get_tfs(g, cell_type):
         # Locate cell type vertex
         v_cell = gt.find_vertex(g, g.vp.ids, cell_type)

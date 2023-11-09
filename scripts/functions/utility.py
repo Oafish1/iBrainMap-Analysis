@@ -867,7 +867,7 @@ def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1)
     return cull_isolated_leaves(g)
 
 
-def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=3):
+def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=5):
     # Check that all provided vertices are synthetic
     assert np.array([string_is_synthetic(s) for s in vertex_ids]).all()
 
@@ -881,13 +881,17 @@ def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=3):
 
     # Recursively propagate
     layers = [synthetic_nodes]
+    synthetic = True
     visited = {v: 0 for v in layers[-1]}
     while depth:
         # Get last layer
         last_layer = layers[-1]
 
         # Get neighbors
-        current_layer = [list(v.all_neighbors()) for v in last_layer]
+        if synthetic:
+            current_layer = [list(v.in_neighbors()) for v in last_layer]
+        else:
+            current_layer = [list(v.out_neighbors()) for v in last_layer]
 
         # Exclude synthetic nodes
         current_layer = [[v for v in l if not string_is_synthetic(g.vp.ids[v])] for l in current_layer]
@@ -899,7 +903,7 @@ def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=3):
         # Filter
         if limit != -1:
             attentions = [
-                [g.edge(v, w) for w in current_layer[i]]
+                [g.edge(v, w) if not synthetic else g.edge(w, v) for w in current_layer[i]]
                 for i, v in enumerate(last_layer)
             ]
             to_keep = [np.argsort(att)[-limit:] for att in attentions]
@@ -912,6 +916,7 @@ def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=3):
         layers.append(current_layer)
 
         # Iterate
+        synthetic = False
         depth -= 1
 
     # Format
