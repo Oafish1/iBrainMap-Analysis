@@ -1,3 +1,6 @@
+### 2023-11-09
+- Figure mock-up
+
 ### 2023-11-08 (1-2)
 - Adjust `plot_edge_comparison` to always have range 0-1 on both axes
 - Figure updates
