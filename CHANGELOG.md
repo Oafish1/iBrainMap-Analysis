@@ -1,4 +1,4 @@
-### 2023-11-15
+### 2023-11-15 (1-2)
 - Color consistency for module analysis
 - Fixes and QOL for plotting functions
 - Many visual alterations to figure 3
