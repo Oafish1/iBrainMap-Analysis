@@ -1,3 +1,10 @@
+### 2023-11-15
+- Color consistency for module analysis
+- Fixes and QOL for plotting functions
+- Many visual alterations to figure 3
+- New main subjects for figure 3
+- Panel resizings
+
 ### 2023-11-09
 - Figure mock-up
 

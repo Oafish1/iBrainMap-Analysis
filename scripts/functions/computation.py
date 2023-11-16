@@ -536,7 +536,7 @@ def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, 
     return df
 
 
-def format_enrichment(enrichment, filter=True):
+def format_enrichment(enrichment, filter=7):
     # Format
     keep = [c for c in enrichment.columns if c.startswith('_LogP_')] + ['Description']
     def rename(n):
@@ -560,7 +560,7 @@ def format_enrichment(enrichment, filter=True):
             [enrichment['Description']])
         for gs in np.unique(enrichment['Gene Set']):
             enrichment.loc[enrichment['Gene Set']==gs] = enrichment.loc[enrichment['Gene Set']==gs].loc[
-                list(rank_by_sum.loc[list(enrichment['Gene Set']==gs)].rank() <= 7)]
+                list(rank_by_sum.loc[list(enrichment['Gene Set']==gs)].rank() <= filter)]
         enrichment = enrichment.dropna()
 
     return enrichment

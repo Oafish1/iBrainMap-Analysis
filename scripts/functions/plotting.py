@@ -236,13 +236,13 @@ def plot_legend(horizontal=True, hub=False, ax=None):
     # NOTE: Unfortunately, shapes need to be changed manually
     legend_elements = [
         Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='h', markerfacecolor=get_node_appearance('celltype')[0], label='Cell Type'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tftg')[0], label='TF+TG'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tf')[0], label='TF'),
-        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='o', markerfacecolor=get_node_appearance('tg')[0], label='TG'),
+        # Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tftg')[0], label='TF+TG'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='^', markerfacecolor=get_node_appearance('tf')[0], label='Transcription Factor'),
+        Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='o', markerfacecolor=get_node_appearance('tg')[0], label='Target Gene'),
     ]
     if hub:
         legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='8', markerfacecolor=get_node_appearance('hub')[0], label='Hub'),] + legend_elements
-    ax.legend(handles=legend_elements, loc='best', ncol=None if not horizontal else len(legend_elements))
+    ax.legend(handles=legend_elements, loc='best', ncol=1 if not horizontal else len(legend_elements))
 
 
 def visualize_graph_diffusion(g, pos=None, scale=None, ax=None):
