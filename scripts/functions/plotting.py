@@ -1,3 +1,5 @@
+
+import colorsys
 import itertools
 import os
 
@@ -229,7 +231,7 @@ def visualize_graph_base(g, **kwargs):  # , min_size=None
     # return min_size
 
 
-def plot_legend(horizontal=True, hub=False, ax=None):
+def plot_legend(horizontal=True, hub=False, loc='best', ax=None, **kwargs):
     if not ax: ax = plt.gca()
 
     # Custom Legend
@@ -242,7 +244,7 @@ def plot_legend(horizontal=True, hub=False, ax=None):
     ]
     if hub:
         legend_elements = [Line2D([0], [0], color='gray', linestyle='None', markersize=10, marker='8', markerfacecolor=get_node_appearance('hub')[0], label='Hub'),] + legend_elements
-    ax.legend(handles=legend_elements, loc='best', ncol=1 if not horizontal else len(legend_elements))
+    ax.legend(handles=legend_elements, loc=loc, ncol=1 if not horizontal else len(legend_elements), **kwargs)
 
 
 def visualize_graph_diffusion(g, pos=None, scale=None, ax=None):
@@ -372,7 +374,7 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
             #     # Formatting
             #     fontsize=10,
             # )
-            ann = plt.text(
+            ann = ax.text(
                 df.loc[idx, sample_ids[0]].item(), df.loc[idx, sample_ids[1]].item(),
                 df.loc[idx, 'id'].item(),
                 # Away from y=x
@@ -384,9 +386,6 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
                 fontsize=10,
             )
             annotations.append(ann)
-        # Make sure text doesn't overlap points or other text
-        # NOTE: Doesn't work with plt.text right now
-        # TODO: Tune for clearer visualization, perhaps figure out why arrows don't work
 
     # Plot
     sns.scatterplot(
@@ -414,6 +413,7 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
     # NOTE: Do before y=x for tighter boundaries
     # ax.set_xscale('log')
     # ax.set_yscale('log')
+    # ax.set_aspect('equal', 'box')
 
     # Plot y=x
     ax.set_xlim(0, 1)
@@ -431,49 +431,20 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
             df[sample_ids[0]].to_numpy(),
             df[sample_ids[1]].to_numpy(),
             arrowprops=dict(arrowstyle='-', color='black', lw=.01),
+            ax=ax,
         )
-
-
-    # Broken
-    # # Calculate discontinuities (From JAMIE)
-    # max_dist = .2; pad = 1e-3
-    # bounds = []
-    # for vals in [df[sample_ids[0]], df[sample_ids[1]]]:
-    #     bounds.append([])
-
-    #     sorted_vals = np.sort(vals)
-    #     min_val = sorted_vals[0]
-    #     max_val = sorted_vals[0]
-    #     for val in sorted_vals[1:]:
-    #         if val - max_val > max_dist:
-    #             bounds[-1].append((min_val - pad, max_val + pad))
-    #             min_val = max_val = val
-    #         else:
-    #             max_val = val
-    #     bounds[-1].append((min_val - pad, max_val + pad))
-
-    # # Make broken plot
-    # bax = brokenaxes(
-    #     xlims=bounds[0],
-    #     ylims=bounds[1],
-    #     hspace=.15,
-    #     wspace=.15,
-    # )
-
-    # # Get y=x
-    # lims = [
-    #     max(bounds[0][0][0], bounds[1][0][0]),
-    #     min(bounds[0][-1][1], bounds[1][-1][1])]
-
-    # # Plot everything
-    # bax.plot(lims, lims, '-', color='black', alpha=0.3)
-    # bax.scatter(df[sample_ids[0]], df[sample_ids[1]], color='black', edgecolors='white')
 
     return df
 
 
-def get_mosaic(mosaic, scale=3):
-    fig = plt.figure(figsize=(scale*len(mosaic[0]), scale*len(mosaic)), constrained_layout=True)
+def get_mosaic(mosaic, figsize=None, **kwargs):
+    """
+    Produce a mosaic using `mosaic` as a layout
+
+    figsize: (length, height)
+    """
+    if figsize is None: figsize = (6, 6)
+    fig = plt.figure(figsize=figsize, **kwargs)
     axs = fig.subplot_mosaic(mosaic)
 
     return fig, axs
@@ -488,6 +459,7 @@ def plot_graph_comparison(
         subject_ids,
         filter_text=False,
         show_null_nodes=True,
+        include_titles=True,
         **kwargs):
     # Aggregate and calculate node positions
     # NOTE: Supplied concatenated graph must not be pruned
@@ -529,7 +501,7 @@ def plot_graph_comparison(
             **kwargs)
         ax.set_xticks([])
         ax.set_yticks([])
-        ax.set_title(sid)
+        if include_titles: ax.set_title(sid)
         ax.axis('off')
 
 
@@ -873,10 +845,9 @@ def plot_circle_heatmap(
     h, l = scp.axes.get_legend_handles_labels()
     scp.axes.legend_.remove()
     plt.legend(h, l, ncol=2)
-    # ax.axis('equal')
-    ax.set_aspect('equal', 'box')
+    # ax.set_aspect('equal', 'box')
     # Zoom X
-    margin = .5
+    margin = 1
     min_xlim, max_xlim = ax.get_xlim()
     min_xlim -= margin; max_xlim += margin
     # Zoom Y
@@ -964,3 +935,325 @@ def plot_attention_dosage_correlation(
     if chromosomes is None: plot_remove_legend(ax=ax)
 
     return ret
+
+
+def plot_graph_comparison_from_sids(sids, *, axs, column=None, vertex_ids=None, include_titles=False):
+    """
+    axs: Dictionary of axes with indices 0 and 1
+    """
+
+    # Assemble
+    gs = [compute_graph(load_graph_by_id(sid, column=column)) for sid in sids]
+
+    # Filter
+    if vertex_ids is not None:
+        gs = [
+            filter_to_synthetic_vertices(g.copy(), vertex_ids=vertex_ids)
+            for g in gs
+        ]
+
+    # Recalculate
+    gs = [assign_vertex_properties(g) for g in gs]
+
+    # Plot
+    plot_graph_comparison(gs, axs=axs, subject_ids=sids, include_titles=include_titles)
+
+
+def plot_edge_comparison_from_sids(sids, *, ax, column=None, palette=None, **kwargs):
+    # Assemble
+    graphs = [compute_graph(load_graph_by_id(sid, column=column)) for sid in sids]
+
+    # Get graph
+    g = concatenate_graphs(*graphs, threshold=False)
+    g = get_intersection(g)
+    g = cull_isolated_leaves(g)
+
+    plot_individual_edge_comparison(g, sids, color_map=palette, ax=ax, **kwargs)
+
+
+def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
+    # Parameters
+    subject_id_1, subject_id_2 = sids
+
+    # Get graphs
+    g1 = compute_graph(load_graph_by_id(subject_id_1, column=column))
+    g2 = compute_graph(load_graph_by_id(subject_id_2, column=column))
+
+    # Get module scores
+    module_scores_1 = get_module_scores(g1)
+    module_scores_2 = get_module_scores(g2)
+    # Make blanks
+    zeros_1 = module_scores_1.copy()
+    zeros_1['Module Score'] = 0
+    zeros_2 = module_scores_2.copy()
+    zeros_2['Module Score'] = 0
+    # Append for consistency
+    module_scores_1 = pd.concat((module_scores_1, zeros_2)).groupby(['Cell Type', 'TF']).max().reset_index()
+    module_scores_2 = pd.concat((module_scores_2, zeros_1)).groupby(['Cell Type', 'TF']).max().reset_index()
+    # Concatenate subjects
+    # NOTE: Only matters that they're in the order sub_1 -> sub_2
+    # and all present for the `.diff()` groupby, no need to label
+    # module_scores_1['Subject'] = subject_id_1
+    # module_scores_2['Subject'] = subject_id_2
+    module_scores = pd.concat((module_scores_1, module_scores_2))
+    module_scores['Module Score'] = -module_scores.groupby(['Cell Type', 'TF'])['Module Score'].diff(periods=-1)  # Second minus first
+    module_scores = module_scores.loc[~module_scores['Module Score'].isna()]
+
+    # Filter to only high values
+    # module_scores = module_scores.loc[module_scores['Module Score'].abs() > .1]
+
+    # Plot
+    def plot_module_scores(module_scores, ax=None):
+        # Pivot
+        df = module_scores.pivot(index='Cell Type', columns='TF', values='Module Score')
+        # Roughly sort by cell type
+        df = df.T
+        for c in df.columns:
+            df = df.sort_values(c)
+        df = df.T  # .iloc[::-1]
+        # Plot
+        from matplotlib.colors import SymLogNorm
+        pl = sns.heatmap(
+            data=df,
+            vmin=np.abs(df.fillna(0).to_numpy()).max(),
+            vmax=-np.abs(df.fillna(0).to_numpy()).max(),
+            norm=SymLogNorm(linthresh=1),
+            cmap=sns.diverging_palette(
+                360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_1]))[0],
+                360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_2]))[0],
+                s=70,
+                l=60,
+                center='dark',
+                as_cmap=True),
+            cbar_kws={'label': f'{subject_id_1} (Prioritization) {subject_id_2}'},
+            ax=ax)
+        pl.set(xlabel=f'TF (+) (n={df.shape[0]})')
+        return pl
+    p1 = plot_module_scores(module_scores, ax=ax)
+
+    # Inset axis
+    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+    axins = inset_axes(
+        ax,
+        width='30%', height='15%',
+        loc=4,
+        bbox_to_anchor=(.05, .05, 1, 1), bbox_transform=ax.transAxes)
+    # Take absolute module score for histogram, unevenly distributed
+    # TODO: Use symlog
+    module_scores_abs = module_scores.copy()
+    module_scores_abs['Module Score'] = module_scores_abs['Module Score'].abs()
+    sns.histplot(data=module_scores, x='Module Score', log_scale=True, kde=True, ax=axins)
+    plt.ylabel(None)
+    plt.xlabel(None)
+
+    # Format
+    p1.set(title=column)
+
+
+def plot_edge_discovery(data, *, edges, heads, ax, column=None, percentage_prioritizations_range=(.05, .06), num_labels=15, **kwargs):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Get all compatible edges
+    _, counts = compute_individual_genes(data=data, edges=edges, heads=heads, percentage_prioritizations_range=(.05, .06), return_counts=True)
+
+    # Plot for chosen head
+    # Filter to column
+    counts_filtered = counts.loc[counts['Head']==column]
+
+    # Sample
+    # NOTE: Maybe remove in final version?  Doesn't matter too much
+    np.random.seed(42)
+    idx = np.random.choice(counts_filtered.shape[0], min(1_000, counts_filtered.shape[0]), replace=False)
+    counts_filtered = counts_filtered.iloc[idx]
+
+    # Sort
+    counts_filtered = counts_filtered.sort_values('Count')
+
+    # Plot
+    pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', ax=ax)
+
+    # Highlight area
+    ax.axhspan(
+        percentage_prioritizations_range[0]*data.shape[2],
+        percentage_prioritizations_range[1]*data.shape[2],
+        color='red', alpha=.2, lw=0)
+
+    # Format
+    plt.sca(ax)
+    plt.xticks(rotation=90)
+    pl.set(title=column)
+    # plt.yscale('log')
+    limit_labels(pl, n=num_labels)
+    # NOTE: I have utterly no idea why, but this is necessary for
+    # constrained layout to work with >100 data points and not be
+    # absurdly long in subplots
+    # ax.set_ylabel(None)
+
+
+def plot_enrichment_from_fname(fname, *, ax, num_descriptors=10):
+    enrichment = pd.read_csv(fname)
+
+    # Format
+    enrichment = format_enrichment(enrichment, filter=num_descriptors)
+
+    # Filter to certain groups
+    # TODO: Fix these groups in previous section
+    gene_sets = np.unique(enrichment['Gene Set'])[[0, 1, 2, 3, 4, 5, 6, 8, 10]]
+    enrichment = enrichment.loc[enrichment['Gene Set'].apply(lambda s: s in gene_sets)]
+
+    # Plot
+    pl = sns.scatterplot(
+        enrichment,
+        x='Description', y='Gene Set',
+        size='-log10(p)',
+        color='black',
+        ax=ax)
+    # Formatting
+    pl.grid()
+    plt.sca(ax)
+    plt.xticks(rotation=90)
+    # pl.set_aspect('equal', 'box')
+    pl.legend(title='-log10(p)', loc='upper left', bbox_to_anchor=(1.05, 1))
+    # Zoom X
+    margin = .5
+    min_xlim, max_xlim = pl.get_xlim()
+    min_xlim -= margin; max_xlim += margin
+    pl.set(xlim=(min_xlim, max_xlim))
+
+
+def plot_ct_edges(contrast, *, ax, data, edges, heads, subject_ids, column=None, num_edges=10):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Get contrast sids
+    contrast_subjects = get_contrast(contrast)
+
+    # Assert only two groups
+    assert len(contrast_subjects) == 2, 'Currently, only contrasts with two groups are supported'
+
+    # Filter to column
+    data = data[:, np.array(heads)==column]
+
+    # Filter to ct-ct edges
+    ct_edges_mask = [string_is_synthetic(s.split(get_edge_string())[0]) and string_is_synthetic(s.split(get_edge_string())[1]) for s in edges]
+    data = data[ct_edges_mask]
+    ct_edges = np.array(edges)[ct_edges_mask]
+
+    # Filter to edges that have over 10 entries
+    data = data[((~np.isnan(data)).sum(axis=2).flatten() > 10).astype(bool)]
+
+    # Find means across contrast groups
+    group_means = {}
+    for group, sids in contrast_subjects.items():
+        filtered_data = data[:, :, [sid in sids for sid in subject_ids]]
+        group_means[group] = np.nanmean(filtered_data, axis=2).flatten()
+
+    # Compute difference between means
+    difference = np.abs(group_means[list(group_means.keys())[0]] - group_means[list(group_means.keys())[1]])
+
+    # Sort and filter
+    difference_argsort = difference.argsort()
+    difference_argsort = difference_argsort[~np.isnan(difference[difference_argsort])]
+    difference_argsort = difference_argsort[::-1]
+    difference_argsort = difference_argsort[:num_edges]
+    difference = difference[difference_argsort]
+    ct_edges = ct_edges[difference_argsort]
+
+    # Format to df
+    df = pd.DataFrame({'CT Edge': ct_edges, 'Difference': difference})
+
+    # Plot
+    sns.barplot(data=df, x='CT Edge', y='Difference', color='gray', ax=ax)
+    plt.sca(ax)
+    plt.xticks(rotation=90)
+    plt.title(column)
+
+
+def plot_ct_individual_edges(sid, *, ax, data, edges, heads, subject_ids, column=None, num_edges=50):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Filter to subject
+    data = data[:, :, np.array(subject_ids)==sid]
+
+    # Filter to column
+    data = data[:, np.array(heads)==column]
+
+    # Filter to ct-ct edges
+    ct_edges_mask = [string_is_synthetic(s.split(get_edge_string())[0]) and string_is_synthetic(s.split(get_edge_string())[1]) for s in edges]
+    data = data[ct_edges_mask]
+    ct_edges = np.array(edges)[ct_edges_mask]
+
+    # Flatten and sort
+    data = data.flatten()
+    empty_mask = ~np.isnan(data)
+    data = data[empty_mask]
+    ct_edges = ct_edges[empty_mask]
+    data_argsort = data.argsort()[::-1][:num_edges]
+
+    # Filter
+    data = data[data_argsort]
+    ct_edges = ct_edges[data_argsort]
+
+    # Format to df
+    df = pd.DataFrame({'CT Edge': ct_edges, 'Attention': data})
+
+    # Plot
+    sns.barplot(data=df, x='CT Edge', y='Attention', color='gray', ax=ax)
+    plt.sca(ax)
+    plt.xticks(rotation=90)
+    plt.title(column)
+
+
+def plot_attention_histogram(sid, *, ax, data, edges, heads, subject_ids, column=None):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Filter to subject
+    data = data[:, :, np.array(subject_ids)==sid]
+
+    # Filter to column
+    data = data[:, np.array(heads)==column]
+
+    # Flatten and filter
+    data = data.flatten()
+    empty_mask = ~np.isnan(data)
+    data = data[empty_mask]
+    new_edges = np.array(edges)[empty_mask]
+
+    # Format to df
+    df = pd.DataFrame({'Edge': new_edges, 'Attention': data})
+
+    # Plot
+    sns.histplot(data=df, x='Attention', color='gray', bins=30, kde=True, ax=ax)
+    plt.sca(ax)
+    plt.yscale('log')
+    plt.xticks(rotation=90)
+    plt.xlabel(column)
+
+
+def create_subfigure_mosaic(shape_array, layout='constrained'):
+    fig, axs = plt.subplots(shape_array.shape[0], shape_array.shape[1], layout=layout, figsize=(int((3/2) * shape_array.shape[1]), int((3/2) * shape_array.shape[0])))
+    # Get gridspec
+    gridspec = axs[0, 0].get_subplotspec().get_gridspec()
+    # Clear axes
+    for a in axs.flatten(): a.remove()
+    # Define subfigs
+    subfigs = {}
+    for key in np.unique(shape_array):
+        # Skip blank spaces
+        if key == '.': continue
+
+        # Find bounding box (assume well-formed)
+        tl = np.argwhere(shape_array==key).min(axis=0)
+        br = np.argwhere(shape_array==key).max(axis=0) + 1
+
+        # Record
+        subfigs[key] = fig.add_subfigure(gridspec[tl[0]:br[0], tl[1]:br[1]])
+    # Create subplots
+    axs = {}
+    for key, subfig in subfigs.items():
+        axs[key] = subfig.add_subplot(1, 1, 1)
+
+    return fig, axs

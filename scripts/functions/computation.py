@@ -564,3 +564,125 @@ def format_enrichment(enrichment, filter=7):
         enrichment = enrichment.dropna()
 
     return enrichment
+
+
+def get_module_scores(g):
+    "Compute module scores"
+    association = []
+    name = []
+    score = []
+    for v in g.vertices():
+        # Escape if not TF
+        if 'tf' not in g.vp.node_type[v]: continue
+        # Get association
+        association_list = None
+        for e in v.out_edges():
+            v_source = e.target()
+            # If synthetic, record
+            if 'celltype' == g.vp.node_type[v_source]:
+                if association_list is None: association_list = [g.vp.ids[v_source]]
+                else: association_list += [g.vp.ids[v_source]]
+
+        # Get scores
+        for e in v.out_edges():
+            v_target = e.target()
+            # Escape if not TG
+            if 'tg' not in g.vp.node_type[v_target]: continue
+            # Record weights
+            for assoc in association_list:
+                association.append(assoc)
+                name.append(g.vp.ids[v])
+                score.append(g.ep.coef[e])
+
+    df = pd.DataFrame({
+        'Cell Type': association,
+        'TF': name,
+        'Module Score': score,
+    }).assign(TGs=1).groupby(['Cell Type', 'TF']).sum().reset_index()
+
+    # Append #TGs to TF names
+    df['TF'] = df.apply(lambda r: f'{r["TF"]} ({r["TGs"]})', axis=1)
+    df = df.drop(columns='TGs')
+
+    return df
+
+
+def compute_individual_genes(data, *, edges, heads, percentage_prioritizations_range=(.05, .06), return_counts=False, **kwargs):
+    # Parameters
+    percentage_prioritizations_range = (.05, .06)
+
+    # Threshold by max/10 on head
+    # NOTE: Percentile is still 0 at 99%
+    head_threshold = np.nan_to_num(data).max(axis=(0, 2)).reshape((1, -1, 1)) / 10
+    within_range = data > head_threshold
+
+    # Get counts for edges
+    counts = within_range.sum(axis=2)
+    counts = pd.DataFrame(counts, index=edges, columns=heads)
+
+    # Melt and format
+    counts = counts.reset_index(names='Edge').melt(id_vars='Edge', var_name='Head', value_name='Count')
+
+    # Remove low counts (was zero, but far too many were low)
+    counts = counts.loc[counts['Count'] > 1]
+
+    # Determine edges that are highly individual for enrichment (between `percentile_prioritizations_range`%s)
+    individual_genes = counts.loc[(counts['Count'] > (percentage_prioritizations_range[0]*data.shape[2])) * (counts['Count'] < (percentage_prioritizations_range[1]*data.shape[2]))]
+    individual_genes = individual_genes.copy()
+    # Parse into genes from edges
+    individual_genes['Edge'] = individual_genes['Edge'].map(lambda s: split_edge_string(s))
+    individual_genes = individual_genes.drop(columns='Edge').reset_index(drop=True).join(pd.DataFrame(individual_genes['Edge'].to_list(), columns=('TF', 'TG')))
+    individual_genes = individual_genes.melt(id_vars=['Head', 'Count'], var_name='Gene Type', value_name='Gene').drop(columns=['Gene Type', 'Count']).drop_duplicates()
+    # Filter synthetic
+    individual_genes = individual_genes.loc[individual_genes['Gene'].apply(lambda s: not string_is_synthetic(s))]
+
+    # Return
+    if return_counts: return individual_genes, counts
+    return individual_genes
+
+
+def compute_differential_genes_from_sids(sids, *, column, vertex_ids=None, threshold=.1):
+    # Formatting
+    subject_id_1, subject_id_2 = sids
+
+    # NOTE: Column doesn't matter here with the current snipping method
+    g1 = compute_graph(load_graph_by_id(subject_id_1, column=column))
+    g2 = compute_graph(load_graph_by_id(subject_id_2, column=column))
+
+    # Get unique modules
+    df = compare_graphs_enrichment(g1, g2, sid_1=subject_id_1, sid_2=subject_id_2, nodes=vertex_ids, threshold=threshold)
+
+    return df
+
+
+
+def compute_all_important_genes_from_sids(sids, *, data, edges, heads, columns=None, vertex_ids=None, threshold=.1, **kwargs):
+    # Defaults
+    if columns is None: columns = get_attention_columns()
+
+    # Get individual genes
+    print('Computing individually variant genes...')
+    individual_genes = compute_individual_genes(data, edges=edges, heads=heads)
+
+    # Get differential genes
+    print('Computing differential attention genes...')
+    df = pd.DataFrame()
+    for column in tqdm(columns):
+        df_new = compute_differential_genes_from_sids(sids, column=column, vertex_ids=vertex_ids, threshold=threshold)
+        df_new = df_new.rename(columns=lambda s: f'{column}.{s}')
+        df = df.join(df_new, how='outer')
+
+    # Add individually important edges (requires above)
+    for column in np.unique(individual_genes['Head']):
+        df_new = pd.DataFrame(individual_genes.loc[individual_genes['Head']==column, 'Gene'].to_list(), columns=(f'{column}',))
+        df = df.join(df_new, how='outer')
+
+    # Remove empty columns
+    df = df.loc[:, (~df.isna()).sum(axis=0) > 0]
+
+    # Add background (formatted for Metascape)
+    all_genes = [node for node in np.unique([s.split(get_edge_string()) for s in edges]) if not string_is_synthetic(node)]
+    df_new = pd.DataFrame({'_BACKGROUND': all_genes})
+    df = df.join(df_new, how='outer')
+
+    return df

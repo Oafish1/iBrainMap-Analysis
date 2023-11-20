@@ -122,6 +122,7 @@ def string_is_synthetic(s):
         or s in ['EN', 'IN', 'OPC', 'PC', 'VLMC', 'PVM', 'SMC']
         or sum([s.startswith(t) for t in ['EN_', 'IN_', 'CD8_']])
     ): return True
+    return False
 
 
 def detect_synthetic_vertices_graph(g):
@@ -1212,11 +1213,16 @@ def convert_dosage_ids_to_subject_ids(dosage, *, meta, inplace=False):
 
 
 def limit_labels(pl, n=10):
-    # Only show *up to* `n` x labels
+    # Only show *up to* `n` x labelslimit_labels
     num_labels = len(pl.get_xticklabels())
     interval = max(1, int(num_labels/n))
+    # positions = []; labels = []
     for i, label in enumerate(pl.get_xticklabels()):
-        if i % interval != 0: label.set_visible(False)
+        # This way works if `constrained_layout` can handle the invisible labels
+        if i % interval != 0 and i != (num_labels-1): label.set_visible(False)
+        # This removes the labels more permanently
+        # if i % interval == 0 or i == (num_labels-1): positions.append(label.get_position()[0]); labels.append(label.get_text())
+    # pl.set_xticks(positions, labels)
 
 
 def get_all_synthetic_ids(g):
