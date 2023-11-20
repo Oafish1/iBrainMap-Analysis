@@ -1,6 +1,7 @@
-### 2023-11-19 (1-2)
+### 2023-11-19 (1-3)
 - Automated figure assembly
 - Complete refactor of figure 3
+- Figure and effect updates
 - Many fixes and optimizations to existing plots
 - Many utility plotting functions, including `create_subfigure_mosaic`, which creates a mosaic constrained (optional) layout using subfigures
 - Spacing updates
