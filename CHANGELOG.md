@@ -1,10 +1,12 @@
-### 2023-11-28
+### 2023-11-28 (1-2)
 - Additional graph visualizations
 - Additional SCZ analysis
+- Figure updates
 - Many figure revisions
 - Many other large miscellaneous changes
 - Refresh enrichments
 - Several QOL improvements, including utility filters and `alphabetize_shape`
+- Small language changes
 
 ### 2023-11-21
 - Figure updates
