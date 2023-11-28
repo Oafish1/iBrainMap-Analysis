@@ -1,3 +1,11 @@
+### 2023-11-28
+- Additional graph visualizations
+- Additional SCZ analysis
+- Many figure revisions
+- Many other large miscellaneous changes
+- Refresh enrichments
+- Several QOL improvements, including utility filters and `alphabetize_shape`
+
 ### 2023-11-19 (1-3)
 - Automated figure assembly
 - Complete refactor of figure 3

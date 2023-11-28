@@ -335,7 +335,7 @@ def plot_enrichment(df, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, color_map=None, ax=None):
+def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, color_map=None, filter=filter_remove_ct_x, ax=None):
     "Take concatenated graph `g` and plot a comparison between the original weights"
     if not ax: ax = plt.gca()
 
@@ -347,6 +347,9 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
         for i, sample_id in enumerate(sample_ids):
             df[sample_id].append(coefs[i])
     df = pd.DataFrame(df)
+
+    # Filter
+    if filter is not None: df = filter(df).reset_index(drop=True)
 
     # Highlight outliers
     if highlight_outliers:
@@ -425,7 +428,7 @@ def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weight
 
     # Adjust text positions to avoid overlap
     # NOTE: Must be done after axis limit/scale changes
-    if highlight_outliers:
+    if highlight_outliers and len(annotations) > 0:
         adjust_text(
             annotations,
             df[sample_ids[0]].to_numpy(),
@@ -574,6 +577,7 @@ def plot_aggregate_edge_summary(contrast_subject_ids=None, *, contrast=None, col
 
 
 def get_graph_pos(g, scale=None):
+    "Make scaling consistent for positioning in graph_tools"
     # Compute scale
     # if not scale:
     #     scale = 20 * np.sqrt(g.num_vertices())
@@ -966,7 +970,7 @@ def plot_edge_comparison_from_sids(sids, *, ax, column=None, palette=None, **kwa
     # Get graph
     g = concatenate_graphs(*graphs, threshold=False)
     g = get_intersection(g)
-    g = cull_isolated_leaves(g)
+    # g = cull_isolated_leaves(g)
 
     plot_individual_edge_comparison(g, sids, color_map=palette, ax=ax, **kwargs)
 
@@ -1050,12 +1054,21 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
     p1.set(title=column)
 
 
-def plot_edge_discovery(data, *, edges, heads, ax, column=None, percentage_prioritizations_range=(.05, .06), num_labels=15, **kwargs):
+def plot_edge_discovery(
+        data,
+        *,
+        edges,
+        heads,
+        ax,
+        column=None,
+        percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.01, .05, .1)],
+        num_labels=15,
+        **kwargs):
     # Defaults
     if column is None: column = get_attention_columns()[0]
 
     # Get all compatible edges
-    _, counts = compute_individual_genes(data=data, edges=edges, heads=heads, percentage_prioritizations_range=(.05, .06), return_counts=True)
+    counts = compute_edge_counts(data=data, edges=edges, heads=heads)
 
     # Plot for chosen head
     # Filter to column
@@ -1074,10 +1087,11 @@ def plot_edge_discovery(data, *, edges, heads, ax, column=None, percentage_prior
     pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', ax=ax)
 
     # Highlight area
-    ax.axhspan(
-        percentage_prioritizations_range[0]*data.shape[2],
-        percentage_prioritizations_range[1]*data.shape[2],
-        color='red', alpha=.2, lw=0)
+    for low, high in percentage_prioritizations_ranges:
+        ax.axhspan(
+            low*data.shape[2],
+            high*data.shape[2],
+            color='red', alpha=.2, lw=0)
 
     # Format
     plt.sca(ax)
@@ -1170,7 +1184,7 @@ def plot_ct_edges(contrast, *, ax, data, edges, heads, subject_ids, column=None,
     plt.title(column)
 
 
-def plot_ct_individual_edges(sid, *, ax, data, edges, heads, subject_ids, column=None, num_edges=50):
+def plot_ct_individual_edges(sid, *, ax, data, edges, heads, subject_ids, column=None, num_edges=15):
     # Defaults
     if column is None: column = get_attention_columns()[0]
 
@@ -1257,3 +1271,31 @@ def create_subfigure_mosaic(shape_array, layout='constrained'):
         axs[key] = subfig.add_subplot(1, 1, 1)
 
     return fig, axs
+
+
+def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None, pos=None):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Assemble
+    g = compute_graph(load_graph_by_id(sid, column=column))
+
+    # Filter to synthetic nodes
+    g = filter_to_synthetic_vertices(g.copy(), vertex_ids=vertex_ids, depth=0)
+
+    # Plot
+    pos = get_graph_pos(g) if pos is None else convert_vertex_map(g_pos, g, pos)
+    visualize_graph_base(
+        g,
+        pos=pos,
+        ink_scale=.5,
+        vertex_font_size=.1,
+        edge_pen_width=gt.prop_to_size(g.ep.coef, .01, .05),
+        mplfig=ax,
+    )
+
+    # Formatting
+    ax.axis('off')
+
+    # Return source graph and positions
+    return {'g_pos': g, 'pos': pos}

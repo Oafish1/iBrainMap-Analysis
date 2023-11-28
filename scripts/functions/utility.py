@@ -1,5 +1,6 @@
 import colorsys
 import re
+import string
 import warnings
 
 import graph_tool.all as gt
@@ -868,7 +869,14 @@ def filter_graph_by_synthetic_vertices(g, *, vertex_ids, max_tfs=-1, max_tgs=-1)
     return cull_isolated_leaves(g)
 
 
-def filter_to_synthetic_vertices(g, vertex_ids, depth=2, limit=5):
+def get_all_synthetic_vertices(g):
+    return [g.vp.ids[v] for v in g.vertices() if string_is_synthetic(g.vp.ids[v])]
+
+
+def filter_to_synthetic_vertices(g, vertex_ids=None, depth=2, limit=5):
+    # Default
+    if vertex_ids is None: vertex_ids = get_all_synthetic_vertices(g)
+
     # Check that all provided vertices are synthetic
     assert np.array([string_is_synthetic(s) for s in vertex_ids]).all()
 
@@ -1219,7 +1227,7 @@ def limit_labels(pl, n=10):
     # positions = []; labels = []
     for i, label in enumerate(pl.get_xticklabels()):
         # This way works if `constrained_layout` can handle the invisible labels
-        if i % interval != 0 and i != (num_labels-1): label.set_visible(False)
+        if i % interval != 0: label.set_visible(False)
         # This removes the labels more permanently
         # if i % interval == 0 or i == (num_labels-1): positions.append(label.get_position()[0]); labels.append(label.get_text())
     # pl.set_xticks(positions, labels)
@@ -1235,3 +1243,36 @@ def get_all_synthetic_ids(g):
 
 def hex_to_rgb(s):
     return [int(s[i:i+2], 16) for i in range(1, 6, 2)]
+
+
+def filter_remove_ct_ct(df, col='id'):
+    "Filter to remove ct-ct linkages from a DataFrame `df` containing a column `col` storing edge names"
+    return df.loc[~df[col].map(lambda s: string_is_synthetic(split_edge_string(s)[0]) and string_is_synthetic(split_edge_string(s)[1]))]
+
+
+def filter_remove_ct_x(df, col='id'):
+    "Filter to remove ct-* linkages from a DataFrame `df` containing a column `col` storing edge names"
+    return df.loc[~df[col].map(lambda s: string_is_synthetic(split_edge_string(s)[0]) or string_is_synthetic(split_edge_string(s)[1]))]
+
+
+def alphabetize_shape(shape):
+    "Alphabetize shape labels for a mosaic layout, useful for adding new panels to existing layouts without having to manually replace"
+    # Get order of appearance
+    del_chars = ('\n', '.', ' ')
+    shape_cull = shape
+    for dc in del_chars:
+        shape_cull = shape_cull.replace(dc, '')
+    shape_cull = np.array(list(shape_cull))
+    _, index = np.unique(shape_cull, return_index=True)
+    order = [shape_cull[i] for i in sorted(index)]
+
+    # Get conversion
+    labels = string.ascii_uppercase[:len(order)]  # Only works up to 26 at the moment
+    conversion = {k : v for k, v in zip(order, labels)}
+
+    # Replace characters
+    new_shape = ''
+    for c in shape:
+        new_shape += conversion[c] if c not in del_chars else c
+
+    return new_shape
