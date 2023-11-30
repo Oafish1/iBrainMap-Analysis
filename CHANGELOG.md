@@ -1,4 +1,7 @@
-### 2023-11-29
+### 2023-11-29 (1-2)
+- Add flow icon to figure 3
+- Add transparency to main figure(s)
+- Figure revisions
 - Fix label logic and streamline placement
 
 ### 2023-11-28 (1-2)
