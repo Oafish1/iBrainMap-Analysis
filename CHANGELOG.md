@@ -1,3 +1,6 @@
+### 2023-11-29
+- Fix label logic and streamline placement
+
 ### 2023-11-28 (1-2)
 - Additional graph visualizations
 - Additional SCZ analysis
