@@ -1255,7 +1255,7 @@ def filter_remove_ct_x(df, col='id'):
     return df.loc[~df[col].map(lambda s: string_is_synthetic(split_edge_string(s)[0]) or string_is_synthetic(split_edge_string(s)[1]))]
 
 
-def alphabetize_shape(shape):
+def alphabetize_shape(shape, return_dict=False):
     "Alphabetize shape labels for a mosaic layout, useful for adding new panels to existing layouts without having to manually replace"
     # Get order of appearance
     del_chars = ('\n', '.', ' ')
@@ -1275,4 +1275,5 @@ def alphabetize_shape(shape):
     for c in shape:
         new_shape += conversion[c] if c not in del_chars else c
 
+    if return_dict: return new_shape, conversion
     return new_shape

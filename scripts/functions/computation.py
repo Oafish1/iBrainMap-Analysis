@@ -724,3 +724,90 @@ def compute_all_important_genes_from_sids(
     df = df.join(df_new, how='outer')
 
     return df
+
+
+def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=0., prs_col='prs_SCZ.3.5_MVP'):
+    "Compute PRS correlation across edges and heads"
+
+    # Get PRS scores
+    # NOTE: There are several prs_SCZ columns, which to use is unclear
+    prs = meta.set_index('SubID').loc[subject_ids, 'prs_SCZ.3.5_MVP']
+
+    # Filter to subjects with PRS scores
+    present_id_mask = (~prs.isna()).to_numpy()
+    data = data[:, :, present_id_mask]
+    subject_ids = np.array(subject_ids)[present_id_mask]
+    prs = prs.loc[~prs.isna()].to_numpy()
+
+    # Compute correlations
+    df = pd.DataFrame(columns=['edge', 'head', 'n', 'correlation', 'p'])
+    np.random.seed(42)
+    for e, h in tqdm(it.product(range(len(edges)), range(len(heads))), total=len(edges)*len(heads)):
+        # Random sample (for testing)
+        if np.random.rand() < subsample: continue
+
+        # Acquire and filter to present data
+        data_eh = data[e, h]
+        present_data_mask = ~np.isnan(data_eh)
+
+        # Skip if not enough data
+        if present_data_mask.sum() < 2 or data_eh[present_data_mask].std() == 0 or prs[present_data_mask].std() == 0: continue
+
+        # Compute correlation
+        # TODO: Compute using matrix
+        corr, p = scipy.stats.pearsonr(data_eh[present_data_mask], prs[present_data_mask])
+
+        # Record
+        df.loc[df.shape[0]] = [edges[e], heads[h], present_data_mask.sum(), corr, p]
+
+    # Add FDR
+    df['fdr'] = scipy.stats.false_discovery_control(df['p'].to_numpy())
+
+    # Sort by p/fdr
+    df = df.sort_values('p').reset_index(drop=True)
+
+    return df
+
+
+def get_prs_df(targets, *, meta, data, edges, heads, subject_ids, prs_col='prs_SCZ.3.5_MVP'):
+    """
+    Get PRS and attention for specified edge-head targets
+
+    `targets` is expected to be a numpy array of shape (-1, 2) which contains
+    edge-head target pairs on each row.
+    """
+
+    # Get PRS scores
+    # NOTE: There are several prs_SCZ columns, which to use is unclear
+
+    prs = meta.set_index('SubID').loc[subject_ids, prs_col]
+
+    # Filter to subjects with PRS scores
+    present_id_mask = (~prs.isna()).to_numpy()
+    data = data[:, :, present_id_mask]
+    subject_ids = np.array(subject_ids)[present_id_mask]
+    prs = prs.loc[~prs.isna()].to_numpy()
+
+    # Format df
+    df = pd.DataFrame()
+    for edge, head in targets:
+        # Find idx
+        edge_idx = np.argwhere(np.array(edges)==edge)[0][0]
+        head_idx = np.argwhere(np.array(heads)==head)[0][0]
+
+        # Get new data
+        att = data[edge_idx, head_idx]
+        df_new = pd.DataFrame({'Subject': subject_ids, 'Edge': edge, 'Head': head, 'PRS': prs, 'Attention': att}).dropna()
+        df = pd.concat((df, df_new))
+    # Combined name
+    df['Name'] = df.apply(lambda r: f'{r["Edge"]} ({r["Head"]})', axis=1)
+
+    # Annotate high/low prs
+    cutoffs = {'low': meta[prs_col].quantile(1/3), 'mid': meta[prs_col].quantile(2/3), 'high': meta[prs_col].quantile(1)}
+    def assign_cutoff(x):
+        for s, v in cutoffs.items():
+            if x < v: break
+        return s
+    df['Risk'] = df['PRS'].map(assign_cutoff)
+
+    return df

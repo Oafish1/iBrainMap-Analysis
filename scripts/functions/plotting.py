@@ -1299,3 +1299,24 @@ def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None,
 
     # Return source graph and positions
     return {'g_pos': g, 'pos': pos}
+
+
+def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=3, subsample=0., df=None, prs_df=None, **kwargs):
+    # Default
+    if ax is None: ax = plt.gca()
+
+    # Get data
+    if df is None: df = compute_prs_difference(meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, subsample=subsample, **kwargs)
+    targets = df[['edge', 'head']].iloc[:num_targets].to_numpy()
+    if prs_df is None: prs_df = get_prs_df(targets, meta=meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, **kwargs)
+
+    # Plot
+    # NOTE: Right now, will not consider different edges on the same head
+    sns.barplot(prs_df, x='Name', y='Attention', hue='Risk', hue_order=['low', 'mid', 'high'], ax=ax)
+    # Formatting
+    plt.sca(ax)
+    plt.xticks(rotation=90)
+    plt.xlabel(None)
+    # plt.ylabel('Prioritization')
+
+    return df, prs_df
