@@ -1,5 +1,6 @@
-### 2023-11-30
+### 2023-11-30 (1-2)
 - Figure layout revisions
+- Figure updates
 - Implement PRS analysis
 - QOL updates
 
