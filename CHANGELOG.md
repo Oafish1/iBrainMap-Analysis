@@ -1,4 +1,4 @@
-### 2023-12-05 (1-2)
+### 2023-12-05 (1-3)
 - Add QOL for several utility functions
 - Add `plot_labels` function for plotting figure labels
 - Add averaging capabilities into `load_graph_by_id`
