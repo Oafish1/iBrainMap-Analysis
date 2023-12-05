@@ -1,3 +1,15 @@
+### 2023-12-05
+- Add QOL for several utility functions
+- Add `plot_labels` function for plotting figure labels
+- Add averaging capabilities into `load_graph_by_id`
+- Add scaling to PRS correlation visualization
+- Change main subjects for figure 3
+- Enhanced PRS analysis
+- Figure layout revisions
+- Miscellaneous bugfixes
+- Separate figure 3 into several unique modules
+- Various formatting changes
+
 ### 2023-11-30 (1-2)
 - Figure layout revisions
 - Figure updates

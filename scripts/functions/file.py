@@ -54,7 +54,7 @@ def get_attention_columns(scaled=False):
     return [c for c in graph.columns if c not in exclude]
 
 
-def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True, **kwargs):
+def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True, average=False, **kwargs):
     "Given a subject id `graph_id`, will return dataframe with column(s) `column` from `source`"
     # From individual graphs
     if source == 'coexpression':
@@ -79,6 +79,10 @@ def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True,
             # If list, keep many columns and don't standardize name
             graph = graphs_pkl[graph_id][['from', 'to', 'edge_type'] + column]
             graph = graph.rename(columns={'from': 'TF', 'to': 'TG'})
+            if average:
+                print(graph)
+                graph['coef'] = graph.drop(columns=['TF', 'TG', 'edge_type']).mean(axis=1)
+                graph = graph[['TF', 'TG', 'edge_type', 'coef']]
         else:
             graph = graphs_pkl[graph_id][['from', 'to', 'edge_type', column]]
             graph = graph.rename(columns={'from': 'TF', 'to': 'TG', column: 'coef'})  # TF, TG, coef

@@ -1255,7 +1255,7 @@ def filter_remove_ct_x(df, col='id'):
     return df.loc[~df[col].map(lambda s: string_is_synthetic(split_edge_string(s)[0]) or string_is_synthetic(split_edge_string(s)[1]))]
 
 
-def alphabetize_shape(shape, return_dict=False):
+def alphabetize_shape(shape, *, offset=0, return_dict=False, return_offset=False):
     "Alphabetize shape labels for a mosaic layout, useful for adding new panels to existing layouts without having to manually replace"
     # Get order of appearance
     del_chars = ('\n', '.', ' ')
@@ -1267,7 +1267,7 @@ def alphabetize_shape(shape, return_dict=False):
     order = [shape_cull[i] for i in sorted(index)]
 
     # Get conversion
-    labels = string.ascii_uppercase[:len(order)]  # Only works up to 26 at the moment
+    labels = string.ascii_uppercase[offset:offset+len(order)]  # Only works up to 26 at the moment
     conversion = {k : v for k, v in zip(order, labels)}
 
     # Replace characters
@@ -1275,5 +1275,21 @@ def alphabetize_shape(shape, return_dict=False):
     for c in shape:
         new_shape += conversion[c] if c not in del_chars else c
 
-    if return_dict: return new_shape, conversion
-    return new_shape
+    ret = (new_shape,)
+    if return_dict: ret += (conversion,)
+    if return_offset: ret += (offset+len(order),)
+    return format_return(ret)
+
+
+def shape_array_from_shape(shape):
+    """
+    Create an array from a `shape` string of the format
+    ```
+    shape = '''
+        xxx
+    '''
+    ```
+    """
+    shape_array = [s.replace(' ', '') for s in shape.split('\n')[1:-1]]
+    shape_array = np.array([list(s) for s in shape_array])
+    return shape_array

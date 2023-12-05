@@ -726,12 +726,12 @@ def compute_all_important_genes_from_sids(
     return df
 
 
-def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=0., prs_col='prs_SCZ.3.5_MVP'):
+def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=1., prs_col='prs_SCZ.3.5_MVP', random_seed=42):
     "Compute PRS correlation across edges and heads"
 
     # Get PRS scores
     # NOTE: There are several prs_SCZ columns, which to use is unclear
-    prs = meta.set_index('SubID').loc[subject_ids, 'prs_SCZ.3.5_MVP']
+    prs = meta.set_index('SubID').loc[subject_ids, prs_col]
 
     # Filter to subjects with PRS scores
     present_id_mask = (~prs.isna()).to_numpy()
@@ -741,10 +741,11 @@ def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=0
 
     # Compute correlations
     df = pd.DataFrame(columns=['edge', 'head', 'n', 'correlation', 'p'])
-    np.random.seed(42)
+    if subsample != 1.: np.random.seed(random_seed)
     for e, h in tqdm(it.product(range(len(edges)), range(len(heads))), total=len(edges)*len(heads)):
         # Random sample (for testing)
-        if np.random.rand() < subsample: continue
+        if subsample != 1.:
+            if np.random.rand() > subsample: continue
 
         # Acquire and filter to present data
         data_eh = data[e, h]

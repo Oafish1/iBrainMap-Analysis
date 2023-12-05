@@ -980,8 +980,8 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
     subject_id_1, subject_id_2 = sids
 
     # Get graphs
-    g1 = compute_graph(load_graph_by_id(subject_id_1, column=column))
-    g2 = compute_graph(load_graph_by_id(subject_id_2, column=column))
+    g1 = compute_graph(load_graph_by_id(subject_id_1, column=column, average=True))
+    g2 = compute_graph(load_graph_by_id(subject_id_2, column=column, average=True))
 
     # Get module scores
     module_scores_1 = get_module_scores(g1)
@@ -1025,8 +1025,8 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
             cmap=sns.diverging_palette(
                 360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_1]))[0],
                 360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_2]))[0],
-                s=70,
-                l=60,
+                s=80,
+                l=70,
                 center='dark',
                 as_cmap=True),
             cbar_kws={'label': f'{subject_id_1} (Prioritization) {subject_id_2}'},
@@ -1269,7 +1269,10 @@ def create_subfigure_mosaic(shape_array, layout='constrained'):
     axs = {}
     for key, subfig in subfigs.items():
         axs[key] = subfig.add_subplot(1, 1, 1)
+    # Formatting
+    fig.set_constrained_layout_pads(w_pad=0, h_pad=0, wspace=.4, hspace=.4)  # *_pad is pad for figs (including subfigs), *_space is pad between subplots
 
+    # NOTE: `bbox_inches='tight'` will eliminate whitespace from edges, even from '.' in mosaic.
     return fig, axs
 
 
@@ -1301,22 +1304,50 @@ def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None,
     return {'g_pos': g, 'pos': pos}
 
 
-def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=3, subsample=0., df=None, prs_df=None, **kwargs):
+def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=5, min_samples=10, subsample=1., max_scale=False, df=None, prs_df=None, **kwargs):
     # Default
     if ax is None: ax = plt.gca()
 
     # Get data
+    # TODO: Allow just passing prs_df
     if df is None: df = compute_prs_difference(meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, subsample=subsample, **kwargs)
-    targets = df[['edge', 'head']].iloc[:num_targets].to_numpy()
+    targets = (
+        df[['edge', 'head']]
+        .loc[df['n'] > min_samples]  # Filter by min_samples
+        .iloc[:num_targets]  # Filter to top targets
+        .to_numpy()
+    )
     if prs_df is None: prs_df = get_prs_df(targets, meta=meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, **kwargs)
+
+    # Max scale individual edges
+    prs_df_format = prs_df.copy()
+    if max_scale:
+        for name in np.unique(prs_df_format['Name']):
+            prs_df_format.loc[prs_df_format['Name']==name, 'Attention'] /= prs_df_format.loc[prs_df_format['Name']==name, 'Attention'].max()
 
     # Plot
     # NOTE: Right now, will not consider different edges on the same head
-    sns.barplot(prs_df, x='Name', y='Attention', hue='Risk', hue_order=['low', 'mid', 'high'], ax=ax)
+    sns.barplot(prs_df_format, x='Name', y='Attention', hue='Risk', hue_order=['low', 'mid', 'high'], ax=ax)
     # Formatting
     plt.sca(ax)
     plt.xticks(rotation=90)
     plt.xlabel(None)
-    # plt.ylabel('Prioritization')
+    if max_scale:
+        plt.ylabel('Prioritization (Max Scaled)')
+    else:
+        plt.ylabel('Prioritization')
 
     return df, prs_df
+
+
+def plot_labels(axs, *, shape=None, **kwargs):
+    """
+    Plot labels for the given `axs`.  If `shape` is provided,
+    alphabetize labels based on appearance order in `shape`.
+    """
+    if shape is not None: _, conversion, offset = alphabetize_shape(shape, return_dict=True, return_offset=True, **kwargs)
+    for label, ax in axs.items():
+        # NOTE: `in_layout=False` removes text from the constrained layout calculation
+        ax.text(0, 1, conversion[label] if shape is not None else label, zorder=1, in_layout=False, ha='right', va='bottom', fontweight='bold', fontsize='xx-large', transform=ax.figure.transSubfigure)
+
+    if shape is not None: return offset
