@@ -576,8 +576,8 @@ def get_module_scores(g):
         if 'tf' not in g.vp.node_type[v]: continue
         # Get association
         association_list = None
-        for e in v.out_edges():
-            v_source = e.target()
+        for e in v.in_edges():
+            v_source = e.source()
             # If synthetic, record
             if 'celltype' == g.vp.node_type[v_source]:
                 if association_list is None: association_list = [g.vp.ids[v_source]]

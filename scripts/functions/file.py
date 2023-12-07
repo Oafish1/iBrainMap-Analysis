@@ -87,6 +87,11 @@ def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True,
             graph = graphs_pkl[graph_id][['from', 'to', 'edge_type', column]]
             graph = graph.rename(columns={'from': 'TF', 'to': 'TG', column: 'coef'})  # TF, TG, coef
 
+        # Fix names
+        # NOTE: Right now these are reversed (or are they?)
+        replace = {'celltype_TF': 'rev_celltype_TF', 'rev_celltype_TF': 'celltype_TF'}
+        graph['edge_type'] = [replace[et] if et in replace else et for et in graph['edge_type']]
+
         # Remove training edges
         if train_omit:
             # Remove reverse edges

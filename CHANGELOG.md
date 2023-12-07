@@ -1,3 +1,11 @@
+### 2023-12-06
+- Add additional extended comparisons
+- Additional graph filters
+- Figure layout reformatting
+- Fix file formatting error, will need to be updated on next model run
+- QOL updates
+- SCZ analysis lengthened
+
 ### 2023-12-05 (1-3)
 - Add QOL for several utility functions
 - Add `plot_labels` function for plotting figure labels

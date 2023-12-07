@@ -898,7 +898,8 @@ def filter_to_synthetic_vertices(g, vertex_ids=None, depth=2, limit=5):
 
         # Get neighbors
         if synthetic:
-            current_layer = [list(v.in_neighbors()) for v in last_layer]
+            # current_layer = [list(v.in_neighbors()) for v in last_layer]  # When CT-TF edges are reversed
+            current_layer = [list(v.out_neighbors()) for v in last_layer]
         else:
             current_layer = [list(v.out_neighbors()) for v in last_layer]
 
@@ -912,7 +913,8 @@ def filter_to_synthetic_vertices(g, vertex_ids=None, depth=2, limit=5):
         # Filter
         if limit != -1:
             attentions = [
-                [g.edge(v, w) if not synthetic else g.edge(w, v) for w in current_layer[i]]
+                # [g.edge(v, w) if not synthetic else g.edge(w, v) for w in current_layer[i]]  # When CT-TF edges are reversed
+                [g.edge(v, w) for w in current_layer[i]]
                 for i, v in enumerate(last_layer)
             ]
             to_keep = [np.argsort(att)[-limit:] for att in attentions]
@@ -1253,6 +1255,11 @@ def filter_remove_ct_ct(df, col='id'):
 def filter_remove_ct_x(df, col='id'):
     "Filter to remove ct-* linkages from a DataFrame `df` containing a column `col` storing edge names"
     return df.loc[~df[col].map(lambda s: string_is_synthetic(split_edge_string(s)[0]) or string_is_synthetic(split_edge_string(s)[1]))]
+
+
+def filter_remove_tf_tg(df, col='id'):
+    "Filter to remove tf-tg linkages from a DataFrame `df` containing a column `col` storing edge names"
+    return df.loc[~df[col].map(lambda s: not string_is_synthetic(split_edge_string(s)[0]) and not string_is_synthetic(split_edge_string(s)[1]))]
 
 
 def alphabetize_shape(shape, *, offset=0, return_dict=False, return_offset=False):

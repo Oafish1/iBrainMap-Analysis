@@ -335,8 +335,12 @@ def plot_enrichment(df, ax=None):
     ax.set_ylabel(None)
 
 
-def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, color_map=None, filter=filter_remove_ct_x, ax=None):
-    "Take concatenated graph `g` and plot a comparison between the original weights"
+def plot_individual_edge_comparison(g, sample_ids, suffix='Prioritization Weights', highlight_outliers=True, color_map=None, filter=lambda x: filter_remove_ct_ct(filter_remove_tf_tg(x)), ax=None):
+    """
+    Take concatenated graph `g` and plot a comparison between the original weights
+
+    By default, only plots CT-TF edges
+    """
     if not ax: ax = plt.gca()
 
     # Assemble dataframe
@@ -1220,6 +1224,37 @@ def plot_ct_individual_edges(sid, *, ax, data, edges, heads, subject_ids, column
     plt.title(column)
 
 
+def plot_ct_individual_edge_comparison(sid, *, ax, data, edges, heads, subject_ids, columns=None, column_names=None, palette=['paleturquoise', 'salmon'], num_edges=15):
+    # Defaults
+    if columns is None: columns = get_attention_columns()[:2]
+
+    # Filter to subject
+    data = data[:, :, np.array(subject_ids)==sid].squeeze()
+
+    # Filter to column
+    data = data[:, [h in columns for h in heads]]
+
+    # Filter to ct-ct edges
+    ct_edges_mask = [string_is_synthetic(s.split(get_edge_string())[0]) and string_is_synthetic(s.split(get_edge_string())[1]) for s in edges]
+    data = data[ct_edges_mask]
+    ct_edges = np.array(edges)[ct_edges_mask]
+
+    # Convert
+    df = pd.DataFrame(data, index=ct_edges, columns=columns)
+    df = df.reset_index(names='Edge').melt(id_vars='Edge', var_name='Head', value_name='Prioritization')
+    if column_names is not None: df['Head'] = df['Head'].apply(lambda s: {c: cn for c, cn in zip(columns, column_names)}[s])
+
+    # Filter
+    mean_prioritization = df[['Edge', 'Prioritization']].groupby('Edge').sum().sort_values('Prioritization', na_position='first').loc[::-1]
+    df = df.loc[df['Edge'].isin(mean_prioritization.index.to_numpy()[:num_edges])]
+
+    # Plot
+    sns.barplot(data=df, x='Edge', y='Prioritization', hue='Head', palette=['paleturquoise', 'salmon'], ax=ax)
+    plt.sca(ax)
+    plt.yscale('log')
+    plt.xticks(rotation=90)
+
+
 def plot_attention_histogram(sid, *, ax, data, edges, heads, subject_ids, column=None):
     # Defaults
     if column is None: column = get_attention_columns()[0]
@@ -1304,7 +1339,7 @@ def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None,
     return {'g_pos': g, 'pos': pos}
 
 
-def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=5, min_samples=10, subsample=1., max_scale=False, df=None, prs_df=None, **kwargs):
+def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=10, min_samples=10, subsample=1., max_scale=False, df=None, prs_df=None, **kwargs):
     # Default
     if ax is None: ax = plt.gca()
 
@@ -1327,7 +1362,8 @@ def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_
 
     # Plot
     # NOTE: Right now, will not consider different edges on the same head
-    sns.barplot(prs_df_format, x='Name', y='Attention', hue='Risk', hue_order=['low', 'mid', 'high'], ax=ax)
+    prs_df_format = prs_df_format.rename(columns={'Risk': 'SCZ Risk'})
+    sns.barplot(prs_df_format, x='Name', y='Attention', hue='SCZ Risk', hue_order=['low', 'mid', 'high'], ax=ax)
     # Formatting
     plt.sca(ax)
     plt.xticks(rotation=90)
