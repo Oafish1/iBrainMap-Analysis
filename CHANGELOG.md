@@ -1,6 +1,7 @@
-### 2023-12-06
+### 2023-12-06 (1-2)
 - Add additional extended comparisons
 - Additional graph filters
+- Adjust figures
 - Figure layout reformatting
 - Fix file formatting error, will need to be updated on next model run
 - QOL updates
