@@ -1452,18 +1452,18 @@ def plot_edge_discovery_enrichment(
     subfig = ax.figure
     ax.remove()
     gs = subfig.add_gridspec(2, len(prioritizations_ranges))
-    ax_top = subfig.add_subfigure(gs[0, :])
-    ax_top = ax_top.add_subplot(1, 1, 1)
-    axs_bottom = subfig.add_subfigure(gs[1, :])
-    axs_bottom = axs_bottom.subplots(1, len(prioritizations_ranges), sharex=True)
-    axs_bottom = axs_bottom[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
+    ax_line = subfig.add_subfigure(gs[1, :])
+    ax_line = ax_line.add_subplot(1, 1, 1)
+    axs_enrich = subfig.add_subfigure(gs[0, :])
+    axs_enrich = axs_enrich.subplots(1, len(prioritizations_ranges), sharex=True)
+    axs_enrich = axs_enrich[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
 
     # Plot
-    pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_top)
-    plt.sca(ax_top)
+    pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
+    plt.sca(ax_line)
     plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
     plt.xticks(rotation=90)
-    sns.despine(ax=ax_top)
+    sns.despine(ax=ax_line)
     pl.set_xlabel(None)
 
     # Adjust labels and record genes
@@ -1516,7 +1516,7 @@ def plot_edge_discovery_enrichment(
         enrichment = format_enrichment(enrichment, filter=None).sort_values('-log10(p)').iloc[::-1]
 
         # Plot barplots
-        for ppr, group, color, ax in zip(percentage_prioritizations_ranges, genes_list.columns, range_colors, axs_bottom):
+        for ppr, group, color, ax in zip(percentage_prioritizations_ranges, genes_list.columns, range_colors, axs_enrich):
             # Get top descriptors
             enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
 
@@ -1531,4 +1531,4 @@ def plot_edge_discovery_enrichment(
             pl.set_ylabel(None)
             sns.despine(ax=ax, bottom=True)
 
-    return ax_top
+    return axs_enrich[0]
