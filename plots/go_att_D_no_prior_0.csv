@@ -1,0 +1,80 @@
+_MEMBER_att_D_no_prior_0 - 0.9-1.1,_MEMBER_att_D_no_prior_0 - 4.5-5.5,_MEMBER_att_D_no_prior_0 - 9.0-11.0,_LogP_att_D_no_prior_0 - 0.9-1.1,_LogP_att_D_no_prior_0 - 4.5-5.5,_LogP_att_D_no_prior_0 - 9.0-11.0,GO,Description,_PATTERN_,_RANK_,GiniIndex
+1,1,0,-2.4,-2,0,M195,PID CMYB PATHWAY,M110,2,0
+1,1,0,-3.5,-2.4,0,GO:0007498,mesoderm development,M110,2,0
+1,0,0,-3.1,0,0,M167,PID AP1 PATHWAY,M100,1,0
+1,0,0,-2.9,0,0,M183,PID IL6 7 PATHWAY,M100,1,0
+1,0,0,-2.7,0,0,GO:0008283,cell population proliferation,M100,1,0
+1,0,0,-2,0,0,GO:0048705,skeletal system morphogenesis,M100,1,0
+1,0,0,-3.5,0,0,GO:0014855,striated muscle cell proliferation,M100,1,0
+1,0,0,-2.8,0,0,GO:0060038,cardiac muscle cell proliferation,M100,1,0
+1,0,0,-2.8,0,0,GO:0032774,RNA biosynthetic process,M100,1,0
+1,0,0,-2.2,0,0,GO:0043583,ear development,M100,1,0
+0,1,0,0,-2.6,0,WP4262,Breast cancer pathway,M010,1,0
+0,0,1,0,0,-2.1,GO:0016053,organic acid biosynthetic process,M001,1,0
+1,0,0,-2.2,0,0,GO:0006366,transcription by RNA polymerase II,M100,1,0
+0,1,0,0,-2.1,0,GO:0045766,positive regulation of angiogenesis,M010,1,0
+1,0,0,-2.8,0,0,GO:0055017,cardiac muscle tissue growth,M100,1,0
+1,0,0,-2.8,0,0,GO:0009896,positive regulation of catabolic process,M100,1,0
+1,0,0,-2.4,0,0,GO:0007517,muscle organ development,M100,1,0
+1,0,0,-2.8,0,0,M285,PID HNF3A PATHWAY,M100,1,0
+1,0,0,-2.4,0,0,GO:0061061,muscle structure development,M100,1,0
+1,0,0,-2.1,0,0,GO:0060576,intestinal epithelial cell development,M100,1,0
+1,0,0,-2.4,0,0,GO:0001892,embryonic placenta development,M100,1,0
+1,0,0,-2.1,0,0,CORUM:2695,ETS2-FOS-JUN complex,M100,1,0
+1,0,0,-2.2,0,0,GO:0048589,developmental growth,M100,1,0
+1,0,0,-2.1,0,0,GO:0060479,lung cell differentiation,M100,1,0
+0,1,0,0,-2,0,GO:0032835,glomerulus development,M010,1,0
+1,0,0,-2.1,0,0,R-HSA-8877330,RUNX1 and FOXP3 control the development of regulatory T lymphocytes (Tregs),M100,1,0
+0,0,1,0,0,-2.1,WP5417,Cell lineage map for neuronal differentiation,M001,1,0
+0,1,0,0,-2.6,0,hsa05224,Breast cancer,M010,1,0
+1,0,0,-2.4,0,0,R-HSA-8878171,Transcriptional regulation by RUNX1,M100,1,0
+1,0,0,-2.2,0,0,WP2064,Neural crest differentiation,M100,1,0
+1,0,0,-2.1,0,0,CORUM:2693,NFAT-JUN-FOS DNA-protein complex,M100,1,0
+1,0,0,-2.1,0,0,CORUM:2694,ERG-JUN-FOS DNA-protein complex,M100,1,0
+1,0,0,-2.1,0,0,GO:0045165,cell fate commitment,M100,1,0
+0,1,0,0,-2,0,GO:1904018,positive regulation of vasculature development,M010,1,0
+1,0,0,-2.4,0,0,WP4149,White fat cell differentiation,M100,1,0
+1,0,0,-2.2,0,0,WP3927,BMP signaling in eyelid development,M100,1,0
+1,0,0,-2.5,0,0,WP4211,Transcriptional cascade regulating adipogenesis,M100,1,0
+0,1,0,0,-2.8,0,WP2849,Hematopoietic stem cell differentiation,M010,1,0
+1,0,0,-3.5,0,0,GO:0033002,muscle cell proliferation,M100,1,0
+1,0,0,-2.3,0,0,GO:0035239,tube morphogenesis,M100,1,0
+0,1,0,0,-2.1,0,R-HSA-9013508,NOTCH3 Intracellular Domain Regulates Transcription,M010,1,0
+1,0,0,-3.3,0,0,M60,PID NFAT TFPATHWAY,M100,1,0
+1,0,0,-2.2,0,0,M2,PID SMAD2 3NUCLEAR PATHWAY,M100,1,0
+1,0,0,-2.9,0,0,M272,PID CD8 TCR DOWNSTREAM PATHWAY,M100,1,0
+0,1,0,0,-3,0,GO:0001525,angiogenesis,M010,1,0
+0,1,0,0,-3,0,R-HSA-157118,Signaling by NOTCH,M010,1,0
+0,1,0,0,-2.1,0,R-HSA-9012852,Signaling by NOTCH3,M010,1,0
+1,0,0,-2.6,0,0,GO:0001501,skeletal system development,M100,1,0
+1,0,0,-2.5,0,0,hsa05202,Transcriptional misregulation in cancer,M100,1,0
+1,0,0,-2.6,0,0,WP5218,Extrafollicular and follicular B cell activation by SARS CoV 2,M100,1,0
+1,0,0,-2.3,0,0,GO:0048568,embryonic organ development,M100,1,0
+1,0,0,-2.3,0,0,GO:0001701,in utero embryonic development,M100,1,0
+0,0,1,0,0,-2.1,GO:0046394,carboxylic acid biosynthetic process,M001,1,0
+1,0,0,-2.1,0,0,M206,PID PDGFRA PATHWAY,M100,1,0
+0,1,0,0,-3.9,0,GO:0060055,angiogenesis involved in wound healing,M010,1,0
+1,0,0,-2.3,0,0,GO:0043009,chordate embryonic development,M100,1,0
+1,0,0,-2.4,0,0,GO:0048839,inner ear development,M100,1,0
+0,1,0,0,-3,0,GO:0071425,hematopoietic stem cell proliferation,M010,1,0
+1,0,0,-2.8,0,0,GO:0060537,muscle tissue development,M100,1,0
+1,0,0,-3.5,0,0,GO:0140467,integrated stress response signaling,M100,1,0
+1,0,0,-2.1,0,0,R-HSA-8939247,RUNX1 regulates transcription of genes involved in interleukin signaling,M100,1,0
+1,0,0,-2.1,0,0,WP2857,Mesodermal commitment pathway,M100,1,0
+1,0,0,-2.1,0,0,GO:0009792,embryo development ending in birth or egg hatching,M100,1,0
+1,0,0,-2.1,0,0,GO:0060487,lung epithelial cell differentiation,M100,1,0
+1,0,0,-2.1,0,0,GO:0060575,intestinal epithelial cell differentiation,M100,1,0
+1,0,0,-2.8,0,0,M235,PID TCR CALCIUM PATHWAY,M100,1,0
+1,0,0,-2.6,0,0,GO:0031331,positive regulation of cellular catabolic process,M100,1,0
+1,0,0,-2.2,0,0,GO:0060428,lung epithelium development,M100,1,0
+1,0,0,-3.5,0,0,M236,PID DELTA NP63 PATHWAY,M100,1,0
+1,0,0,-2.8,0,0,GO:0060419,heart growth,M100,1,0
+0,1,0,0,-3,0,WP3678,Amplification and expansion of oncogenic pathways as metastatic traits,M010,1,0
+0,1,0,0,-2.2,0,GO:0048514,blood vessel morphogenesis,M010,1,0
+1,0,0,-2.8,0,0,R-HSA-8939245,RUNX1 regulates transcription of genes involved in BCR signaling,M100,1,0
+0,0,1,0,0,-3.1,WP5420,ADHD and Autism ASD linked metabolic pathways and SNP,M001,1,0
+0,1,0,0,-2.1,0,WP4223,Ras signaling,M010,1,0
+1,0,0,-2.1,0,0,GO:2000739,regulation of mesenchymal stem cell differentiation,M100,1,0
+1,0,0,-2.2,0,0,GO:0040007,growth,M100,1,0
+0,1,0,0,-3.4,0,hsa05200,Pathways in cancer,M010,1,0
+1,0,0,-3,0,0,GO:0006351,DNA-templated transcription,M100,1,0

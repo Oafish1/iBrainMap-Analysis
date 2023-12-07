@@ -1233,6 +1233,7 @@ def plot_ct_individual_edge_comparison(sid, *, ax, data, edges, heads, subject_i
 
     # Filter to column
     data = data[:, [h in columns for h in heads]]
+    heads = [h for h in heads if h in columns]
 
     # Filter to ct-ct edges
     ct_edges_mask = [string_is_synthetic(s.split(get_edge_string())[0]) and string_is_synthetic(s.split(get_edge_string())[1]) for s in edges]
@@ -1240,7 +1241,7 @@ def plot_ct_individual_edge_comparison(sid, *, ax, data, edges, heads, subject_i
     ct_edges = np.array(edges)[ct_edges_mask]
 
     # Convert
-    df = pd.DataFrame(data, index=ct_edges, columns=columns)
+    df = pd.DataFrame(data, index=ct_edges, columns=heads)
     df = df.reset_index(names='Edge').melt(id_vars='Edge', var_name='Head', value_name='Prioritization')
     if column_names is not None: df['Head'] = df['Head'].apply(lambda s: {c: cn for c, cn in zip(columns, column_names)}[s])
 
@@ -1249,7 +1250,7 @@ def plot_ct_individual_edge_comparison(sid, *, ax, data, edges, heads, subject_i
     df = df.loc[df['Edge'].isin(mean_prioritization.index.to_numpy()[:num_edges])]
 
     # Plot
-    sns.barplot(data=df, x='Edge', y='Prioritization', hue='Head', palette=['paleturquoise', 'salmon'], ax=ax)
+    sns.barplot(data=df, x='Edge', y='Prioritization', hue='Head', hue_order=column_names if column_names is not None else columns, palette=['paleturquoise', 'salmon'], ax=ax)
     plt.sca(ax)
     plt.yscale('log')
     plt.xticks(rotation=90)
@@ -1305,7 +1306,7 @@ def create_subfigure_mosaic(shape_array, layout='constrained'):
     for key, subfig in subfigs.items():
         axs[key] = subfig.add_subplot(1, 1, 1)
     # Formatting
-    fig.set_constrained_layout_pads(w_pad=0, h_pad=0, wspace=.4, hspace=.4)  # *_pad is pad for figs (including subfigs), *_space is pad between subplots
+    fig.set_constrained_layout_pads(w_pad=.4, h_pad=.4, wspace=0, hspace=0)  # *_pad is pad for figs (including subfigs), *_space is pad between subplots
 
     # NOTE: `bbox_inches='tight'` will eliminate whitespace from edges, even from '.' in mosaic.
     return fig, axs
@@ -1339,19 +1340,17 @@ def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None,
     return {'g_pos': g, 'pos': pos}
 
 
-def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=10, min_samples=10, subsample=1., max_scale=False, df=None, prs_df=None, **kwargs):
+def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=3, min_samples=20, subsample=1., max_scale=False, df=None, prs_df=None, discrete=False, head_prefix='att_D_SCZ', **kwargs):
     # Default
     if ax is None: ax = plt.gca()
 
     # Get data
     # TODO: Allow just passing prs_df
     if df is None: df = compute_prs_difference(meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, subsample=subsample, **kwargs)
-    targets = (
-        df[['edge', 'head']]
-        .loc[df['n'] > min_samples]  # Filter by min_samples
-        .iloc[:num_targets]  # Filter to top targets
-        .to_numpy()
-    )
+    targets = df[['edge', 'head']].loc[df['n'] > min_samples]  # Filter by min_samples
+    if head_prefix is not None: targets = targets.loc[[h.startswith(head_prefix) for h in targets['head']]]  # Filter to certain heads
+    targets = targets.iloc[:num_targets]  # Filter to top targets
+    targets = targets.to_numpy()
     if prs_df is None: prs_df = get_prs_df(targets, meta=meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, **kwargs)
 
     # Max scale individual edges
@@ -1362,18 +1361,36 @@ def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_
 
     # Plot
     # NOTE: Right now, will not consider different edges on the same head
-    prs_df_format = prs_df_format.rename(columns={'Risk': 'SCZ Risk'})
-    sns.barplot(prs_df_format, x='Name', y='Attention', hue='SCZ Risk', hue_order=['low', 'mid', 'high'], ax=ax)
-    # Formatting
-    plt.sca(ax)
-    plt.xticks(rotation=90)
-    plt.xlabel(None)
-    if max_scale:
-        plt.ylabel('Prioritization (Max Scaled)')
+    ret = (df, prs_df,)
+    if discrete:
+        # Plot
+        prs_df_format = prs_df_format.rename(columns={'Risk': 'SCZ Risk'})
+        sns.barplot(prs_df_format, x='Name', y='Attention', hue='SCZ Risk', hue_order=['low', 'mid', 'high'], ax=ax)
+        # Formatting
+        plt.sca(ax)
+        plt.xticks(rotation=90)
+        plt.xlabel(None)
+        plt.ylabel('Prioritization (Max Scaled)' if max_scale else 'Prioritization')
     else:
-        plt.ylabel('Prioritization')
+        # Replace ax with multiple
+        subfig = ax.figure
+        ax.remove()
+        sub_axs = subfig.subplots(1, num_targets)
 
-    return df, prs_df
+        # Plot
+        for i, ax in enumerate(sub_axs):
+            name = np.unique(prs_df_format['Name'])[i]
+            sns.scatterplot(prs_df_format.loc[prs_df_format['Name']==name], x='PRS', y='Attention', color='gray', ax=ax)
+            name_mask = df.apply(lambda r: f'{r["edge"]} ({r["head"]})', axis=1)==name
+            p = df.loc[name_mask, 'p'].iloc[0]
+            fdr = df.loc[name_mask, 'fdr'].iloc[0]
+            plt.text(.95, .95, f'p={p:.3e}, fdr={fdr:.3e}', ha='right', va='top', in_layout=False, transform=ax.transAxes)
+            if i > 0: ax.set_ylabel(None)
+
+        # Return
+        ret += (sub_axs[0],)
+
+    return format_return(ret)
 
 
 def plot_labels(axs, *, shape=None, **kwargs):
@@ -1387,3 +1404,131 @@ def plot_labels(axs, *, shape=None, **kwargs):
         ax.text(0, 1, conversion[label] if shape is not None else label, zorder=1, in_layout=False, ha='right', va='bottom', fontweight='bold', fontsize='xx-large', transform=ax.figure.transSubfigure)
 
     if shape is not None: return offset
+
+
+def plot_edge_discovery_enrichment(
+        data,
+        *,
+        edges,
+        heads,
+        ax,
+        column=None,
+        percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.01, .05, .1)],
+        range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
+        subsample=0,
+        interval=10,
+        num_descriptors=3,
+        clamp_min=True,
+        results_dir='../plots/',
+        random_seed=42,
+        **kwargs,
+):
+    # Defaults
+    if column is None: column = get_attention_columns()[0]
+
+    # Calculate ranges
+    prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
+
+    # Get all compatible edges
+    counts = compute_edge_counts(data=data, edges=edges, heads=heads)
+
+    # Filter to chosen head
+    counts_filtered = counts.loc[counts['Head']==column]
+
+    # Sample
+    # NOTE: Maybe remove in final version?  Doesn't matter too much
+    np.random.seed(random_seed)
+    idx = np.random.choice(counts_filtered.shape[0], min(subsample, counts_filtered.shape[0]) if subsample else counts_filtered.shape[0], replace=False)
+    counts_filtered = counts_filtered.iloc[idx]
+
+    # Sort
+    counts_filtered = counts_filtered.sort_values('Count')
+    counts_filtered = counts_filtered.iloc[::-1]
+
+    # Filter
+    if clamp_min: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
+
+    # Split ax
+    subfig = ax.figure
+    ax.remove()
+    gs = subfig.add_gridspec(2, len(prioritizations_ranges))
+    ax_top = subfig.add_subfigure(gs[0, :])
+    ax_top = ax_top.add_subplot(1, 1, 1)
+    axs_bottom = subfig.add_subfigure(gs[1, :])
+    axs_bottom = axs_bottom.subplots(1, len(prioritizations_ranges), sharex=True)
+    axs_bottom = axs_bottom[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
+
+    # Plot
+    pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_top)
+    plt.sca(ax_top)
+    plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
+    plt.xticks(rotation=90)
+    sns.despine(ax=ax_top)
+    pl.set_xlabel(None)
+
+    # Adjust labels and record genes
+    xticklabels = pl.get_xticklabels()
+    for label in xticklabels: label.set_visible(False)
+    genes_list = pd.DataFrame()
+    for pr, ppr, color in zip(prioritizations_ranges, percentage_prioritizations_ranges, range_colors):
+        # Get mask
+        within_range_mask = (counts_filtered['Count'].to_numpy() > pr[0]) * (counts_filtered['Count'].to_numpy() < pr[1])
+
+        # Check for content
+        if within_range_mask.sum() == 0:
+            print('Not enough datapoints found within range, skipping.')
+            continue
+
+        # Get idx
+        idx = []
+        idx.append(np.argwhere(within_range_mask).flatten().min())  # Add min
+        idx.append(np.argwhere(within_range_mask).flatten().max())  # Add max
+        mid = np.linspace(*idx, num=int((idx[1]-idx[0])/interval))
+        idx += list([int(i) for i in mid])  # Every 10 (or so) between
+
+        # Set visibility and color
+        for i in idx:
+            xticklabels[i].set_visible(True)
+            xticklabels[i].set_color(color)
+
+        # Record important genes
+        genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
+        genes = [g for g in genes if not string_is_synthetic(g)]
+        genes_new = pd.DataFrame({f'{column} - {100*ppr[0]:.1f}-{100*ppr[1]:.1f}': genes})
+        genes_list = pd.concat((genes_list, genes_new), axis=1)
+
+    # Record background
+    genes = np.array([split_edge_string(e) for e in counts_filtered['Edge']]).flatten()
+    genes = [g for g in genes if not string_is_synthetic(g)]
+    genes_new = pd.DataFrame({'_BACKGROUND': genes})
+    genes_list = pd.concat((genes_list, genes_new), axis=1)
+
+    # Save important genes
+    genes_list.to_csv(os.path.join(results_dir, f'genes_{column}.csv'), index=False)
+
+    # Plot enrichments
+    fname = os.path.join(results_dir, f'go_{column}.csv')
+    if os.path.isfile(fname):
+        # Read enrichment if exists
+        enrichment = pd.read_csv(fname)
+
+        # Format
+        enrichment = format_enrichment(enrichment, filter=None).sort_values('-log10(p)').iloc[::-1]
+
+        # Plot barplots
+        for ppr, group, color, ax in zip(percentage_prioritizations_ranges, genes_list.columns, range_colors, axs_bottom):
+            # Get top descriptors
+            enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
+
+            # Plot
+            pl = sns.barplot(
+                enrichment_filtered,
+                x='-log10(p)',
+                y='Description',
+                palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=2, max_val=5, start=(.9, .9, .9), end=color),
+                ax=ax)
+            pl.set_xlabel(None)
+            pl.set_ylabel(None)
+            sns.despine(ax=ax, bottom=True)
+
+    return ax_top

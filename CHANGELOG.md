@@ -1,7 +1,10 @@
-### 2023-12-07 (1-2)
+### 2023-12-07 (1-3)
 - Add SCZ PRS analysis saving
+- Change PRS analysis to scatterplot and add significance
 - Change bottom layout
+- Change unique edge enrichment format
 - Figure updates
+- Formatting changes and nested subplots
 - Inset edge discovery analysis
 
 ### 2023-12-06 (1-2)

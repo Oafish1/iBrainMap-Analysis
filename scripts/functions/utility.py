@@ -1300,3 +1300,16 @@ def shape_array_from_shape(shape):
     shape_array = [s.replace(' ', '') for s in shape.split('\n')[1:-1]]
     shape_array = np.array([list(s) for s in shape_array])
     return shape_array
+
+
+def get_colors_from_values(values, min_val=None, max_val=None, start=(.8, .5, .25), end=(1., .1, .1)):
+    # Defaults
+    if min_val is None: min_val = min(values)
+    if max_val is None: max_val = min(values)
+    # Normalize values
+    normalized = (values-min_val) / (max_val-min_val)
+    normalized[normalized < 0] = 0
+    normalized[normalized > 1] = 1
+    # Calculate colors
+    colors = [v*np.array(end) + (1-v)*np.array(start) for v in normalized]
+    return colors
