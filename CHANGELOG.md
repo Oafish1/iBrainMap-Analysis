@@ -3,7 +3,7 @@
 - Change PRS analysis to scatterplot and add significance
 - Change bottom layout
 - Change unique edge enrichment format
-- Figure updates (2x)
+- Figure updates (3x)
 - Formatting changes and nested subplots
 - Inset edge discovery analysis
 - Recompute enrichment panel
