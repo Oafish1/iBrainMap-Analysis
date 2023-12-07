@@ -1066,7 +1066,7 @@ def plot_edge_discovery(
         ax,
         column=None,
         percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.01, .05, .1)],
-        num_labels=15,
+        num_labels=10,
         **kwargs):
     # Defaults
     if column is None: column = get_attention_columns()[0]

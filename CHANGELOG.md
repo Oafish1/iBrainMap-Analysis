@@ -1,3 +1,8 @@
+### 2023-12-07
+- Add SCZ PRS analysis saving
+- Change bottom layout
+- Inset edge discovery analysis
+
 ### 2023-12-06 (1-2)
 - Add additional extended comparisons
 - Additional graph filters
