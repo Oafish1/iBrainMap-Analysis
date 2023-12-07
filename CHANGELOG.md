@@ -1,6 +1,7 @@
-### 2023-12-07
+### 2023-12-07 (1-2)
 - Add SCZ PRS analysis saving
 - Change bottom layout
+- Figure updates
 - Inset edge discovery analysis
 
 ### 2023-12-06 (1-2)
