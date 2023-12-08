@@ -1385,6 +1385,7 @@ def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_
             p = df.loc[name_mask, 'p'].iloc[0]
             fdr = df.loc[name_mask, 'fdr'].iloc[0]
             plt.text(.95, .95, f'p={p:.3e}, fdr={fdr:.3e}', ha='right', va='top', in_layout=False, transform=ax.transAxes)
+            ax.set_title(name)
             if i > 0: ax.set_ylabel(None)
 
         # Return

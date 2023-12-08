@@ -1,5 +1,6 @@
-### 2023-12-07 (1-4)
+### 2023-12-07 (1-5)
 - Add SCZ PRS analysis saving
+- Bugfix for extended ct-ct comparison
 - Change PRS analysis to scatterplot and add significance
 - Change bottom layout
 - Change unique edge enrichment format
