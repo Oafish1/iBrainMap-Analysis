@@ -1,6 +1,7 @@
 import colorsys
 import re
 import string
+import textwrap
 import warnings
 
 import graph_tool.all as gt
@@ -1313,3 +1314,37 @@ def get_colors_from_values(values, min_val=None, max_val=None, start=(.8, .5, .2
     # Calculate colors
     colors = [v*np.array(end) + (1-v)*np.array(start) for v in normalized]
     return colors
+
+
+def wrap_text(ticklabels, *, chars=20):
+    new_ticklabels = []
+    for label in ticklabels:
+        text = label.get_text()
+        new_text = '\n'.join(textwrap.wrap(text, chars))
+        label.set_text(new_text)
+        new_ticklabels.append(label)
+    return new_ticklabels
+
+
+def check_ct_edge_specificity():
+    """
+    Check for duplicate edges with different attention weights.
+    If exist, throw error.
+    """
+    # Get all graphs
+    for k in tqdm(get_graphs_pkl()):
+        df = get_graphs_pkl()[k]
+        df['count'] = 1
+        dup = df[['from', 'to', 'count']].groupby(['from', 'to']).sum().reset_index()
+        df = df.drop(columns='count')
+        dup = dup.loc[dup['count'] > 1]
+        dup_id = dup.apply(lambda r: f'{r["from"]}_{r["to"]}', axis=1)
+
+        # Check all duplicates for differing attentions
+        unique = (~df.loc[dup_id].drop(columns=['org_edge_weight', 'ct_GRN', 'edge_type']).duplicated()).sum()
+        assert unique == dup_id.shape[0], f'Found {unique - dup_id.shape[0]} non-redundant duplicated edges across cell types.'
+        # Naive
+        # for id in dup_id:
+        #     df_filt = df.loc[id].drop(columns=['org_edge_weight', 'ct_GRN', 'edge_type'])
+        #     duplicates = df_filt.duplicated().sum()
+        #     assert duplicates == df_filt.shape[0]-1, f'Found edge with difference across cell-types, {id}'

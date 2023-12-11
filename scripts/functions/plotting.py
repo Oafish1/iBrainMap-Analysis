@@ -969,12 +969,20 @@ def plot_graph_comparison_from_sids(sids, *, axs, column=None, vertex_ids=None, 
 
 def plot_edge_comparison_from_sids(sids, *, ax, column=None, palette=None, **kwargs):
     # Assemble
-    graphs = [compute_graph(load_graph_by_id(sid, column=column)) for sid in sids]
+    if type(column) == type([]):
+        graphs = [compute_graph(load_graph_by_id(sid, column=c)) for sid in sids for c in column]
+    else:
+        graphs = [compute_graph(load_graph_by_id(sid, column=column)) for sid in sids]
 
     # Get graph
     g = concatenate_graphs(*graphs, threshold=False)
     g = get_intersection(g)
     # g = cull_isolated_leaves(g)
+
+    # Compute averages if needed
+    if type(column) == type([]):
+        for e in g.edges():
+            g.ep.coefs[e] = [np.mean(g.ep.coefs[e][i*len(column):(i+1)*len(column)]) for i in range(len(sids))]
 
     plot_individual_edge_comparison(g, sids, color_map=palette, ax=ax, **kwargs)
 
@@ -1340,7 +1348,25 @@ def plot_ct_graph_from_sid(sid, *, ax, column=None, vertex_ids=None, g_pos=None,
     return {'g_pos': g, 'pos': pos}
 
 
-def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_targets=3, min_samples=20, subsample=1., max_scale=False, df=None, prs_df=None, discrete=False, head_prefix='att_D_SCZ', **kwargs):
+def plot_prs_correlation(
+        meta,
+        *,
+        data,
+        edges,
+        heads,
+        subject_ids,
+        ax=None,
+        num_targets=3,
+        min_samples=20,
+        subsample=1.,
+        max_scale=False,
+        df=None,
+        prs_df=None,
+        discrete=False,
+        show_head=False,
+        head_prefix='att_D_SCZ',
+        **kwargs
+):
     # Default
     if ax is None: ax = plt.gca()
 
@@ -1375,18 +1401,33 @@ def plot_prs_correlation(meta, *, data, edges, heads, subject_ids, ax=None, num_
         # Replace ax with multiple
         subfig = ax.figure
         ax.remove()
-        sub_axs = subfig.subplots(1, num_targets)
+        sub_axs = subfig.subplots(1, num_targets, sharey=True)
 
         # Plot
         for i, ax in enumerate(sub_axs):
             name = np.unique(prs_df_format['Name'])[i]
-            sns.scatterplot(prs_df_format.loc[prs_df_format['Name']==name], x='PRS', y='Attention', color='gray', ax=ax)
+            edge = np.unique(prs_df_format['Edge'])[i]
+            prs_df_format_filtered = prs_df_format.loc[prs_df_format['Name']==name]
+            sns.scatterplot(prs_df_format_filtered, x='PRS', y='Attention', color='gray', ax=ax)
+
+            # Trendline
+            x, y = prs_df_format_filtered['PRS'].values, prs_df_format_filtered['Attention'].values
+            coef = np.polyfit(x, y, 1)
+            fit = np.poly1d(coef)
+            ax.plot(x, fit(x), color='black', alpha=.5)
+
+            # Significance
             name_mask = df.apply(lambda r: f'{r["edge"]} ({r["head"]})', axis=1)==name
+            correlation = df.loc[name_mask, 'correlation'].iloc[0]
             p = df.loc[name_mask, 'p'].iloc[0]
-            fdr = df.loc[name_mask, 'fdr'].iloc[0]
-            plt.text(.95, .95, f'p={p:.3e}, fdr={fdr:.3e}', ha='right', va='top', in_layout=False, transform=ax.transAxes)
-            ax.set_title(name)
+            # fdr = df.loc[name_mask, 'fdr'].iloc[0]
+            plt.text(.05, .95, f'corr={correlation:.3e}\np={p:.3e}', ha='left', va='top', in_layout=False, transform=ax.transAxes)
+
+            # Styling
+            ax.set_title(edge)
+            sns.despine(ax=ax, left=i>0)
             if i > 0: ax.set_ylabel(None)
+        ax.set_ylim([-.05, 1.05])
 
         # Return
         ret += (sub_axs[0],)
@@ -1419,6 +1460,7 @@ def plot_edge_discovery_enrichment(
         subsample=0,
         interval=10,
         num_descriptors=3,
+        show_labels=False,
         clamp_min=True,
         results_dir='../plots/',
         random_seed=42,
@@ -1437,7 +1479,6 @@ def plot_edge_discovery_enrichment(
     counts_filtered = counts.loc[counts['Head']==column]
 
     # Sample
-    # NOTE: Maybe remove in final version?  Doesn't matter too much
     np.random.seed(random_seed)
     idx = np.random.choice(counts_filtered.shape[0], min(subsample, counts_filtered.shape[0]) if subsample else counts_filtered.shape[0], replace=False)
     counts_filtered = counts_filtered.iloc[idx]
@@ -1452,12 +1493,13 @@ def plot_edge_discovery_enrichment(
     # Split ax
     subfig = ax.figure
     ax.remove()
-    gs = subfig.add_gridspec(2, len(prioritizations_ranges))
-    ax_line = subfig.add_subfigure(gs[1, :])
+    gs = subfig.add_gridspec(2, len(prioritizations_ranges), height_ratios=(2, 3))
+    ax_line = subfig.add_subfigure(gs[0, :])
     ax_line = ax_line.add_subplot(1, 1, 1)
-    axs_enrich = subfig.add_subfigure(gs[0, :])
+    axs_enrich = subfig.add_subfigure(gs[1, :])
     axs_enrich = axs_enrich.subplots(1, len(prioritizations_ranges), sharex=True)
     axs_enrich = axs_enrich[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
+    ret_ax = ax_line  # Return top left ax for labeling
 
     # Plot
     pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
@@ -1465,7 +1507,8 @@ def plot_edge_discovery_enrichment(
     plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
     plt.xticks(rotation=90)
     sns.despine(ax=ax_line)
-    pl.set_xlabel(None)
+    if show_labels: pl.set_xlabel(None)
+    pl.set_ylabel('Individuals')
 
     # Adjust labels and record genes
     xticklabels = pl.get_xticklabels()
@@ -1489,8 +1532,9 @@ def plot_edge_discovery_enrichment(
 
         # Set visibility and color
         for i in idx:
-            xticklabels[i].set_visible(True)
+            if show_labels: xticklabels[i].set_visible(True)
             xticklabels[i].set_color(color)
+        plt.fill_between(counts_filtered.loc[within_range_mask]['Edge'].values, counts_filtered.loc[within_range_mask]['Count'].values, color=color, zorder=1)
 
         # Record important genes
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
@@ -1526,10 +1570,12 @@ def plot_edge_discovery_enrichment(
                 enrichment_filtered,
                 x='-log10(p)',
                 y='Description',
-                palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=2, max_val=5, start=(.9, .9, .9), end=color),
+                palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=3, max_val=enrichment['-log10(p)'].max(), start=(.9, .9, .9), end=color),
                 ax=ax)
             pl.set_xlabel(None)
             pl.set_ylabel(None)
             sns.despine(ax=ax, bottom=True)
+            ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
+        ax.figure.text(.5, .04, '-log10(p)')
 
-    return axs_enrich[0]
+    return ret_ax

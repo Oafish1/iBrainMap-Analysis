@@ -1,3 +1,10 @@
+### 2023-12-11
+- Add mean capability for individual edge comparison
+- Add text wrapping
+- Formatting changes
+- Individual edge enrichment analysis formatting
+- Trendline, statistics, and formatting for SCZ PRS analysis
+
 ### 2023-12-07 (1-6)
 - Add SCZ PRS analysis saving
 - Bugfix for extended ct-ct comparison
