@@ -1,5 +1,6 @@
-### 2023-12-12
+### 2023-12-12 (1-2)
 - Figure updates
+- Small visual bugfix for module analysis
 
 ### 2023-12-11 (1-2)
 - Add mean capability for individual edge comparison

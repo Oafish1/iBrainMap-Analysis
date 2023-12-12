@@ -1044,7 +1044,7 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None, symlog_linea
                 as_cmap=True),
             cbar_kws={'label': f'{subject_id_1} (Prioritization) {subject_id_2}'},
             ax=ax)
-        pl.set(xlabel=f'TF (+) (n={df.shape[0]})')
+        pl.set(xlabel=f'TF (+) (n={df.shape[1]})')
         return pl
     p1 = plot_module_scores(module_scores, ax=ax)
 
