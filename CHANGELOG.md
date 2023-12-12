@@ -1,3 +1,6 @@
+### 2023-12-12
+- Figure updates
+
 ### 2023-12-11 (1-2)
 - Add mean capability for individual edge comparison
 - Add text wrapping
