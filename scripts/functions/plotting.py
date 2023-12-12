@@ -987,7 +987,7 @@ def plot_edge_comparison_from_sids(sids, *, ax, column=None, palette=None, **kwa
     plot_individual_edge_comparison(g, sids, color_map=palette, ax=ax, **kwargs)
 
 
-def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
+def plot_module_scores_from_sids(sids, *, ax, palette, column=None, symlog_linear=.1, cbar_percentile=1.):
     # Parameters
     subject_id_1, subject_id_2 = sids
 
@@ -1029,11 +1029,12 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None):
         df = df.T  # .iloc[::-1]
         # Plot
         from matplotlib.colors import SymLogNorm
+        print()
         pl = sns.heatmap(
             data=df,
-            vmin=np.abs(df.fillna(0).to_numpy()).max(),
-            vmax=-np.abs(df.fillna(0).to_numpy()).max(),
-            norm=SymLogNorm(linthresh=1),
+            vmin=np.quantile(np.abs(df.fillna(0).to_numpy()), cbar_percentile),
+            vmax=-np.quantile(np.abs(df.fillna(0).to_numpy()), cbar_percentile),
+            norm=SymLogNorm(linthresh=symlog_linear),
             cmap=sns.diverging_palette(
                 360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_1]))[0],
                 360*colorsys.rgb_to_hls(*hex_to_rgb(palette[subject_id_2]))[0],

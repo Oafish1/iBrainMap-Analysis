@@ -1,6 +1,7 @@
-### 2023-12-11
+### 2023-12-11 (1-2)
 - Add mean capability for individual edge comparison
 - Add text wrapping
+- Adjust color bar min and max for module analysis
 - Formatting changes
 - Individual edge enrichment analysis formatting
 - Trendline, statistics, and formatting for SCZ PRS analysis
