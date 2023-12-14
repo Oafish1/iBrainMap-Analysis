@@ -1374,10 +1374,15 @@ def plot_prs_correlation(
     # Get data
     # TODO: Allow just passing prs_df
     if df is None: df = compute_prs_difference(meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, subsample=subsample, **kwargs)
-    targets = df[['edge', 'head']].loc[df['n'] > min_samples]  # Filter by min_samples
+    targets = df.copy()
+    targets = targets.iloc[np.abs(targets['correlation'].to_numpy()).argsort()[::-1]]  # Sort by abs corr instead of p
+    targets = targets[['edge', 'head']].loc[df['n'] > min_samples]  # Filter by min_samples
     if head_prefix is not None: targets = targets.loc[[h.startswith(head_prefix) for h in targets['head']]]  # Filter to certain heads
-    targets = targets.iloc[:num_targets]  # Filter to top targets
+    targets = targets.drop_duplicates(subset=['edge'])  # Only keep first instance of each edge
+    targets = targets.iloc[:num_targets]  # Filter to top targets by p
     targets = targets.to_numpy()
+
+    # Load prs_df
     if prs_df is None: prs_df = get_prs_df(targets, meta=meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, **kwargs)
 
     # Max scale individual edges

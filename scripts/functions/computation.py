@@ -728,7 +728,17 @@ def compute_all_important_genes_from_sids(
     return df
 
 
-def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=1., prs_col='prs_scaled_SCZ.3.5_MVP', random_seed=42):
+def compute_prs_difference(
+        meta,
+        *,
+        data,
+        edges,
+        heads,
+        subject_ids,
+        subsample=1.,
+        prs_col='prs_scaled_SCZ.3.5_MVP',
+        random_seed=42,
+    ):
     "Compute PRS correlation across edges and heads"
 
     # Get PRS scores

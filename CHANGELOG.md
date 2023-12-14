@@ -1,4 +1,4 @@
-### 2023-12-13 (1-2)
+### 2023-12-13 (1-3)
 - Add advanced thresholding to edge counting computation
 - Add inset to individual gene enrichment
 - Ease of distinction between shaded sections in individual gene enrichment
@@ -8,6 +8,7 @@
 - Refresh metadata
 - Several small bugfixes
 - Small layout changes
+- Sort SCZ PRS by correlation rather than p
 
 ### 2023-12-12 (1-3)
 - Figure updates
