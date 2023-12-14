@@ -1,3 +1,13 @@
+### 2023-12-13
+- Add advanced thresholding to edge counting computation
+- Add inset to individual gene enrichment
+- Ease of distinction between shaded sections in individual gene enrichment
+- Expand background in enrichment calculation
+- More shading changes to enrichment plot
+- Refresh metadata
+- Several small bugfixes
+- Small layout changes
+
 ### 2023-12-12 (1-3)
 - Figure updates
 - Small visual bugfix for module analysis

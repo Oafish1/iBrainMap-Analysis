@@ -616,13 +616,15 @@ def compute_edge_counts(
         **kwargs,
     ):
 
-    if threshold is not None:
-        within_range = data > threshold
-    else:
+    if threshold is None:
         # Threshold by max/10 on head
-        # NOTE: Percentile is still 0 at 99%
-        head_threshold = np.nan_to_num(data).max(axis=(0, 2)).reshape((1, -1, 1)) / 10
-        within_range = data > head_threshold
+        threshold = np.nan_to_num(data).max(axis=(0, 2)).reshape((1, -1, 1)) / 10
+    elif threshold >= 1:
+        # Percentile threshold (integer)
+        threshold = np.nanquantile(data, threshold/100.)
+    # else, raw threshold
+    # Apply
+    within_range = data > threshold
 
     # Get counts for edges
     counts = within_range.sum(axis=2)
@@ -726,7 +728,7 @@ def compute_all_important_genes_from_sids(
     return df
 
 
-def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=1., prs_col='prs_SCZ.3.5_MVP', random_seed=42):
+def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=1., prs_col='prs_scaled_SCZ.3.5_MVP', random_seed=42):
     "Compute PRS correlation across edges and heads"
 
     # Get PRS scores
@@ -770,7 +772,7 @@ def compute_prs_difference(meta, *, data, edges, heads, subject_ids, subsample=1
     return df
 
 
-def get_prs_df(targets, *, meta, data, edges, heads, subject_ids, prs_col='prs_SCZ.3.5_MVP'):
+def get_prs_df(targets, *, meta, data, edges, heads, subject_ids, prs_col='prs_scaled_SCZ.3.5_MVP'):
     """
     Get PRS and attention for specified edge-head targets
 

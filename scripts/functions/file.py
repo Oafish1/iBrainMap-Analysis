@@ -6,7 +6,7 @@ import pandas as pd
 
 # Locations
 DATA_FOLDER = '../../data/'
-META = DATA_FOLDER + 'metadata_latest_Oct.csv'
+META = DATA_FOLDER + 'metadata_dec.csv'
 CONTRAST = DATA_FOLDER + 'contrasts.csv'
 DOSAGE = DATA_FOLDER + 'PsychAD_Dosage/genotype_varThresh0.5.csv'
 COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'

@@ -8,6 +8,7 @@ from brokenaxes import brokenaxes
 import graph_tool.all as gt
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import numpy as np
 import plotly.graph_objects as go
 import seaborn as sns
@@ -1049,7 +1050,6 @@ def plot_module_scores_from_sids(sids, *, ax, palette, column=None, symlog_linea
     p1 = plot_module_scores(module_scores, ax=ax)
 
     # Inset axis
-    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
     axins = inset_axes(
         ax,
         width='30%', height='15%',
@@ -1357,7 +1357,7 @@ def plot_prs_correlation(
         heads,
         subject_ids,
         ax=None,
-        num_targets=3,
+        num_targets=4,
         min_samples=20,
         subsample=1.,
         max_scale=False,
@@ -1425,7 +1425,7 @@ def plot_prs_correlation(
             plt.text(.05, .95, f'corr={correlation:.3e}\np={p:.3e}', ha='left', va='top', in_layout=False, transform=ax.transAxes)
 
             # Styling
-            ax.set_title(edge)
+            ax.set_title(name if show_head else edge)
             sns.despine(ax=ax, left=i>0)
             if i > 0: ax.set_ylabel(None)
         ax.set_ylim([-.05, 1.05])
@@ -1460,7 +1460,9 @@ def plot_edge_discovery_enrichment(
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
         subsample=0,
         interval=10,
-        num_descriptors=3,
+        num_descriptors=5,
+        # hist_top=True,
+        threshold=80,
         show_labels=False,
         clamp_min=True,
         results_dir='../plots/',
@@ -1474,7 +1476,7 @@ def plot_edge_discovery_enrichment(
     prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
 
     # Get all compatible edges
-    counts = compute_edge_counts(data=data, edges=edges, heads=heads)
+    counts = compute_edge_counts(data=data, edges=edges, heads=heads, threshold=threshold)
 
     # Filter to chosen head
     counts_filtered = counts.loc[counts['Head']==column]
@@ -1491,28 +1493,49 @@ def plot_edge_discovery_enrichment(
     # Filter
     if clamp_min: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
 
-    # Split ax
-    subfig = ax.figure
-    ax.remove()
-    gs = subfig.add_gridspec(2, len(prioritizations_ranges), height_ratios=(2, 3))
-    ax_line = subfig.add_subfigure(gs[0, :])
-    ax_line = ax_line.add_subplot(1, 1, 1)
-    axs_enrich = subfig.add_subfigure(gs[1, :])
-    axs_enrich = axs_enrich.subplots(1, len(prioritizations_ranges), sharex=True)
-    axs_enrich = axs_enrich[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
+    # Inset ax
+    ax_line = ax
+    num_enrichments = len(percentage_prioritizations_ranges)
+    total_width = .95  # Axis fraction
+    margin = .25  # Axis fraction, assumed to be roughly text length
+    height = .7
+    axs_enrich = []
+    for i in range(num_enrichments):
+        width = (total_width - margin * num_enrichments) /num_enrichments
+        offset = - i * (width + margin)
+        axins = inset_axes(
+            ax_line,
+            width=f'{100*width}%', height=f'{100*height}%',
+            loc=1,
+            bbox_to_anchor=(offset, 0, 1, 1), bbox_transform=ax_line.transAxes)
+        axs_enrich.append(axins)
+    ax_line.text(1-(total_width)/2, 1-height-.15, '-log10(p)', transform=ax_line.transAxes)  # Enrichment x label
     ret_ax = ax_line  # Return top left ax for labeling
 
+    # Completely separate ax
+    # subfig = ax.figure
+    # ax.remove()
+    # gs = subfig.add_gridspec(2, len(prioritizations_ranges), height_ratios=(2, 3) if hist_top else (3, 2))
+    # ax_line = subfig.add_subfigure(gs[0 if hist_top else 1, :])
+    # ax_line = ax_line.add_subplot(1, 1, 1)
+    # axs_enrich = subfig.add_subfigure(gs[1 if hist_top else 0, :])
+    # axs_enrich = axs_enrich.subplots(1, len(prioritizations_ranges), sharex=True)
+    # axs_enrich = axs_enrich[np.argsort([ppr[0] for ppr in percentage_prioritizations_ranges])[::-1]]  # Match order to top
+    # if nto hist_top: axs_enrich[0].figure.text(.5, .04, '-log10(p)')  # Enrichment x label
+    # ret_ax = ax_line if hist_top else axs_enrich[0]  # Return top left ax for labeling
+
     # Plot
-    pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
+    # pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
     plt.sca(ax_line)
     plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
     plt.xticks(rotation=90)
     sns.despine(ax=ax_line)
-    if show_labels: pl.set_xlabel(None)
-    pl.set_ylabel('Individuals')
+    if show_labels: ax_line.set_xlabel(None)
+    else: ax_line.set_xlabel('Edge')
+    ax_line.set_ylabel('Individuals')
 
     # Adjust labels and record genes
-    xticklabels = pl.get_xticklabels()
+    xticklabels = ax_line.get_xticklabels()
     for label in xticklabels: label.set_visible(False)
     genes_list = pd.DataFrame()
     for pr, ppr, color in zip(prioritizations_ranges, percentage_prioritizations_ranges, range_colors):
@@ -1535,18 +1558,22 @@ def plot_edge_discovery_enrichment(
         for i in idx:
             if show_labels: xticklabels[i].set_visible(True)
             xticklabels[i].set_color(color)
-        plt.fill_between(counts_filtered.loc[within_range_mask]['Edge'].values, counts_filtered.loc[within_range_mask]['Count'].values, color=color, zorder=1)
+        plt.fill_between(
+            counts_filtered.loc[within_range_mask]['Edge'].values,
+            counts_filtered.loc[within_range_mask]['Count'].values,
+            color=get_colors_from_values(np.array([.4]), min_val=0, max_val=1, start=(.9, .9, .9), end=color)[0],
+            zorder=1)
 
         # Record important genes
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
         genes = [g for g in genes if not string_is_synthetic(g)]
-        genes_new = pd.DataFrame({f'{column} - {100*ppr[0]:.1f}-{100*ppr[1]:.1f}': genes})
+        genes_new = pd.DataFrame({f'{column} - {100*ppr[0]:.1f}-{100*ppr[1]:.1f}': np.unique(genes)})
         genes_list = pd.concat((genes_list, genes_new), axis=1)
 
     # Record background
-    genes = np.array([split_edge_string(e) for e in counts_filtered['Edge']]).flatten()
+    genes = np.array([split_edge_string(e) for e in edges]).flatten()
     genes = [g for g in genes if not string_is_synthetic(g)]
-    genes_new = pd.DataFrame({'_BACKGROUND': genes})
+    genes_new = pd.DataFrame({'_BACKGROUND': np.unique(genes)})
     genes_list = pd.concat((genes_list, genes_new), axis=1)
 
     # Save important genes
@@ -1577,6 +1604,5 @@ def plot_edge_discovery_enrichment(
             pl.set_ylabel(None)
             sns.despine(ax=ax, bottom=True)
             ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
-        ax.figure.text(.5, .04, '-log10(p)')
 
     return ret_ax
