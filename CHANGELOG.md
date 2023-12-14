@@ -1,4 +1,4 @@
-### 2023-12-13 (1-3)
+### 2023-12-13 (1-4)
 - Add advanced thresholding to edge counting computation
 - Add inset to individual gene enrichment
 - Ease of distinction between shaded sections in individual gene enrichment
