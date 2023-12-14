@@ -1360,12 +1360,13 @@ def plot_prs_correlation(
         num_targets=4,
         min_samples=20,
         subsample=1.,
-        max_scale=False,
         df=None,
         prs_df=None,
         discrete=False,
         show_head=False,
+        max_scale=True,
         head_prefix='att_D_SCZ',
+        ylabel='Attention',
         **kwargs
 ):
     # Default
@@ -1389,6 +1390,7 @@ def plot_prs_correlation(
     prs_df_format = prs_df.copy()
     if max_scale:
         for name in np.unique(prs_df_format['Name']):
+            # Max scale attentions
             prs_df_format.loc[prs_df_format['Name']==name, 'Attention'] /= prs_df_format.loc[prs_df_format['Name']==name, 'Attention'].max()
 
     # Plot
@@ -1432,6 +1434,9 @@ def plot_prs_correlation(
             # Styling
             ax.set_title(name if show_head else edge)
             sns.despine(ax=ax, left=i>0)
+            # ax.set_xlabel(None)
+            if max_scale: ax.set_ylabel(f'Max Scaled {ylabel}')
+            else: ax.set_ylabel(ylabel)
             if i > 0: ax.set_ylabel(None)
         ax.set_ylim([-.05, 1.05])
 
@@ -1583,6 +1588,11 @@ def plot_edge_discovery_enrichment(
 
     # Save important genes
     genes_list.to_csv(os.path.join(results_dir, f'genes_{column}.csv'), index=False)
+
+    # MANUAL PROCESSING
+    # Run the output '*/genes_<column>.csv' from above on Metascape as multiple gene list and perform
+    # enrichment.  From the all-in-one ZIP file, save the file from Enrichment_GO/GO_membership.csv as '*/go_<column>.csv'
+    # and rerun.
 
     # Plot enrichments
     fname = os.path.join(results_dir, f'go_{column}.csv')

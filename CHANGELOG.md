@@ -1,3 +1,10 @@
+### 2023-12-14
+- Extend PRS and enrichment analyses to data/AD/SCZ
+- Extend bottom figure 3
+- Rearrange figure 3 bottom
+- Scaling updates to PRS analysis
+- Small labeling updates to PRS analysis
+
 ### 2023-12-13 (1-4)
 - Add advanced thresholding to edge counting computation
 - Add inset to individual gene enrichment
