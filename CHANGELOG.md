@@ -1,3 +1,6 @@
+### 2023-12-17
+- Figure updates
+
 ### 2023-12-14
 - Extend PRS and enrichment analyses to data/AD/SCZ
 - Extend bottom figure 3
