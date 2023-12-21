@@ -7,6 +7,7 @@ import pandas as pd
 # Locations
 DATA_FOLDER = '../../data/'
 META = DATA_FOLDER + 'metadata_dec.csv'
+GENOTYPE_META = DATA_FOLDER + 'genotype_metadata_dec.csv'
 CONTRAST = DATA_FOLDER + 'contrasts.csv'
 DOSAGE = DATA_FOLDER + 'PsychAD_Dosage/genotype_varThresh0.5.csv'
 COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
@@ -129,6 +130,10 @@ def get_graphs_pkl():
 
 def get_meta():
     return pd.read_csv(META)
+
+
+def get_genotype_meta():
+    return pd.read_csv(GENOTYPE_META)
 
 
 def get_dosage():

@@ -1,3 +1,9 @@
+### 2023-12-20
+- Add covariate considerations to PRS analysis
+- Add genotype metadata file
+- Recalculate panels
+- Usage of the `pingouin` library for statistics
+
 ### 2023-12-17
 - Figure updates
 

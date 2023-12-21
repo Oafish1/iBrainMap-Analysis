@@ -9,6 +9,7 @@ networkx
 numpy
 pandas
 pecanpy
+pingouin
 pip-tools
 plotly
 pydot

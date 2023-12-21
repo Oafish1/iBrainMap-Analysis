@@ -5,6 +5,7 @@ import graph_tool.all as gt
 import networkx as nx
 import numpy as np
 import pandas as pd
+import pingouin as pg
 import scipy.stats
 from sklearn.linear_model import SGDClassifier
 from sklearn.neural_network import MLPClassifier
@@ -737,9 +738,14 @@ def compute_prs_difference(
         subject_ids,
         subsample=1.,
         prs_col='prs_scaled_SCZ.3.5_MVP',
+        covariates=None,
         random_seed=42,
+        **kwargs,
     ):
     "Compute PRS correlation across edges and heads"
+
+    # Format
+    if covariates is not None: covariates = covariates.copy().set_index('SubID')  # Don't alter original
 
     # Get PRS scores
     # NOTE: There are several prs_SCZ columns, which to use is unclear
@@ -754,6 +760,8 @@ def compute_prs_difference(
     # Compute correlations
     df = pd.DataFrame(columns=['edge', 'head', 'n', 'correlation', 'p'])
     if subsample != 1.: np.random.seed(random_seed)
+    df_corr = pd.DataFrame(prs, index=subject_ids, columns=['prs'])  # PRS
+    df_corr = df_corr.join(covariates)  # Join covariates
     for e, h in tqdm(it.product(range(len(edges)), range(len(heads))), total=len(edges)*len(heads)):
         # Random sample (for testing)
         if subsample != 1.:
@@ -761,17 +769,27 @@ def compute_prs_difference(
 
         # Acquire and filter to present data
         data_eh = data[e, h]
-        present_data_mask = ~np.isnan(data_eh)
 
+        # Create data mask
+        # present_data_mask = ~np.isnan(data_eh)
         # Skip if not enough data
-        if present_data_mask.sum() < 2 or data_eh[present_data_mask].std() == 0 or prs[present_data_mask].std() == 0: continue
-
+        # if present_data_mask.sum() < 2 or data_eh[present_data_mask].std() == 0 or prs[present_data_mask].std() == 0: continue
         # Compute correlation
         # TODO: Compute using matrix
-        corr, p = scipy.stats.pearsonr(data_eh[present_data_mask], prs[present_data_mask])
+        # corr, p = scipy.stats.pearsonr(data_eh[present_data_mask], prs[present_data_mask])  # Sensitive to outliers
+        # corr, p = scipy.stats.spearmanr(data_eh[present_data_mask], prs[present_data_mask])
+
+        # Add/replace attentions
+        df_corr['attention'] = data_eh
+        # Skip if not enough data
+        n_data = (~df_corr.isna()).min(axis=1).sum()
+        if (~df_corr.isna()).min(axis=1).sum() < 20: continue  # Minimum for calculating p and CI is 14, but will still throw (sampling?) errors
+        # Compute partial correlation
+        stats = pg.partial_corr(data=df_corr.reset_index(drop=True), x='attention', y='prs', covar=covariates.columns.to_list(), method='spearman')
+        corr, p = stats['r'].item(), stats['p-val'].item()
 
         # Record
-        df.loc[df.shape[0]] = [edges[e], heads[h], present_data_mask.sum(), corr, p]
+        df.loc[df.shape[0]] = [edges[e], heads[h], n_data, corr, p]
 
     # Add FDR
     df['fdr'] = scipy.stats.false_discovery_control(df['p'].to_numpy())
@@ -782,7 +800,7 @@ def compute_prs_difference(
     return df
 
 
-def get_prs_df(targets, *, meta, data, edges, heads, subject_ids, prs_col='prs_scaled_SCZ.3.5_MVP'):
+def get_prs_df(targets, *, meta, data, edges, heads, subject_ids, prs_col='prs_scaled_SCZ.3.5_MVP', **kwargs):
     """
     Get PRS and attention for specified edge-head targets
 
