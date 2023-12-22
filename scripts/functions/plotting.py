@@ -12,6 +12,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import numpy as np
 import plotly.graph_objects as go
 import seaborn as sns
+import sklearn.isotonic
 import sympy
 
 from .computation import *
@@ -1418,16 +1419,27 @@ def plot_prs_correlation(
             prs_df_format_filtered = prs_df_format.loc[prs_df_format['Name']==name]
             sns.scatterplot(prs_df_format_filtered, x='PRS', y='Attention', color='gray', ax=ax)
 
-            # Trendline
-            x, y = prs_df_format_filtered['PRS'].values, prs_df_format_filtered['Attention'].values
-            coef = np.polyfit(x, y, 1)
-            fit = np.poly1d(coef)
-            ax.plot(x, fit(x), color='black', alpha=.5)
-
-            # Significance
+            # Get values
             name_mask = df.apply(lambda r: f'{r["edge"]} ({r["head"]})', axis=1)==name
             correlation = df.loc[name_mask, 'correlation'].iloc[0]
             p = df.loc[name_mask, 'p'].iloc[0]
+
+            # Trendline
+            x, y = prs_df_format_filtered['PRS'].values, prs_df_format_filtered['Attention'].values
+            sort_idx = np.argsort(x)
+            x, y = x[sort_idx], y[sort_idx]
+            # Linear
+            # coef = np.polyfit(x, y, 1)
+            # fit = np.poly1d(coef)
+            # pred = fit(x)
+            # Monotonic
+            regressor = sklearn.isotonic.IsotonicRegression(increasing=(correlation>0))
+            regressor.fit(x, y)
+            pred = regressor.predict(x)
+            # Plot
+            ax.plot(x, pred, color='black', alpha=.5)
+
+            # Significance
             # fdr = df.loc[name_mask, 'fdr'].iloc[0]
             plt.text(.05, .95, f'corr={correlation:.3e}\np={p:.3e}', ha='left', va='top', in_layout=False, transform=ax.transAxes)
 

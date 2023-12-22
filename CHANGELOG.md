@@ -1,3 +1,6 @@
+### 2023-12-22
+- Change PRS trendline to monotonic fit
+
 ### 2023-12-20
 - Add covariate considerations to PRS analysis
 - Add genotype metadata file
