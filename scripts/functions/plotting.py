@@ -1365,7 +1365,7 @@ def plot_prs_correlation(
         prs_df=None,
         discrete=False,
         show_head=False,
-        max_scale=True,
+        max_scale=False,
         head_prefix='att_D_SCZ',
         ylabel='Attention',
         **kwargs
