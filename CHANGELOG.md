@@ -1,3 +1,6 @@
+### 2023-01-09
+- Figure and extended figure layouts
+
 ### 2023-12-22
 - Change PRS trendline to monotonic fit
 
