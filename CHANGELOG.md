@@ -1,4 +1,4 @@
-### 2023-01-19
+### 2023-01-19 (1-2)
 - Ancestry enrichment analysis for individual and conserved edges
 - Figure rearrangements
 - Notebook reorganization
