@@ -1478,7 +1478,7 @@ def plot_edge_discovery_enrichment(
         heads,
         ax,
         column=None,
-        percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.01, .05, .1)],
+        percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.02, .05, .1)],
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
         subsample=0,
         interval=10,
@@ -1487,15 +1487,25 @@ def plot_edge_discovery_enrichment(
         threshold=80,
         show_labels=False,
         clamp_min=True,
+        smooth_zeros=True,
+        skip_plot=False,
         results_dir='../plots/',
+        postfix=None,
         random_seed=42,
         **kwargs,
 ):
     # Defaults
     if column is None: column = get_attention_columns()[0]
+    if postfix is None: postfix = f'{column}'
 
     # Calculate ranges
     prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
+    # Smooth if will have zero
+    if smooth_zeros:
+        for i in range(len(prioritizations_ranges)):
+            pr = prioritizations_ranges[i]
+            if np.ceil(pr[0]) == np.ceil(pr[1]):
+                prioritizations_ranges[i][0] = prioritizations_ranges[i][1] = np.ceil(pr[0])
 
     # Get all compatible edges
     counts = compute_edge_counts(data=data, edges=edges, heads=heads, threshold=threshold)
@@ -1549,7 +1559,7 @@ def plot_edge_discovery_enrichment(
     # Plot
     # pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
     plt.sca(ax_line)
-    plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
+    if not skip_plot: plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
     plt.xticks(rotation=90)
     sns.despine(ax=ax_line)
     if show_labels: ax_line.set_xlabel(None)
@@ -1562,7 +1572,7 @@ def plot_edge_discovery_enrichment(
     genes_list = pd.DataFrame()
     for pr, ppr, color in zip(prioritizations_ranges, percentage_prioritizations_ranges, range_colors):
         # Get mask
-        within_range_mask = (counts_filtered['Count'].to_numpy() > pr[0]) * (counts_filtered['Count'].to_numpy() < pr[1])
+        within_range_mask = (counts_filtered['Count'].to_numpy() >= pr[0]) * (counts_filtered['Count'].to_numpy() <= pr[1])  # Inclusive on both sides
 
         # Check for content
         if within_range_mask.sum() == 0:
@@ -1577,14 +1587,15 @@ def plot_edge_discovery_enrichment(
         idx += list([int(i) for i in mid])  # Every 10 (or so) between
 
         # Set visibility and color
-        for i in idx:
-            if show_labels: xticklabels[i].set_visible(True)
-            xticklabels[i].set_color(color)
-        plt.fill_between(
-            counts_filtered.loc[within_range_mask]['Edge'].values,
-            counts_filtered.loc[within_range_mask]['Count'].values,
-            color=get_colors_from_values(np.array([.4]), min_val=0, max_val=1, start=(.9, .9, .9), end=color)[0],
-            zorder=1)
+        if not skip_plot:
+            for i in idx:
+                if show_labels: xticklabels[i].set_visible(True)
+                xticklabels[i].set_color(color)
+            plt.fill_between(
+                counts_filtered.loc[within_range_mask]['Edge'].values,
+                counts_filtered.loc[within_range_mask]['Count'].values,
+                color=get_colors_from_values(np.array([.4]), min_val=0, max_val=1, start=(.9, .9, .9), end=color)[0],
+                zorder=1)
 
         # Record important genes
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
@@ -1599,7 +1610,7 @@ def plot_edge_discovery_enrichment(
     genes_list = pd.concat((genes_list, genes_new), axis=1)
 
     # Save important genes
-    genes_list.to_csv(os.path.join(results_dir, f'genes_{column}.csv'), index=False)
+    genes_list.to_csv(os.path.join(results_dir, f'genes_{postfix}.csv'), index=False)
 
     # MANUAL PROCESSING
     # Run the output '*/genes_<column>.csv' from above on Metascape as multiple gene list and perform
@@ -1607,7 +1618,7 @@ def plot_edge_discovery_enrichment(
     # and rerun.
 
     # Plot enrichments
-    fname = os.path.join(results_dir, f'go_{column}.csv')
+    fname = os.path.join(results_dir, f'go_{postfix}.csv')
     if os.path.isfile(fname):
         # Read enrichment if exists
         enrichment = pd.read_csv(fname)
@@ -1621,15 +1632,16 @@ def plot_edge_discovery_enrichment(
             enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
 
             # Plot
-            pl = sns.barplot(
-                enrichment_filtered,
-                x='-log10(p)',
-                y='Description',
-                palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=3, max_val=enrichment['-log10(p)'].max(), start=(.9, .9, .9), end=color),
-                ax=ax)
-            pl.set_xlabel(None)
-            pl.set_ylabel(None)
-            sns.despine(ax=ax, bottom=True)
+            if not skip_plot:
+                pl = sns.barplot(
+                    enrichment_filtered,
+                    x='-log10(p)',
+                    y='Description',
+                    palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=3, max_val=enrichment['-log10(p)'].max(), start=(.9, .9, .9), end=color),
+                    ax=ax)
+                pl.set_xlabel(None)
+                pl.set_ylabel(None)
+                sns.despine(ax=ax, bottom=True)
             ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
 
     return ret_ax

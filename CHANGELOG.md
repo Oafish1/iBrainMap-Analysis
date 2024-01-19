@@ -1,3 +1,9 @@
+### 2023-01-19
+- Ancestry enrichment analysis for individual and conserved edges
+- Figure rearrangements
+- Notebook reorganization
+- QOL updates for plotting functions
+
 ### 2023-01-09
 - Figure and extended figure layouts
 
