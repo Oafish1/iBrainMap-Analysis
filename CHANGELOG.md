@@ -1,3 +1,11 @@
+### 2023-01-30
+- Add new circle heatmap plotting functions
+- Append corresponding GO terms with descriptions in all applications
+- Calculate new enrichments
+- Cross-ancestry enrichments
+- Figure updates and rearrangement
+- Result Recalculations
+
 ### 2023-01-19 (1-2)
 - Ancestry enrichment analysis for individual and conserved edges
 - Figure rearrangements

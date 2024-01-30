@@ -538,6 +538,9 @@ def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, 
 
 
 def format_enrichment(enrichment, filter=7, replace_dot=False):
+    # Add GO term to description
+    enrichment['Description'] = enrichment.apply(lambda r: f'({r["GO"]}) {r["Description"]}', axis=1)
+
     # Format
     keep = [c for c in enrichment.columns if c.startswith('_LogP_')] + ['Description']
     def rename(n):

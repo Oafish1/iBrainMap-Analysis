@@ -6,6 +6,7 @@ import os
 from adjustText import adjust_text
 from brokenaxes import brokenaxes
 import graph_tool.all as gt
+from matplotlib.collections import PatchCollection
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -803,6 +804,7 @@ def plot_circle_heatmap(
     sign_name='Sign',
     color='Red',
     size_max=200,
+    margin=.5,
     multicolor=None,
     multicolor_labels=['Positive', 'Negative'],
     transform=True,
@@ -857,7 +859,6 @@ def plot_circle_heatmap(
     plt.legend(h, l, ncol=2)
     # ax.set_aspect('equal', 'box')
     # Zoom X
-    margin = 1
     min_xlim, max_xlim = ax.get_xlim()
     min_xlim -= margin; max_xlim += margin
     # Zoom Y
@@ -1476,7 +1477,7 @@ def plot_edge_discovery_enrichment(
         *,
         edges,
         heads,
-        ax,
+        ax=None,
         column=None,
         percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.02, .05, .1)],
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
@@ -1497,6 +1498,7 @@ def plot_edge_discovery_enrichment(
     # Defaults
     if column is None: column = get_attention_columns()[0]
     if postfix is None: postfix = f'{column}'
+    assert (ax is not None) or skip_plot, '`skip_plot` must be true if `ax` is not provided'
 
     # Calculate ranges
     prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
@@ -1526,23 +1528,24 @@ def plot_edge_discovery_enrichment(
     if clamp_min: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
 
     # Inset ax
-    ax_line = ax
-    num_enrichments = len(percentage_prioritizations_ranges)
-    total_width = .95  # Axis fraction
-    margin = .25  # Axis fraction, assumed to be roughly text length
-    height = .7
-    axs_enrich = []
-    for i in range(num_enrichments):
-        width = (total_width - margin * num_enrichments) /num_enrichments
-        offset = - i * (width + margin)
-        axins = inset_axes(
-            ax_line,
-            width=f'{100*width}%', height=f'{100*height}%',
-            loc=1,
-            bbox_to_anchor=(offset, 0, 1, 1), bbox_transform=ax_line.transAxes)
-        axs_enrich.append(axins)
-    ax_line.text(1-(total_width)/2, 1-height-.15, '-log10(p)', transform=ax_line.transAxes)  # Enrichment x label
-    ret_ax = ax_line  # Return top left ax for labeling
+    if not skip_plot:
+        ax_line = ax
+        num_enrichments = len(percentage_prioritizations_ranges)
+        total_width = .95  # Axis fraction
+        margin = .25  # Axis fraction, assumed to be roughly text length
+        height = .7
+        axs_enrich = []
+        for i in range(num_enrichments):
+            width = (total_width - margin * num_enrichments) /num_enrichments
+            offset = - i * (width + margin)
+            axins = inset_axes(
+                ax_line,
+                width=f'{100*width}%', height=f'{100*height}%',
+                loc=1,
+                bbox_to_anchor=(offset, 0, 1, 1), bbox_transform=ax_line.transAxes)
+            axs_enrich.append(axins)
+        ax_line.text(1-(total_width)/2, 1-height-.15, '-log10(p)', transform=ax_line.transAxes)  # Enrichment x label
+        ret_ax = ax_line  # Return top left ax for labeling
 
     # Completely separate ax
     # subfig = ax.figure
@@ -1557,18 +1560,20 @@ def plot_edge_discovery_enrichment(
     # ret_ax = ax_line if hist_top else axs_enrich[0]  # Return top left ax for labeling
 
     # Plot
-    # pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
-    plt.sca(ax_line)
-    if not skip_plot: plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
-    plt.xticks(rotation=90)
-    sns.despine(ax=ax_line)
-    if show_labels: ax_line.set_xlabel(None)
-    else: ax_line.set_xlabel('Edge')
-    ax_line.set_ylabel('Individuals')
+    if not skip_plot:
+        # pl = sns.lineplot(data=counts_filtered, x='Edge', y='Count', color='gray', ax=ax_line)
+        plt.sca(ax_line)
+        plt.fill_between(counts_filtered['Edge'].values, counts_filtered['Count'].values, color='gray')
+        plt.xticks(rotation=90)
+        sns.despine(ax=ax_line)
+        if show_labels: ax_line.set_xlabel(None)
+        else: ax_line.set_xlabel('Edge')
+        ax_line.set_ylabel('Individuals')
 
     # Adjust labels and record genes
-    xticklabels = ax_line.get_xticklabels()
-    for label in xticklabels: label.set_visible(False)
+    if not skip_plot:
+        xticklabels = ax_line.get_xticklabels()
+        for label in xticklabels: label.set_visible(False)
     genes_list = pd.DataFrame()
     for pr, ppr, color in zip(prioritizations_ranges, percentage_prioritizations_ranges, range_colors):
         # Get mask
@@ -1627,12 +1632,12 @@ def plot_edge_discovery_enrichment(
         enrichment = format_enrichment(enrichment, filter=None).sort_values('-log10(p)').iloc[::-1]
 
         # Plot barplots
-        for ppr, group, color, ax in zip(percentage_prioritizations_ranges, genes_list.columns, range_colors, axs_enrich):
-            # Get top descriptors
-            enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
+        if not skip_plot:
+            for ppr, group, color, ax in zip(percentage_prioritizations_ranges, genes_list.columns, range_colors, axs_enrich):
+                # Get top descriptors
+                enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
 
-            # Plot
-            if not skip_plot:
+                # Plot
                 pl = sns.barplot(
                     enrichment_filtered,
                     x='-log10(p)',
@@ -1642,6 +1647,79 @@ def plot_edge_discovery_enrichment(
                 pl.set_xlabel(None)
                 pl.set_ylabel(None)
                 sns.despine(ax=ax, bottom=True)
-            ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
+                ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
 
-    return ret_ax
+    if not skip_plot: return ret_ax
+
+
+def plot_cross_enrichment(
+    postfixes,
+    ax=None,
+    results_dir='../plots/',
+    index_name='Description',
+    column_name='Gene Set',
+    value_name='-log10(p)',
+    postfix_name='Ancestry',
+    num_terms=30,
+):
+    # Compile enrichments across postfixes
+    enrichments = pd.DataFrame()
+    for postfix in postfixes:
+        # Check if exists
+        fname = os.path.join(results_dir, f'go_{postfix}.csv')
+        if not os.path.isfile(fname): continue
+
+        # Read enrichment
+        enrichment = pd.read_csv(fname)
+        enrichment = format_enrichment(enrichment, filter=None).sort_values(value_name).iloc[::-1]
+        enrichment[postfix_name] = postfix
+
+        # Append
+        enrichments = pd.concat((enrichments, enrichment))
+
+    # Filter to most individual gene set
+    individual_set = enrichments[column_name].unique()[np.argsort([float(gene_set.split(' - ')[1].split('-')[0]) for gene_set in enrichments['Gene Set'].unique()])[0]]
+    enrichments = enrichments.loc[enrichments[column_name] == individual_set]
+
+    # Pivot data
+    enrichments = enrichments.pivot(index=index_name, columns=postfix_name, values=value_name).fillna(0)
+
+    # Filter to top terms
+    enrichments = enrichments.iloc[enrichments.mean(axis=1).argsort().to_list()[:-num_terms:-1]]
+
+    # Plot
+    if ax is not None:
+        plot_circle_heatmap_patches(enrichments, ax=ax, cbar_label=value_name)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=60)
+
+    return enrichments
+
+
+def plot_circle_heatmap_patches(df, ax=None, cmap='afmhot_r', cbar_label=None, axis_labels=True):
+    # Defaults
+    if ax is None: ax = plt.gca()
+
+    # Formatting
+    df = df.iloc[::-1]  # Invert y to match df ordering
+
+    # REFERENCE: https://stackoverflow.com/a/59384782
+    # Create grid
+    n, m = df.shape
+    X, Y = np.meshgrid(np.arange(m), np.arange(n))
+    V = df.to_numpy()
+    R = V / V.max() / 2
+
+    # Create patches
+    patches = [plt.Circle((x, y), radius=r) for x, y, r in zip(X.flat, Y.flat, R.flat)]
+    collection =PatchCollection(patches, array=V.flatten(), cmap=cmap)
+    ax.add_collection(collection)
+
+    # Format
+    ax.set_aspect('equal')
+    ax.set(xticks=np.arange(m), yticks=np.arange(n), xticklabels=df.columns.to_list(), yticklabels=df.index.to_list())
+    ax.set_xticks(np.arange(m+1)-0.5, minor=True)
+    ax.set_yticks(np.arange(n+1)-0.5, minor=True)
+    ax.grid(which='minor')
+    cbar = ax.figure.colorbar(collection, ax=ax)
+    if cbar_label is not None: cbar.ax.set_ylabel(cbar_label)
+    if axis_labels: ax.set(xlabel=df.columns.name, ylabel=df.index.name)
