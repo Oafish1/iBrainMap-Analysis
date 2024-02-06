@@ -1,4 +1,5 @@
-### 2023-02-06
+### 2023-02-06 (1-2)
+- Figure updates
 - Filter GO terms (in progress)
 - QOL and additional utility functions
 - Reruns
