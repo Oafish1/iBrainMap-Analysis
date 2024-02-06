@@ -537,7 +537,12 @@ def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, 
     return df
 
 
-def format_enrichment(enrichment, filter=7, replace_dot=False):
+def format_enrichment(enrichment, term_filter=filter_go_terms, num_filter=None, replace_dot=False):
+    # Filter using term filter
+    if term_filter is not None:
+        mask = term_filter(enrichment['GO'].to_list())
+        enrichment = enrichment.iloc[mask].copy()
+
     # Add GO term to description
     enrichment['Description'] = enrichment.apply(lambda r: f'({r["GO"]}) {r["Description"]}', axis=1)
 
@@ -556,15 +561,15 @@ def format_enrichment(enrichment, filter=7, replace_dot=False):
     enrichment = enrichment.loc[enrichment['-log10(p)'] != 0]
     # df = enrichment.pivot(index='Description', columns='Gene Set', values='-log10(p)').fillna(0)
 
-    # Filter to top 7 descriptions for each gene set by sum across all gene sets
-    if filter:
+    # Filter to top `num_filter` descriptions for each gene set by sum across all gene sets
+    if num_filter is not None:
         rank_by_sum = (
             enrichment.groupby(('Description'))['-log10(p)']
             .sum().rank(ascending=False)
             [enrichment['Description']])
         for gs in np.unique(enrichment['Gene Set']):
             enrichment.loc[enrichment['Gene Set']==gs] = enrichment.loc[enrichment['Gene Set']==gs].loc[
-                list(rank_by_sum.loc[list(enrichment['Gene Set']==gs)].rank() <= filter)]
+                list(rank_by_sum.loc[list(enrichment['Gene Set']==gs)].rank() <= num_filter)]
         enrichment = enrichment.dropna()
 
     return enrichment

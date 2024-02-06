@@ -1348,3 +1348,14 @@ def check_ct_edge_specificity():
         #     df_filt = df.loc[id].drop(columns=['org_edge_weight', 'ct_GRN', 'edge_type'])
         #     duplicates = df_filt.duplicated().sum()
         #     assert duplicates == df_filt.shape[0]-1, f'Found edge with difference across cell-types, {id}'
+
+
+def filter_go_terms(terms):
+    # Filter to only GO terms
+    is_go = [term.startswith('GO:') for term in terms]
+
+    # Filter to deep GO terms
+    # TODO: Use *.obo file instead of heuristic
+    mask = [ig and (int(term[3:]) >= 50_000) for ig, term in zip(is_go, terms)]
+
+    return mask

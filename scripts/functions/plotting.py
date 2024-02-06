@@ -1124,7 +1124,7 @@ def plot_enrichment_from_fname(fname, *, ax, num_descriptors=10):
     enrichment = pd.read_csv(fname)
 
     # Format
-    enrichment = format_enrichment(enrichment, filter=num_descriptors)
+    enrichment = format_enrichment(enrichment, num_filter=num_descriptors)
 
     # Filter to certain groups
     # TODO: Fix these groups in previous section
@@ -1491,6 +1491,7 @@ def plot_edge_discovery_enrichment(
         smooth_zeros=True,
         skip_plot=False,
         results_dir='../plots/',
+        filter=filter_go_terms,
         postfix=None,
         random_seed=42,
         **kwargs,
@@ -1629,7 +1630,7 @@ def plot_edge_discovery_enrichment(
         enrichment = pd.read_csv(fname)
 
         # Format
-        enrichment = format_enrichment(enrichment, filter=None).sort_values('-log10(p)').iloc[::-1]
+        enrichment = format_enrichment(enrichment).sort_values('-log10(p)').iloc[::-1]
 
         # Plot barplots
         if not skip_plot:
@@ -1671,7 +1672,7 @@ def plot_cross_enrichment(
 
         # Read enrichment
         enrichment = pd.read_csv(fname)
-        enrichment = format_enrichment(enrichment, filter=None).sort_values(value_name).iloc[::-1]
+        enrichment = format_enrichment(enrichment).sort_values(value_name).iloc[::-1]
         enrichment[postfix_name] = postfix
 
         # Append

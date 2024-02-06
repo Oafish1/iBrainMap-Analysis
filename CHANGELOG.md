@@ -1,3 +1,9 @@
+### 2023-02-06
+- Filter GO terms (in progress)
+- QOL and additional utility functions
+- Reruns
+- Revise cross-ancestry enrichment
+
 ### 2023-01-30 (1-2)
 - Add new circle heatmap plotting functions
 - Append corresponding GO terms with descriptions in all applications
