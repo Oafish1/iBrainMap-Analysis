@@ -1,6 +1,7 @@
-### 2024-02-12
+### 2024-02-12 (1-2)
 - Add new heatmap visualization
 - Figure 3 reorganization
+- Figure updates
 - Many QOL additions
 - New enrichment analysis
 
