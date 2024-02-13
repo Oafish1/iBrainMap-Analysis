@@ -1,9 +1,10 @@
-### 2024-02-12 (1-2)
+### 2024-02-12 (1-3)
 - Add new heatmap visualization
 - Figure 3 reorganization
 - Figure updates
 - Many QOL additions
 - New enrichment analysis
+- PRS analysis
 
 ### 2024-02-11
 - Add pkl generation function from source CSV
