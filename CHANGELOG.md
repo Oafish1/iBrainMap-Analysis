@@ -1,11 +1,21 @@
-### 2023-02-06 (1-2)
+### 2024-02-12
+- Add new heatmap visualization
+- Figure 3 reorganization
+- Many QOL additions
+- New enrichment analysis
+
+### 2024-02-11
+- Add pkl generation function from source CSV
+- Switch to 25p25p
+
+### 2024-02-06 (1-2)
 - Figure updates
 - Filter GO terms (in progress)
 - QOL and additional utility functions
 - Reruns
 - Revise cross-ancestry enrichment
 
-### 2023-01-30 (1-2)
+### 2024-01-30 (1-2)
 - Add new circle heatmap plotting functions
 - Append corresponding GO terms with descriptions in all applications
 - Calculate new enrichments
@@ -13,13 +23,13 @@
 - Figure updates and rearrangement
 - Result Recalculations
 
-### 2023-01-19 (1-2)
+### 2024-01-19 (1-2)
 - Ancestry enrichment analysis for individual and conserved edges
 - Figure rearrangements
 - Notebook reorganization
 - QOL updates for plotting functions
 
-### 2023-01-09
+### 2024-01-09
 - Figure and extended figure layouts
 
 ### 2023-12-28

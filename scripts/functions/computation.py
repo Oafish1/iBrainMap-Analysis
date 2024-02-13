@@ -537,14 +537,14 @@ def compare_graphs_enrichment(g1, g2, *, sid_1, sid_2, nodes, include_tgs=True, 
     return df
 
 
-def format_enrichment(enrichment, term_filter=filter_go_terms, num_filter=None, replace_dot=False):
+def format_enrichment(enrichment, term_filter=filter_go_terms, num_filter=None, replace_dot=False, show_go_num=False):
     # Filter using term filter
     if term_filter is not None:
         mask = term_filter(enrichment['GO'].to_list())
         enrichment = enrichment.iloc[mask].copy()
 
     # Add GO term to description
-    enrichment['Description'] = enrichment.apply(lambda r: f'({r["GO"]}) {r["Description"]}', axis=1)
+    if show_go_num: enrichment['Description'] = enrichment.apply(lambda r: f'({r["GO"]}) {r["Description"]}', axis=1)
 
     # Format
     keep = [c for c in enrichment.columns if c.startswith('_LogP_')] + ['Description']
@@ -624,13 +624,12 @@ def compute_edge_counts(
         threshold=.01,
         **kwargs,
     ):
-
     if threshold is None:
         # Threshold by max/10 on head
-        threshold = np.nan_to_num(data).max(axis=(0, 2)).reshape((1, -1, 1)) / 10
+        threshold = np.nanmax(data, axis=(0, 2)).reshape((1, -1, 1)) / 10
     elif threshold >= 1:
         # Percentile threshold (integer)
-        threshold = np.nanquantile(data, threshold/100.)
+        threshold = np.nanquantile(data, threshold/100.)  # Crashes for large graphs
     # else, raw threshold
     # Apply
     within_range = data > threshold
@@ -641,6 +640,7 @@ def compute_edge_counts(
 
     # Melt and format
     counts = counts.reset_index(names='Edge').melt(id_vars='Edge', var_name='Head', value_name='Count')
+    # print(counts.loc[counts['Count'] > 0])
 
     # Return
     return counts
@@ -791,10 +791,11 @@ def compute_prs_difference(
         df_corr['attention'] = data_eh
         # Skip if not enough data
         n_data = (~df_corr.isna()).min(axis=1).sum()
-        if (~df_corr.isna()).min(axis=1).sum() < 20: continue  # Minimum for calculating p and CI is 14, but will still throw (sampling?) errors
+        if (~df_corr.isna()).min(axis=1).sum() < 20: continue  # Minimum for calculating p and CI is 14 data points, but will still throw (sampling?) errors
         # Compute partial correlation
         stats = pg.partial_corr(data=df_corr.reset_index(drop=True), x='attention', y='prs', covar=covariates.columns.to_list(), method='spearman')
         corr, p = stats['r'].item(), stats['p-val'].item()
+        if np.isnan(p): continue
 
         # Record
         df.loc[df.shape[0]] = [edges[e], heads[h], n_data, corr, p]

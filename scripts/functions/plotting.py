@@ -7,6 +7,7 @@ from adjustText import adjust_text
 from brokenaxes import brokenaxes
 import graph_tool.all as gt
 from matplotlib.collections import PatchCollection
+from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -1376,7 +1377,9 @@ def plot_prs_correlation(
 
     # Get data
     # TODO: Allow just passing prs_df
+    # print('a')
     if df is None: df = compute_prs_difference(meta, data=data, edges=edges, heads=heads, subject_ids=subject_ids, subsample=subsample, **kwargs)
+    # print('b')
     targets = df.copy()
     targets = targets.iloc[np.abs(targets['correlation'].to_numpy()).argsort()[::-1]]  # Sort by abs corr instead of p
     targets = targets[['edge', 'head']].loc[df['n'] > min_samples]  # Filter by min_samples
@@ -1485,7 +1488,7 @@ def plot_edge_discovery_enrichment(
         interval=10,
         num_descriptors=5,
         # hist_top=True,
-        threshold=80,
+        threshold=.01,  # Normally 90 for low-volume graphs
         show_labels=False,
         clamp_min=True,
         smooth_zeros=True,
@@ -1638,6 +1641,9 @@ def plot_edge_discovery_enrichment(
                 # Get top descriptors
                 enrichment_filtered = enrichment.loc[enrichment['Gene Set']==group].iloc[:num_descriptors]
 
+                # Throw error if enrichment files are missing groups
+                assert enrichment_filtered.shape[0] > 0, f'Missing group "{group}".  Try refreshing enrichments.'
+
                 # Plot
                 pl = sns.barplot(
                     enrichment_filtered,
@@ -1724,3 +1730,70 @@ def plot_circle_heatmap_patches(df, ax=None, cmap='afmhot_r', cbar_label=None, a
     cbar = ax.figure.colorbar(collection, ax=ax)
     if cbar_label is not None: cbar.ax.set_ylabel(cbar_label)
     if axis_labels: ax.set(xlabel=df.columns.name, ylabel=df.index.name)
+
+
+def plot_heatmap_comparison(
+    data,
+    *,
+    edges,
+    heads,
+    subject_ids,
+    target_sids,
+    palette,
+    column_groups,
+    column_group_names,
+    ax,
+    random_seed=42,
+    num_edges=40,
+):
+    # TODO: Get tighter spacing
+    # Replace ax with subplots
+    subfig = ax.figure
+    ax.remove()
+    axs = subfig.subplots(2, 2, gridspec_kw={'height_ratios': [1, .15]})
+    axs, caxs = axs[0, :], axs[1, :]
+
+    # Plot in each
+    dfs = []
+    for sid in zip(target_sids):
+        # Get subject data
+        sid_data = data[:, :, np.array(subject_ids) == sid].squeeze()
+        df = pd.DataFrame(sid_data, index=edges, columns=heads).dropna()
+
+        # Get data for each subset
+        df['All'] = df.mean(axis=1)
+        for cg, nm in zip(column_groups, column_group_names):
+            df[nm] = df[cg].mean(axis=1)
+            df = df.drop(columns=cg)
+
+        # Record
+        dfs.append(df)
+
+    # Filter edges
+    edges_present = [df.index.to_list() for df in dfs]
+    common_edges = list(set(edges_present[0]).intersection(set(edges_present[1])))
+    if random_seed is not None: np.random.seed(random_seed)
+    edges_to_keep = np.random.choice(common_edges, num_edges, replace=False)
+    edges_to_keep.sort()
+
+    # Plot
+    for i, (ax, cax, sid, df) in enumerate(zip(axs, caxs, target_sids, dfs)):
+        color = hex_to_rgb(palette[sid])
+        blank_val = .99
+        cdict = {
+            'red': [(0., blank_val, blank_val), (1., color[0]/255, color[0]/255)],
+            'green': [(0., blank_val, blank_val), (1., color[1]/255, color[1]/255)],
+            'blue': [(0., blank_val, blank_val), (1., color[2]/255, color[2]/255)],
+        }
+        sns.heatmap(
+            df.loc[edges_to_keep],
+            cmap=LinearSegmentedColormap(f'Custom - {sid}', cdict),
+            yticklabels=i==0,
+            cbar=False,
+            ax=ax)
+
+        # Add colorbar
+        cbar = subfig.colorbar(ax.collections[0], cax=cax)
+        cbar.ax.set_ylabel(sid)
+
+    return axs[0]

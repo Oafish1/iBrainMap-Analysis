@@ -1341,7 +1341,7 @@ def check_ct_edge_specificity():
         dup_id = dup.apply(lambda r: f'{r["from"]}_{r["to"]}', axis=1)
 
         # Check all duplicates for differing attentions
-        unique = (~df.loc[dup_id].drop(columns=['org_edge_weight', 'ct_GRN', 'edge_type']).duplicated()).sum()
+        unique = (~df.loc[dup_id].drop(columns=['ct_GRN', 'edge_type']).duplicated()).sum()  # 'org_edge_weight',
         assert unique == dup_id.shape[0], f'Found {unique - dup_id.shape[0]} non-redundant duplicated edges across cell types.'
         # Naive
         # for id in dup_id:
@@ -1350,12 +1350,12 @@ def check_ct_edge_specificity():
         #     assert duplicates == df_filt.shape[0]-1, f'Found edge with difference across cell-types, {id}'
 
 
-def filter_go_terms(terms):
+def filter_go_terms(terms, min_go_num=50_000):
     # Filter to only GO terms
     is_go = [term.startswith('GO:') for term in terms]
 
     # Filter to deep GO terms
     # TODO: Use *.obo file instead of heuristic
-    mask = [ig and (int(term[3:]) >= 50_000) for ig, term in zip(is_go, terms)]
+    mask = [ig and (int(term[3:]) >= min_go_num) for ig, term in zip(is_go, terms)]
 
     return mask

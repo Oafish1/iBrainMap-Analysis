@@ -2,6 +2,7 @@ import os
 import pickle
 
 import pandas as pd
+from tqdm import tqdm
 
 
 # Locations
@@ -28,8 +29,15 @@ COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
 ##  SID = NOT PROVIDED
 
 # Freeze 3 (2023-11-06)
-ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_Nov/'
-ATT = ATT_FOLDER + 'c15x_att_10pTF_10pTG.pkl'
+# ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_Nov/'
+# ATT = ATT_FOLDER + 'c15x_att_10pTF_10pTG.pkl'
+# GE = NOT PROVIDED
+# SID = NOT PROVIDED
+
+# Freeze 3 (2024-02-11)
+ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_02_11/'
+ATT_CSV = ATT_FOLDER + 'MSSM_attn_all_224.csv'
+ATT = ATT_FOLDER + 'MSSM_attn_all_224.pkl'
 # GE = NOT PROVIDED
 # SID = NOT PROVIDED
 
@@ -50,7 +58,8 @@ def get_attention_columns(scaled=False):
         exclude += [c[:-6] for c in graph.columns if c.endswith('_scale')]
 
     # Remove alternatives
-    exclude += [c for c in graph.columns if not c.startswith('att_')]
+    # exclude += [c for c in graph.columns if not c.startswith('att_')]
+    exclude += [c for c in graph.columns if not c[-1].isdigit()]
 
     return [c for c in graph.columns if c not in exclude]
 
@@ -126,6 +135,24 @@ def get_graphs_pkl():
         with open(ATT, 'rb') as f:
             graphs_pkl = pickle.load(f)
     return graphs_pkl
+
+
+def generate_pkl_from_csv(fname=ATT_CSV):
+    "Generate `graphs_pkl` file from source csv file."
+    global graphs_pkl
+
+    # Load csv
+    full_csv = pd.read_csv(fname)
+    full_csv = full_csv.set_index('id')
+
+    # Formulate pkl
+    graphs_pkl = {}
+    for sid in tqdm(full_csv['sample'].unique()):
+        graphs_pkl[sid] = full_csv.loc[full_csv['sample'] == sid].drop(columns='sample')
+
+    # Dump pickle
+    with open(ATT, 'wb') as f:
+        pickle.dump(graphs_pkl, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def get_meta():
