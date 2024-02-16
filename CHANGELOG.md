@@ -1,3 +1,6 @@
+### 2024-02-16
+- Upload alternate figure version
+
 ### 2024-02-12 (1-3)
 - Add new heatmap visualization
 - Figure 3 reorganization
