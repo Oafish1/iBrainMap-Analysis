@@ -621,16 +621,24 @@ def compute_edge_counts(
         *,
         edges,
         heads,
-        threshold=.01,
+        threshold=90,
+        threshold_type_override=None,
         **kwargs,
     ):
-    if threshold is None:
+    if threshold_type_override == 'raw': pass  # Input threshold directly
+    elif threshold_type_override == 'max' or threshold is None:
         # Threshold by max/10 on head
         threshold = np.nanmax(data, axis=(0, 2)).reshape((1, -1, 1)) / 10
-    elif threshold >= 1:
+    elif threshold_type_override == 'percentile' or threshold >= 1:
         # Percentile threshold (integer)
-        threshold = np.nanquantile(data, threshold/100.)  # Crashes for large graphs
-    # else, raw threshold
+        # NOTE: Functions like `np.nanpercentile` crash for large arrays
+        threshold = []
+        for i in range(data.shape[1]):
+            vals = data[:, i, :].flatten()
+            vals = vals[~np.isnan(vals)]
+            threshold.append(np.percentile(vals, 10))
+        threshold = np.array(threshold).reshape((1, -1, 1))
+
     # Apply
     within_range = data > threshold
 

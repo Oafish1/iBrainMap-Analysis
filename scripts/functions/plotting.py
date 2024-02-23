@@ -1482,19 +1482,20 @@ def plot_edge_discovery_enrichment(
         heads,
         ax=None,
         column=None,
-        percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.02, .05, .1)],
+        percentage_prioritizations_ranges=None,
+        use_percentile=True,
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
         subsample=0,
         interval=10,
         num_descriptors=5,
         # hist_top=True,
-        threshold=.01,  # Normally 90 for low-volume graphs
+        threshold=90,  # Normally 90 for low-volume graphs
         show_labels=False,
-        clamp_min=True,
+        clamp_min=False,  # End lineplot at lowest
         smooth_zeros=True,
         skip_plot=False,
         results_dir='../plots/',
-        filter=filter_go_terms,
+        term_filter=filter_go_terms,
         postfix=None,
         random_seed=42,
         **kwargs,
@@ -1503,21 +1504,18 @@ def plot_edge_discovery_enrichment(
     if column is None: column = get_attention_columns()[0]
     if postfix is None: postfix = f'{column}'
     assert (ax is not None) or skip_plot, '`skip_plot` must be true if `ax` is not provided'
-
-    # Calculate ranges
-    prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
-    # Smooth if will have zero
-    if smooth_zeros:
-        for i in range(len(prioritizations_ranges)):
-            pr = prioritizations_ranges[i]
-            if np.ceil(pr[0]) == np.ceil(pr[1]):
-                prioritizations_ranges[i][0] = prioritizations_ranges[i][1] = np.ceil(pr[0])
+    if percentage_prioritizations_ranges is None:
+        if use_percentile: percentage_prioritizations_ranges=[(top-2, top) for top in (96, 98, 100)]
+        else: percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.02, .05, .1)]
 
     # Get all compatible edges
     counts = compute_edge_counts(data=data, edges=edges, heads=heads, threshold=threshold)
 
     # Filter to chosen head
     counts_filtered = counts.loc[counts['Head']==column]
+
+    # Filter zero counts
+    counts_filtered = counts_filtered.loc[counts_filtered['Count'] > 0]
 
     # Sample
     np.random.seed(random_seed)
@@ -1527,6 +1525,24 @@ def plot_edge_discovery_enrichment(
     # Sort
     counts_filtered = counts_filtered.sort_values('Count')
     counts_filtered = counts_filtered.iloc[::-1]
+
+    # Calculate ranges
+    if use_percentile:
+        prioritizations_ranges = [[np.percentile(counts_filtered['Count'].to_numpy(), p) for p in ppr] for ppr in percentage_prioritizations_ranges]
+    else:
+        prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
+    # Debug for showing ranges
+    # print(percentage_prioritizations_ranges)
+    # print(prioritizations_ranges)
+
+    # Smooth if will have zero
+    # Useful in the case that the filter is between two numbers, i.e. 61.2 - 61.4 people has nothing within it.
+    # This will round to 62
+    if smooth_zeros:
+        for i in range(len(prioritizations_ranges)):
+            pr = prioritizations_ranges[i]
+            if np.ceil(pr[0]) == np.ceil(pr[1]):
+                prioritizations_ranges[i][0] = prioritizations_ranges[i][1] = np.ceil(pr[0])
 
     # Filter
     if clamp_min: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
@@ -1609,7 +1625,7 @@ def plot_edge_discovery_enrichment(
         # Record important genes
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
         genes = [g for g in genes if not string_is_synthetic(g)]
-        genes_new = pd.DataFrame({f'{column} - {100*ppr[0]:.1f}-{100*ppr[1]:.1f}': np.unique(genes)})
+        genes_new = pd.DataFrame({f'{column} - {(1 if use_percentile else 100)*ppr[0]:.1f}-{(1 if use_percentile else 100)*ppr[1]:.1f}': np.unique(genes)})
         genes_list = pd.concat((genes_list, genes_new), axis=1)
 
     # Record background
@@ -1633,7 +1649,7 @@ def plot_edge_discovery_enrichment(
         enrichment = pd.read_csv(fname)
 
         # Format
-        enrichment = format_enrichment(enrichment).sort_values('-log10(p)').iloc[::-1]
+        enrichment = format_enrichment(enrichment, term_filter=term_filter).sort_values('-log10(p)').iloc[::-1]
 
         # Plot barplots
         if not skip_plot:
@@ -1667,6 +1683,8 @@ def plot_cross_enrichment(
     column_name='Gene Set',
     value_name='-log10(p)',
     postfix_name='Ancestry',
+    gene_set_idx=-1,  # Most general
+    transpose=True,
     num_terms=30,
 ):
     # Compile enrichments across postfixes
@@ -1684,8 +1702,8 @@ def plot_cross_enrichment(
         # Append
         enrichments = pd.concat((enrichments, enrichment))
 
-    # Filter to most individual gene set
-    individual_set = enrichments[column_name].unique()[np.argsort([float(gene_set.split(' - ')[1].split('-')[0]) for gene_set in enrichments['Gene Set'].unique()])[0]]
+    # Filter to gene set indicated by `gene_set_idx`
+    individual_set = enrichments[column_name].unique()[np.argsort([float(gene_set.split(' - ')[1].split('-')[0]) for gene_set in enrichments['Gene Set'].unique()])[gene_set_idx]]
     enrichments = enrichments.loc[enrichments[column_name] == individual_set]
 
     # Pivot data
@@ -1696,13 +1714,14 @@ def plot_cross_enrichment(
 
     # Plot
     if ax is not None:
-        plot_circle_heatmap_patches(enrichments, ax=ax, cbar_label=value_name)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=60)
+        plot_circle_heatmap_patches(enrichments if not transpose else enrichments.T, ax=ax, cbar_label=value_name, cbar_kws={'shrink': .8 if not transpose else .3})
+        if not transpose: ax.set_xticklabels(ax.get_xticklabels(), rotation=60)
+        else: ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 
     return enrichments
 
 
-def plot_circle_heatmap_patches(df, ax=None, cmap='afmhot_r', cbar_label=None, axis_labels=True):
+def plot_circle_heatmap_patches(df, ax=None, cmap='afmhot_r', cbar_label=None, axis_labels=True, cbar_kws={}):
     # Defaults
     if ax is None: ax = plt.gca()
 
@@ -1727,7 +1746,7 @@ def plot_circle_heatmap_patches(df, ax=None, cmap='afmhot_r', cbar_label=None, a
     ax.set_xticks(np.arange(m+1)-0.5, minor=True)
     ax.set_yticks(np.arange(n+1)-0.5, minor=True)
     ax.grid(which='minor')
-    cbar = ax.figure.colorbar(collection, ax=ax)
+    cbar = ax.figure.colorbar(collection, ax=ax, **cbar_kws)
     if cbar_label is not None: cbar.ax.set_ylabel(cbar_label)
     if axis_labels: ax.set(xlabel=df.columns.name, ylabel=df.index.name)
 

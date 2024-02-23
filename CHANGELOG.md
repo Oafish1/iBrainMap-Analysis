@@ -1,3 +1,9 @@
+### 2024-02-22
+- General bugfixes
+- QOL additions
+- Refresh edge discovery
+- Revise cross-enrichments
+
 ### 2024-02-16
 - Upload alternate figure version
 
