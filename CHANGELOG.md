@@ -1,3 +1,8 @@
+### 2024-02-29
+- Add `gene_max_num` to `plot_edge_discovery_enrichment` for enrichment significance normalization
+- General QOL improvements
+- Refresh edge and cross-ancestry enrichment panels
+
 ### 2024-02-22
 - General bugfixes
 - QOL additions

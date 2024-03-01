@@ -1486,6 +1486,7 @@ def plot_edge_discovery_enrichment(
         use_percentile=True,
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
         subsample=0,
+        gene_max_num=300,
         interval=10,
         num_descriptors=5,
         # hist_top=True,
@@ -1508,6 +1509,9 @@ def plot_edge_discovery_enrichment(
         if use_percentile: percentage_prioritizations_ranges=[(top-2, top) for top in (96, 98, 100)]
         else: percentage_prioritizations_ranges=[(center-center/10, center+center/10) for center in (.02, .05, .1)]
 
+    # Seeding
+    np.random.seed(random_seed)
+
     # Get all compatible edges
     counts = compute_edge_counts(data=data, edges=edges, heads=heads, threshold=threshold)
 
@@ -1518,7 +1522,6 @@ def plot_edge_discovery_enrichment(
     counts_filtered = counts_filtered.loc[counts_filtered['Count'] > 0]
 
     # Sample
-    np.random.seed(random_seed)
     idx = np.random.choice(counts_filtered.shape[0], min(subsample, counts_filtered.shape[0]) if subsample else counts_filtered.shape[0], replace=False)
     counts_filtered = counts_filtered.iloc[idx]
 
@@ -1625,7 +1628,9 @@ def plot_edge_discovery_enrichment(
         # Record important genes
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
         genes = [g for g in genes if not string_is_synthetic(g)]
-        genes_new = pd.DataFrame({f'{column} - {(1 if use_percentile else 100)*ppr[0]:.1f}-{(1 if use_percentile else 100)*ppr[1]:.1f}': np.unique(genes)})
+        genes_unique = np.unique(genes)
+        if gene_max_num is not None and gene_max_num != 0: genes_unique = np.random.choice(genes_unique, gene_max_num, replace=False)
+        genes_new = pd.DataFrame({f'{column} - {(1 if use_percentile else 100)*ppr[0]:.1f}-{(1 if use_percentile else 100)*ppr[1]:.1f}': genes_unique})
         genes_list = pd.concat((genes_list, genes_new), axis=1)
 
     # Record background
