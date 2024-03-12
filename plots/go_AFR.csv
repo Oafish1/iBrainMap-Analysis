@@ -376,8 +376,8 @@ _MEMBER_data_imp_1 - 94.0-96.0,_MEMBER_data_imp_1 - 96.0-98.0,_MEMBER_data_imp_1
 0,0,1,0,0,-2.4,GO:0060333,type II interferon-mediated signaling pathway,M001,1,0
 0,1,0,0,-2.6,0,GO:0060998,regulation of dendritic spine development,M010,1,0
 0,1,0,0,-2.4,0,GO:0048839,inner ear development,M010,1,0
-0,1,0,0,-2.7,0,R-HSA-350054,Notch-HLH transcription pathway,M010,1,0
 0,1,0,0,-2.7,0,WP2526,PDGF pathway,M010,1,0
+0,1,0,0,-2.7,0,R-HSA-350054,Notch-HLH transcription pathway,M010,1,0
 0,1,0,0,-2.1,0,GO:0006898,receptor-mediated endocytosis,M010,1,0
 0,1,0,0,-2.4,0,GO:0050803,regulation of synapse structure or activity,M010,1,0
 0,1,0,0,-2,0,GO:0097120,receptor localization to synapse,M010,1,0

@@ -1404,7 +1404,7 @@ def plot_prs_correlation(
     if discrete:
         # Plot
         prs_df_format = prs_df_format.rename(columns={'Risk': 'SCZ Risk'})
-        sns.barplot(prs_df_format, x='Name', y='Attention', hue='SCZ Risk', hue_order=['low', 'mid', 'high'], ax=ax)
+        sns.barplot(data=prs_df_format, x='Name', y='Attention', hue='SCZ Risk', hue_order=['low', 'mid', 'high'], ax=ax)
         # Formatting
         plt.sca(ax)
         plt.xticks(rotation=90)
@@ -1421,7 +1421,7 @@ def plot_prs_correlation(
             name = np.unique(prs_df_format['Name'])[i]
             edge = np.unique(prs_df_format['Edge'])[i]
             prs_df_format_filtered = prs_df_format.loc[prs_df_format['Name']==name]
-            sns.scatterplot(prs_df_format_filtered, x='PRS', y='Attention', color='gray', ax=ax)
+            sns.scatterplot(data=prs_df_format_filtered, x='PRS', y='Attention', color='gray', ax=ax)
 
             # Get values
             name_mask = df.apply(lambda r: f'{r["edge"]} ({r["head"]})', axis=1)==name
@@ -1454,7 +1454,7 @@ def plot_prs_correlation(
             if max_scale: ax.set_ylabel(f'Max Scaled {ylabel}')
             else: ax.set_ylabel(ylabel)
             if i > 0: ax.set_ylabel(None)
-        ax.set_ylim([-.05, 1.05])
+        ax.set_ylim([-.05, 1.25])
 
         # Return
         ret += (sub_axs[0],)
@@ -1486,7 +1486,7 @@ def plot_edge_discovery_enrichment(
         use_percentile=True,
         range_colors=[(1., 0., 0.), (0., 1., 0.), (0., 0., 1.)],
         subsample=0,
-        gene_max_num=300,
+        gene_max_num=500,
         interval=10,
         num_descriptors=5,
         # hist_top=True,
@@ -1667,7 +1667,7 @@ def plot_edge_discovery_enrichment(
 
                 # Plot
                 pl = sns.barplot(
-                    enrichment_filtered,
+                    data=enrichment_filtered,
                     x='-log10(p)',
                     y='Description',
                     palette=get_colors_from_values(enrichment_filtered['-log10(p)'].to_numpy(), min_val=3, max_val=enrichment['-log10(p)'].max(), start=(.9, .9, .9), end=color),

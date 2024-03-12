@@ -1,3 +1,10 @@
+### 2024-03-12
+- Adjust range and layout for PRS comparison plots
+- Rerun and refresh enrichments
+- Various hyperparameter tweaks
+- Violin plot update
+- Workaround for Seaborn bug with `data` and `y` arguments in multiple plotting functions
+
 ### 2024-02-29
 - Add `gene_max_num` to `plot_edge_discovery_enrichment` for enrichment significance normalization
 - General QOL improvements
