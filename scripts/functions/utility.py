@@ -12,6 +12,9 @@ from tqdm import tqdm
 from .file import *
 
 
+EDGE_SPLIT_STRING = ' --> '
+
+
 ### Utility functions
 def rgba_to_hex(rgba):
     # No alpha included
@@ -356,11 +359,11 @@ def get_edge_string(g=['', ''], e=None):
         assert e is not None, 'If a graph is provided, `e` must not be None'
         source_str, target_str = g.vp.ids[e.source()], g.vp.ids[e.target()]
 
-    return f'{source_str} -- {target_str}'
+    return f'{source_str}{EDGE_SPLIT_STRING}{target_str}'
 
 
 def split_edge_string(s):
-    return s.split(' -- ')
+    return s.split(EDGE_SPLIT_STRING)
 
 
 def _add_attribute_to_dict(dict, iterator, *, indexer=lambda x: x, attribute, default=lambda: [], index=None):
@@ -1359,3 +1362,15 @@ def filter_go_terms(terms, min_go_num=50_000):
     mask = [ig and (int(term[3:]) >= min_go_num) for ig, term in zip(is_go, terms)]
 
     return mask
+
+
+def label_add_arrow(labels, ct=False):
+    # This function replaces hyphens with arrows
+    for l in labels:
+        text = l.get_text()
+        text = text.split('_')
+        if ct: text = '_'.join(text[:-2]) + ': ' + ' --> '.join(text[-2:])
+        else: text = ' --> '.join(text)
+        l.set_text(text)
+
+    return labels

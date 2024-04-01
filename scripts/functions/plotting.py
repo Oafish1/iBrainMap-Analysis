@@ -1369,7 +1369,7 @@ def plot_prs_correlation(
         show_head=False,
         max_scale=False,
         head_prefix='att_D_SCZ',
-        ylabel='Attention',
+        ylabel='Importance Score',
         **kwargs
 ):
     # Default
@@ -1445,7 +1445,7 @@ def plot_prs_correlation(
 
             # Significance
             # fdr = df.loc[name_mask, 'fdr'].iloc[0]
-            plt.text(.05, .95, f'corr={correlation:.3e}\np={p:.3e}', ha='left', va='top', in_layout=False, transform=ax.transAxes)
+            plt.text(.05, .95, f'corr={correlation:.3f}\np={p:.3e}', ha='left', va='top', in_layout=False, transform=ax.transAxes)
 
             # Styling
             ax.set_title(name if show_head else edge)
