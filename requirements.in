@@ -1,4 +1,6 @@
-# graph-tool  # conda install -c conda-forge graph-tool
+# graph-tool
+# Install with conda install -c conda-forge graph-tool
+# sudo apt install libgtk-3-0
 adjustText
 brokenaxes
 hiveplotlib
@@ -13,10 +15,11 @@ pingouin
 pip-tools
 plotly
 pydot
-seaborn
 scikit-learn
+seaborn
+statannotations
 sympy
 torch
 torch_geometric
-torch_sparse
+# torch_sparse
 umap-learn
