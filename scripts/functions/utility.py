@@ -1374,3 +1374,7 @@ def label_add_arrow(labels, ct=False):
         l.set_text(text)
 
     return labels
+
+
+def rgb_to_float(l):
+    return np.array(l) / 255.

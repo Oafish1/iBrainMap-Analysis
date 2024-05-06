@@ -1,3 +1,7 @@
+### 2024-05-05
+- Density plot generation
+- General plot formatting revisions
+
 ### 2024-04-12
 - Frequency analyses
 

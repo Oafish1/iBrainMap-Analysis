@@ -1454,7 +1454,7 @@ def plot_prs_correlation(
             if max_scale: ax.set_ylabel(f'Max Scaled {ylabel}')
             else: ax.set_ylabel(ylabel)
             if i > 0: ax.set_ylabel(None)
-        ax.set_ylim([-.05, 1.25])
+        ax.set_ylim([-.05, 1.5])
 
         # Return
         ret += (sub_axs[0],)
