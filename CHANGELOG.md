@@ -1,3 +1,10 @@
+### 2024-05-07
+- Distribution plot changes
+- Edge discovery plot changes
+
+### 2024-05-06
+- Plot formatting
+
 ### 2024-05-05
 - Density plot generation
 - General plot formatting revisions
