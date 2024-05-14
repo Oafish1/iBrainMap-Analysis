@@ -1,3 +1,6 @@
+### 2024-05-14
+- Adjust formatting
+
 ### 2024-05-07
 - Distribution plot changes
 - Edge discovery plot changes

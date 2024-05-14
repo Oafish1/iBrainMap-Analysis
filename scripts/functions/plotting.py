@@ -1489,6 +1489,7 @@ def plot_edge_discovery_enrichment(
         gene_max_num=500,
         interval=10,
         num_descriptors=5,
+        bar_fontsize='xx-small',
         # hist_top=True,
         threshold=90,  # Normally 90 for low-volume graphs
         show_labels=False,
@@ -1567,7 +1568,7 @@ def plot_edge_discovery_enrichment(
                 loc=1,
                 bbox_to_anchor=(offset, 0, 1, 1), bbox_transform=ax_line.transAxes)
             axs_enrich.append(axins)
-        ax_line.text(1-(total_width)/2, 1-height-.15, '-log10(p)', transform=ax_line.transAxes)  # Enrichment x label
+        ax_line.text(1-(total_width)/2, 1-height-.15, '-log10(p)', fontsize=bar_fontsize, transform=ax_line.transAxes)  # Enrichment x label
         ret_ax = ax_line  # Return top left ax for labeling
 
     # Completely separate ax
@@ -1675,7 +1676,8 @@ def plot_edge_discovery_enrichment(
                 pl.set_xlabel(None)
                 pl.set_ylabel(None)
                 sns.despine(ax=ax, bottom=True)
-                ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30))
+                ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30), fontsize=bar_fontsize)
+                ax.set_xticklabels(ax.get_xticklabels(), fontsize=bar_fontsize)
 
     if not skip_plot: return ret_ax
 
@@ -1719,7 +1721,7 @@ def plot_cross_enrichment(
 
     # Plot
     if ax is not None:
-        plot_circle_heatmap_patches(enrichments if not transpose else enrichments.T, ax=ax, cbar_label=value_name, cbar_kws={'shrink': .8 if not transpose else .3})
+        plot_circle_heatmap_patches(enrichments if not transpose else enrichments.T, ax=ax, cbar_label=value_name, cbar_kws={'shrink': .8 if not transpose else .7})
         if not transpose: ax.set_xticklabels(ax.get_xticklabels(), rotation=60)
         else: ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 
