@@ -1,3 +1,7 @@
+### 2024-05-28
+- Add butterfly plot for cell type prioritization comparison
+- File organization, renaming, and accreditations
+
 ### 2024-05-14
 - Adjust formatting
 
