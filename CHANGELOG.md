@@ -1,3 +1,7 @@
+### 2024-06-02
+- Real data for prioritization
+- Revisions to cell type prioritization plot
+
 ### 2024-05-28
 - Add butterfly plot for cell type prioritization comparison
 - File organization, renaming, and accreditations
