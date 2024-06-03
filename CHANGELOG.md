@@ -1,4 +1,5 @@
-### 2024-06-02
+### 2024-06-02 (1-2)
+- Add more CT groupings to prioritization analysis
 - Real data for prioritization
 - Revisions to cell type prioritization plot
 
