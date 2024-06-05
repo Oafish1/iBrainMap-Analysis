@@ -1,3 +1,11 @@
+### 2024-06-05
+- Readd grouped prioritization comparison
+- Touch up for prioritization figure
+
+### 2024-06-03
+- Add cross-disease comparison to prioritization
+- Plot coloration revisions for prioritization
+
 ### 2024-06-02 (1-2)
 - Add more CT groupings to prioritization analysis
 - Real data for prioritization
