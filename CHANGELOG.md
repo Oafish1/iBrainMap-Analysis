@@ -1,3 +1,7 @@
+### 2024-06-06
+- Add scaling methods to prioritization
+- Revise prioritization sorting
+
 ### 2024-06-05
 - Readd grouped prioritization comparison
 - Touch up for prioritization figure
