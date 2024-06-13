@@ -1,3 +1,6 @@
+### 2024-06-07
+- Group anti-centering measure for prioritization analysis
+
 ### 2024-06-06
 - Add scaling methods to prioritization
 - Revise prioritization sorting
