@@ -1,6 +1,7 @@
-### 2024-07-02 (1-4)
+### 2024-07-02 (1-5)
 - Figure revisions
 - Importance score language change
+- Plot revisions
 - PRS language change
 - Supplementary analyses
 
