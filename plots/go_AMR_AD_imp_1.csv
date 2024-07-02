@@ -1,0 +1,1005 @@
+_MEMBER_AD_imp_1 - 94.0-96.0,_MEMBER_AD_imp_1 - 96.0-98.0,_MEMBER_AD_imp_1 - 98.0-100.0,_LogP_AD_imp_1 - 94.0-96.0,_LogP_AD_imp_1 - 96.0-98.0,_LogP_AD_imp_1 - 98.0-100.0,GO,Description,_PATTERN_,_RANK_,GiniIndex
+1,1,1,-3.8,-2.7,-6.4,GO:0045580,regulation of T cell differentiation,M111,3,0
+1,1,1,-2.6,-3.7,-2.6,R-HSA-9824443,Parasitic Infection Pathways,M111,3,0
+1,1,1,-3.7,-3.7,-5.2,GO:0035239,tube morphogenesis,M111,3,0
+1,1,1,-2,-2,-4,WP5130,Th17 cell differentiation pathway,M111,3,0
+1,1,1,-4.8,-2.4,-3.5,GO:0050678,regulation of epithelial cell proliferation,M111,3,0
+1,1,1,-2.7,-2.7,-2.7,GO:0043378,"positive regulation of CD8-positive, alpha-beta T cell differentiation",M111,3,0
+1,1,1,-2.1,-3.3,-2.1,GO:0098727,maintenance of cell number,M111,3,0
+1,1,1,-8.4,-4.8,-4.2,GO:0048562,embryonic organ morphogenesis,M111,3,0
+1,1,1,-2.1,-2.1,-2.4,GO:0048732,gland development,M111,3,0
+1,1,1,-2.2,-3.3,-2.7,R-HSA-166016,Toll Like Receptor 4 (TLR4) Cascade,M111,3,0
+1,1,1,-2.3,-2.3,-3,GO:0060537,muscle tissue development,M111,3,0
+1,1,1,-3,-2.4,-4.4,GO:0046637,regulation of alpha-beta T cell differentiation,M111,3,0
+1,1,1,-3.2,-3.2,-3.2,GO:0043370,"regulation of CD4-positive, alpha-beta T cell differentiation",M111,3,0
+1,1,1,-3.1,-2.5,-3.7,GO:0048469,cell maturation,M111,3,0
+1,1,1,-2.5,-2,-5,GO:0046634,regulation of alpha-beta T cell activation,M111,3,0
+1,1,1,-6.4,-3.5,-2.9,GO:0042471,ear morphogenesis,M111,3,0
+1,1,1,-3,-3,-2.1,GO:0072189,ureter development,M111,3,0
+1,1,1,-3.3,-2,-3.8,GO:0050870,positive regulation of T cell activation,M111,3,0
+1,1,1,-4.2,-2.4,-4.2,GO:1903039,positive regulation of leukocyte cell-cell adhesion,M111,3,0
+1,1,1,-3.2,-2.6,-4,GO:0007167,enzyme-linked receptor protein signaling pathway,M111,3,0
+1,1,1,-10,-3.7,-8.5,GO:0001501,skeletal system development,M111,3,0
+1,1,1,-4,-2.5,-5.7,WP2849,Hematopoietic stem cell differentiation,M111,3,0
+1,1,1,-4.6,-2.4,-4.1,GO:1903037,regulation of leukocyte cell-cell adhesion,M111,3,0
+1,1,1,-4.6,-8.7,-11,GO:0030097,hemopoiesis,M111,3,0
+1,1,1,-2.9,-2.9,-3.4,GO:0021700,developmental maturation,M111,3,0
+1,1,1,-5.2,-2.4,-3,GO:0060021,roof of mouth development,M111,3,0
+1,1,1,-2.4,-4,-4,GO:0045646,regulation of erythrocyte differentiation,M111,3,0
+1,1,1,-6.1,-4.8,-5.2,GO:0007423,sensory organ development,M111,3,0
+1,1,1,-2.1,-2.5,-2.1,hsa05166,Human T-cell leukemia virus 1 infection,M111,3,0
+1,1,1,-6.7,-2.9,-7.4,GO:0061448,connective tissue development,M111,3,0
+1,1,1,-2.3,-4.6,-4.6,GO:0140747,regulation of ncRNA transcription,M111,3,0
+1,1,1,-2.1,-2.1,-4,WP5102,Familial partial lipodystrophy,M111,3,0
+1,1,1,-2.8,-4.4,-6.2,GO:0002683,negative regulation of immune system process,M111,3,0
+1,1,1,-4.8,-2.9,-6.7,GO:0045321,leukocyte activation,M111,3,0
+1,1,1,-3.1,-3.9,-6.5,GO:0072089,stem cell proliferation,M111,3,0
+1,1,1,-2.4,-2.4,-3.8,GO:0002703,regulation of leukocyte mediated immunity,M111,3,0
+1,1,1,-2.2,-5.1,-3.8,WP2857,Mesodermal commitment pathway,M111,3,0
+1,1,1,-3.8,-2.4,-2.4,GO:0045666,positive regulation of neuron differentiation,M111,3,0
+1,1,1,-2.2,-2.2,-2.2,GO:0043376,"regulation of CD8-positive, alpha-beta T cell differentiation",M111,3,0
+1,1,1,-2.6,-2.6,-3.1,GO:0071695,anatomical structure maturation,M111,3,0
+1,1,1,-2.1,-3.8,-2.1,GO:0006954,inflammatory response,M111,3,0
+1,1,1,-2.2,-5.3,-4.2,GO:0045637,regulation of myeloid cell differentiation,M111,3,0
+1,1,1,-2.7,-3.2,-2.7,GO:0048863,stem cell differentiation,M111,3,0
+1,1,1,-2.1,-5.5,-3.7,hsa05167,Kaposi sarcoma-associated herpesvirus infection,M111,3,0
+1,1,1,-3.4,-2.4,-3.4,R-HSA-2871796,FCERI mediated MAPK activation,M111,3,0
+1,1,1,-3.7,-2.1,-2.5,GO:0003002,regionalization,M111,3,0
+1,1,1,-5.7,-4.7,-4.2,GO:0030900,forebrain development,M111,3,0
+1,1,1,-7.8,-3.6,-2.5,GO:0070848,response to growth factor,M111,3,0
+1,1,1,-5.3,-4.7,-4.2,GO:0021537,telencephalon development,M111,3,0
+1,1,1,-3.5,-7.9,-8.5,GO:0002521,leukocyte differentiation,M111,3,0
+1,1,1,-3.9,-4.6,-3.2,hsa04928,"Parathyroid hormone synthesis, secretion and action",M111,3,0
+1,1,1,-3.5,-2.6,-4,GO:0060485,mesenchyme development,M111,3,0
+1,1,1,-3,-2.1,-5.3,GO:0050865,regulation of cell activation,M111,3,0
+1,1,1,-2.7,-2.7,-2.7,GO:0060099,"regulation of phagocytosis, engulfment",M111,3,0
+1,1,1,-2.1,-2.1,-2.7,GO:0002285,lymphocyte activation involved in immune response,M111,3,0
+1,1,1,-4.3,-2.3,-2.6,GO:0048729,tissue morphogenesis,M111,3,0
+1,1,1,-5.8,-2.4,-4.5,GO:0009792,embryo development ending in birth or egg hatching,M111,3,0
+1,1,1,-2.7,-2.7,-2.7,GO:1905153,regulation of membrane invagination,M111,3,0
+1,1,1,-3.4,-4.9,-4.9,GO:0030098,lymphocyte differentiation,M111,3,0
+1,1,1,-2.3,-3.7,-2.3,GO:1904888,cranial skeletal system development,M111,3,0
+1,1,1,-2,-2.9,-4.7,GO:0001568,blood vessel development,M111,3,0
+1,1,1,-7.4,-2.2,-6.7,GO:0051216,cartilage development,M111,3,0
+1,1,1,-3.4,-2.5,-4.1,R-HSA-1280215,Cytokine Signaling in Immune system,M111,3,0
+1,1,1,-8.1,-7,-7.6,GO:0048568,embryonic organ development,M111,3,0
+1,1,1,-3.8,-4.8,-7.5,GO:1902105,regulation of leukocyte differentiation,M111,3,0
+1,1,1,-2.2,-2.2,-3.4,GO:2001187,"positive regulation of CD8-positive, alpha-beta T cell activation",M111,3,0
+1,1,1,-4.4,-2.6,-5.4,GO:0042110,T cell activation,M111,3,0
+1,1,1,-2.4,-2.4,-2.4,GO:0048701,embryonic cranial skeleton morphogenesis,M111,3,0
+1,1,1,-2.1,-3.3,-4.7,GO:0072091,regulation of stem cell proliferation,M111,3,0
+1,1,1,-2.6,-2.2,-6.3,GO:0050867,positive regulation of cell activation,M111,3,0
+1,1,1,-2.6,-3.7,-2.6,R-HSA-9658195,Leishmania infection,M111,3,0
+1,1,1,-4.1,-2.1,-5.6,GO:0050863,regulation of T cell activation,M111,3,0
+1,1,1,-5.5,-3.3,-6.8,GO:0001775,cell activation,M111,3,0
+1,1,1,-2.3,-3.8,-5.6,M10,PID BCR 5PATHWAY,M111,3,0
+1,1,1,-6.6,-3.5,-5.8,GO:0002062,chondrocyte differentiation,M111,3,0
+1,1,1,-6,-4,-4,GO:0007420,brain development,M111,3,0
+1,1,1,-4.5,-2.7,-2.2,GO:0035107,appendage morphogenesis,M111,3,0
+1,1,1,-4.2,-7.2,-7.7,GO:1903706,regulation of hemopoiesis,M111,3,0
+1,1,1,-3.8,-3,-2,GO:0002009,morphogenesis of an epithelium,M111,3,0
+1,1,1,-2.2,-2.2,-2.2,R-HSA-2454202,Fc epsilon receptor (FCERI) signaling,M111,3,0
+1,1,1,-2.2,-5.2,-4.5,GO:2000628,regulation of miRNA metabolic process,M111,3,0
+1,1,1,-4,-4,-3.4,GO:0048839,inner ear development,M111,3,0
+1,1,1,-2.8,-3.1,-4.5,GO:0045596,negative regulation of cell differentiation,M111,3,0
+1,1,1,-2.7,-6.3,-2.7,WP2840,Hair follicle development cytodifferentiation part 3 of 3,M111,3,0
+1,1,1,-3.3,-2.3,-2.8,GO:0021953,central nervous system neuron differentiation,M111,3,0
+1,1,1,-5,-3.5,-3.5,GO:0042472,inner ear morphogenesis,M111,3,0
+1,1,1,-4.1,-5.6,-7.3,GO:1903131,mononuclear cell differentiation,M111,3,0
+1,1,1,-5.2,-5.2,-8.8,GO:0008283,cell population proliferation,M111,3,0
+1,1,1,-4.4,-3.8,-2.8,GO:0043583,ear development,M111,3,0
+1,1,1,-3.4,-2.9,-4.5,GO:0030217,T cell differentiation,M111,3,0
+1,1,1,-2.4,-3.8,-3.1,WP3527,Pre implantation embryo,M111,3,0
+1,1,1,-2.3,-3.1,-3.1,WP286,IL 3 signaling pathway,M111,3,0
+1,1,1,-3.8,-3.1,-2.4,GO:0030855,epithelial cell differentiation,M111,3,0
+1,1,1,-4.6,-3.7,-4.6,R-HSA-449147,Signaling by Interleukins,M111,3,0
+1,1,1,-4.6,-3.7,-6.5,GO:0046649,lymphocyte activation,M111,3,0
+1,1,1,-3.8,-2.5,-3.3,GO:0001701,in utero embryonic development,M111,3,0
+1,1,1,-4,-3.4,-6.4,GO:0045619,regulation of lymphocyte differentiation,M111,3,0
+1,1,1,-2.1,-3.1,-3.4,GO:0048514,blood vessel morphogenesis,M111,3,0
+1,1,1,-6.6,-4,-10,GO:0045165,cell fate commitment,M111,3,0
+1,1,1,-8,-3.5,-3.2,GO:0048598,embryonic morphogenesis,M111,3,0
+1,1,1,-4.1,-4.1,-8,GO:0010720,positive regulation of cell development,M111,3,0
+1,1,1,-4.5,-3.8,-5.9,GO:0045621,positive regulation of lymphocyte differentiation,M111,3,0
+1,1,1,-3.2,-2.6,-3.9,GO:2000514,"regulation of CD4-positive, alpha-beta T cell activation",M111,3,0
+1,1,1,-2.9,-2.9,-4.8,WP4304,Oligodendrocyte specification and differentiation leading to myelin components for CNS,M111,3,0
+1,1,1,-3.4,-2.2,-2.2,GO:0090596,sensory organ morphogenesis,M111,3,0
+1,1,1,-3.2,-2.4,-2.4,GO:0021954,central nervous system neuron development,M111,3,0
+1,1,1,-2.9,-3.9,-6.3,hsa05202,Transcriptional misregulation in cancer,M111,3,0
+1,1,1,-2.6,-2.6,-2.1,R-HSA-168898,Toll-like Receptor Cascades,M111,3,0
+1,1,1,-2.3,-5,-4.2,M167,PID AP1 PATHWAY,M111,3,0
+1,1,1,-2.1,-4.7,-5.4,WP236,Adipogenesis,M111,3,0
+1,1,1,-2.3,-5,-3.5,GO:1902895,positive regulation of miRNA transcription,M111,3,0
+1,1,1,-4.5,-2.7,-2.2,GO:0035108,limb morphogenesis,M111,3,0
+1,1,1,-2.5,-2.5,-4.8,GO:0030851,granulocyte differentiation,M111,3,0
+1,1,1,-2.4,-2.7,-2,GO:0009611,response to wounding,M111,3,0
+1,1,1,-2,-5.3,-3.2,GO:2000630,positive regulation of miRNA metabolic process,M111,3,0
+1,1,1,-6.3,-2.5,-5.4,GO:0061351,neural precursor cell proliferation,M111,3,0
+1,1,1,-2.4,-4.8,-4.8,GO:1902893,regulation of miRNA transcription,M111,3,0
+1,1,1,-5.7,-4.1,-4.1,GO:0060322,head development,M111,3,0
+1,1,1,-2.5,-2.1,-6.9,GO:0002696,positive regulation of leukocyte activation,M111,3,0
+1,1,1,-2.5,-5.2,-3.1,GO:0045639,positive regulation of myeloid cell differentiation,M111,3,0
+1,1,1,-5.7,-3.4,-4.5,GO:0048705,skeletal system morphogenesis,M111,3,0
+1,1,1,-3.2,-2.2,-6.1,GO:0002694,regulation of leukocyte activation,M111,3,0
+1,1,1,-5.9,-2.5,-4.6,GO:0043009,chordate embryonic development,M111,3,0
+1,1,1,-4.1,-3.3,-2.9,GO:0007389,pattern specification process,M111,3,0
+1,1,1,-3.8,-2.1,-6.1,GO:0051249,regulation of lymphocyte activation,M111,3,0
+1,1,1,-2.9,-2.9,-3.5,GO:0050851,antigen receptor-mediated signaling pathway,M111,3,0
+1,1,1,-3.2,-4.9,-4.9,GO:1902107,positive regulation of leukocyte differentiation,M111,3,0
+1,1,1,-4.5,-3.8,-4.5,GO:0045582,positive regulation of T cell differentiation,M111,3,0
+1,1,1,-3.2,-4.9,-4.9,GO:1903708,positive regulation of hemopoiesis,M111,3,0
+0,1,1,0,-2.1,-2.1,R-HSA-168188,Toll Like Receptor TLR6:TLR2 Cascade,M011,2,0
+1,1,0,-4.1,-2.3,0,GO:0035113,embryonic appendage morphogenesis,M110,2,0
+0,1,1,0,-2.7,-2.7,GO:0021846,cell proliferation in forebrain,M011,2,0
+0,1,1,0,-3,-2.5,GO:0002757,immune response-activating signaling pathway,M011,2,0
+1,1,0,-3.8,-2.1,0,GO:0007507,heart development,M110,2,0
+1,0,1,-3.1,0,-3.1,GO:0048341,paraxial mesoderm formation,M101,2,0
+0,1,1,0,-2.1,-2.8,M285,PID HNF3A PATHWAY,M011,2,0
+1,0,1,-2.9,0,-2.9,GO:0046638,positive regulation of alpha-beta T cell differentiation,M101,2,0
+0,1,1,0,-2.2,-2.2,R-HSA-8951671,RUNX3 regulates YAP1-mediated transcription,M011,2,0
+0,1,1,0,-2.4,-3.4,GO:0003416,endochondral bone growth,M011,2,0
+1,0,1,-2.1,0,-2.1,GO:0030324,lung development,M101,2,0
+0,1,1,0,-2.6,-2.6,GO:0045648,positive regulation of erythrocyte differentiation,M011,2,0
+0,1,1,0,-4,-3.2,WP5293,Acute myeloid leukemia,M011,2,0
+1,1,0,-2.9,-2.9,0,WP5098,T cell activation SARS CoV 2,M110,2,0
+1,0,1,-2.1,0,-2.1,GO:2000516,"positive regulation of CD4-positive, alpha-beta T cell activation",M101,2,0
+0,1,1,0,-7.8,-8.5,GO:0030099,myeloid cell differentiation,M011,2,0
+0,1,1,0,-2.8,-5.3,hsa04662,B cell receptor signaling pathway,M011,2,0
+0,1,1,0,-2.1,-2.5,GO:0006366,transcription by RNA polymerase II,M011,2,0
+0,1,1,0,-2.5,-3.6,WP3599,Transcription factor regulation in adipogenesis,M011,2,0
+1,1,0,-2.4,-2.4,0,GO:0008593,regulation of Notch signaling pathway,M110,2,0
+1,0,1,-2.4,0,-2.4,R-HSA-525793,Myogenesis,M101,2,0
+0,1,1,0,-2.1,-2.1,M290,PID IL12 STAT4 PATHWAY,M011,2,0
+1,1,0,-4.5,-7.5,0,WP2064,Neural crest differentiation,M110,2,0
+0,1,1,0,-4.6,-2.8,M183,PID IL6 7 PATHWAY,M011,2,0
+0,1,1,0,-2.2,-3.9,GO:0050778,positive regulation of immune response,M011,2,0
+0,1,1,0,-4.9,-4.9,R-HSA-9616222,Transcriptional regulation of granulopoiesis,M011,2,0
+1,0,1,-3.6,0,-2.4,GO:0007517,muscle organ development,M101,2,0
+0,1,1,0,-3,-2.2,GO:0002764,immune response-regulating signaling pathway,M011,2,0
+1,0,1,-4.1,0,-2.7,GO:0048704,embryonic skeletal system morphogenesis,M101,2,0
+0,1,1,0,-2.5,-3.1,GO:0035265,organ growth,M011,2,0
+0,1,1,0,-2.1,-2.1,M8,PID ENDOTHELIN PATHWAY,M011,2,0
+1,0,1,-3,0,-3,M186,PID PDGFRB PATHWAY,M101,2,0
+1,0,1,-3,0,-4,hsa04664,Fc epsilon RI signaling pathway,M101,2,0
+1,0,1,-2,0,-2,GO:0060872,semicircular canal development,M101,2,0
+1,0,1,-2.8,0,-2.4,GO:1901342,regulation of vasculature development,M101,2,0
+1,1,0,-2.2,-3.3,0,GO:0071407,cellular response to organic cyclic compound,M110,2,0
+1,0,1,-2.5,0,-3.8,GO:0001503,ossification,M101,2,0
+1,0,1,-2.1,0,-3.5,GO:0060350,endochondral bone morphogenesis,M101,2,0
+0,1,1,0,-2.2,-2.2,GO:0009725,response to hormone,M011,2,0
+0,1,1,0,-2.7,-4.5,GO:0002697,regulation of immune effector process,M011,2,0
+0,1,1,0,-2,-2,hsa05215,Prostate cancer,M011,2,0
+1,0,1,-3.6,0,-2.5,R-HSA-9006335,Signaling by Erythropoietin,M101,2,0
+1,0,1,-2.4,0,-2.4,GO:0060425,lung morphogenesis,M101,2,0
+1,0,1,-2.6,0,-3.2,GO:0021987,cerebral cortex development,M101,2,0
+1,0,1,-2.2,0,-2.2,GO:0002053,positive regulation of mesenchymal cell proliferation,M101,2,0
+0,1,1,0,-2.6,-3.1,GO:0002429,immune response-activating cell surface receptor signaling pathway,M011,2,0
+1,0,1,-2.1,0,-3.3,GO:0007169,transmembrane receptor protein tyrosine kinase signaling pathway,M101,2,0
+0,1,1,0,-2,-2,GO:0032870,cellular response to hormone stimulus,M011,2,0
+1,0,1,-2.5,0,-2.5,GO:0043010,camera-type eye development,M101,2,0
+0,1,1,0,-2.4,-3.1,R-HSA-381340,Transcriptional regulation of white adipocyte differentiation,M011,2,0
+1,0,1,-4.1,0,-4.1,GO:0045785,positive regulation of cell adhesion,M101,2,0
+0,1,1,0,-3.8,-3.8,GO:0046643,regulation of gamma-delta T cell activation,M011,2,0
+1,1,0,-2.2,-2.2,0,hsa04010,MAPK signaling pathway,M110,2,0
+1,0,1,-2.3,0,-3.9,GO:0045058,T cell selection,M101,2,0
+1,0,1,-3.4,0,-2.7,GO:0040017,positive regulation of locomotion,M101,2,0
+1,0,1,-3.2,0,-2.7,GO:0009952,anterior/posterior pattern specification,M101,2,0
+1,0,1,-2.4,0,-3.7,hsa04611,Platelet activation,M101,2,0
+1,0,1,-2.4,0,-2.4,GO:0048844,artery morphogenesis,M101,2,0
+0,1,1,0,-2.3,-3.3,GO:0002819,regulation of adaptive immune response,M011,2,0
+1,0,1,-2.2,0,-2.2,R-HSA-114604,GPVI-mediated activation cascade,M101,2,0
+0,1,1,0,-2.7,-2.7,WP4341,Non genomic actions of 1 25 dihydroxyvitamin D3,M011,2,0
+0,1,1,0,-2.4,-2.7,GO:0001525,angiogenesis,M011,2,0
+1,0,1,-3.7,0,-3.7,GO:0002828,regulation of type 2 immune response,M101,2,0
+0,1,1,0,-2.7,-2.7,GO:0002768,immune response-regulating cell surface receptor signaling pathway,M011,2,0
+1,0,1,-2.1,0,-4.3,GO:0002700,regulation of production of molecular mediator of immune response,M101,2,0
+1,0,1,-3.4,0,-2.9,GO:0045664,regulation of neuron differentiation,M101,2,0
+1,1,0,-2.9,-3.7,0,GO:0048483,autonomic nervous system development,M110,2,0
+0,1,1,0,-2.4,-5.1,GO:0050727,regulation of inflammatory response,M011,2,0
+1,1,0,-2,-2,0,GO:0045064,T-helper 2 cell differentiation,M110,2,0
+1,0,1,-2.3,0,-4.1,GO:1903707,negative regulation of hemopoiesis,M101,2,0
+1,0,1,-2,0,-3.1,GO:0001502,cartilage condensation,M101,2,0
+0,1,1,0,-2.1,-2.1,R-HSA-166058,MyD88:MAL(TIRAP) cascade initiated on plasma membrane,M011,2,0
+1,1,0,-2,-2,0,R-HSA-9662851,Anti-inflammatory response favouring Leishmania parasite infection,M110,2,0
+1,0,1,-4.9,0,-2.4,GO:0007405,neuroblast proliferation,M101,2,0
+1,0,1,-3.6,0,-3.6,GO:0072132,mesenchyme morphogenesis,M101,2,0
+1,1,0,-2,-2,0,R-HSA-9664433,Leishmania parasite growth and survival,M110,2,0
+1,0,1,-2.3,0,-2.3,R-HSA-512988,"Interleukin-3, Interleukin-5 and GM-CSF signaling",M101,2,0
+1,0,1,-2.6,0,-2.6,GO:0002286,T cell activation involved in immune response,M101,2,0
+1,0,1,-2,0,-3.1,GO:0098743,cell aggregation,M101,2,0
+0,1,1,0,-3.5,-2.8,GO:0034101,erythrocyte homeostasis,M011,2,0
+0,1,1,0,-2.9,-2.9,GO:1905155,positive regulation of membrane invagination,M011,2,0
+0,1,1,0,-2.4,-3.2,GO:0061515,myeloid cell development,M011,2,0
+1,0,1,-4,0,-3.4,GO:0021543,pallium development,M101,2,0
+1,0,1,-2.4,0,-2.4,GO:0048340,paraxial mesoderm morphogenesis,M101,2,0
+0,1,1,0,-4.1,-4.1,GO:0045586,regulation of gamma-delta T cell differentiation,M011,2,0
+0,1,1,0,-3.8,-2.7,M235,PID TCR CALCIUM PATHWAY,M011,2,0
+1,0,1,-2.9,0,-2.1,GO:0045765,regulation of angiogenesis,M101,2,0
+0,1,1,0,-2,-2,WP4666,Hepatitis B infection,M011,2,0
+1,1,0,-2.4,-3.4,0,GO:0060216,definitive hemopoiesis,M110,2,0
+1,0,1,-3.6,0,-3.6,GO:0048762,mesenchymal cell differentiation,M101,2,0
+0,1,1,0,-2.5,-2.1,GO:0002253,activation of immune response,M011,2,0
+1,0,1,-3.7,0,-2.1,GO:0003231,cardiac ventricle development,M101,2,0
+1,1,0,-4.3,-2.1,0,GO:0003007,heart morphogenesis,M110,2,0
+0,1,1,0,-3,-3,GO:0001892,embryonic placenta development,M011,2,0
+0,1,1,0,-2.4,-2.4,hsa04750,Inflammatory mediator regulation of TRP channels,M011,2,0
+1,0,1,-2.1,0,-2.1,WP474,Endochondral ossification,M101,2,0
+1,1,0,-2.3,-4.8,0,R-HSA-8939236,RUNX1 regulates transcription of genes involved in differentiation of HSCs,M110,2,0
+0,1,1,0,-3.1,-4.4,GO:0046645,positive regulation of gamma-delta T cell activation,M011,2,0
+1,0,1,-3.4,0,-2.7,GO:0030335,positive regulation of cell migration,M101,2,0
+0,1,1,0,-2.1,-2.8,GO:0045577,regulation of B cell differentiation,M011,2,0
+1,0,1,-2.6,0,-4.9,GO:0060348,bone development,M101,2,0
+0,1,1,0,-2.3,-3.2,GO:0002699,positive regulation of immune effector process,M011,2,0
+1,1,0,-4.1,-2.3,0,GO:0030326,embryonic limb morphogenesis,M110,2,0
+0,1,1,0,-3,-3.6,GO:0002761,regulation of myeloid leukocyte differentiation,M011,2,0
+0,1,1,0,-3.2,-2.4,M151,PID AR TF PATHWAY,M011,2,0
+1,0,1,-3.7,0,-3.7,GO:0010464,regulation of mesenchymal cell proliferation,M101,2,0
+1,1,0,-4.3,-2.7,0,GO:0060173,limb development,M110,2,0
+1,0,1,-2.5,0,-3.6,GO:0060438,trachea development,M101,2,0
+1,0,1,-2.4,0,-4.5,GO:0021781,glial cell fate commitment,M101,2,0
+0,1,1,0,-2.1,-2.8,R-HSA-3769402,Deactivation of the beta-catenin transactivating complex,M011,2,0
+0,1,1,0,-2.5,-2.5,GO:0060443,mammary gland morphogenesis,M011,2,0
+1,0,1,-2.1,0,-2.5,GO:0050866,negative regulation of cell activation,M101,2,0
+1,1,0,-5.3,-3.7,0,GO:0035050,embryonic heart tube development,M110,2,0
+1,1,0,-2.2,-2.2,0,R-HSA-9031628,NGF-stimulated transcription,M110,2,0
+1,0,1,-2.1,0,-2.8,GO:0001654,eye development,M101,2,0
+1,0,1,-2.7,0,-2.2,GO:1903038,negative regulation of leukocyte cell-cell adhesion,M101,2,0
+0,1,1,0,-2.4,-2.4,GO:0050766,positive regulation of phagocytosis,M011,2,0
+1,0,1,-2.8,0,-4.3,GO:0032944,regulation of mononuclear cell proliferation,M101,2,0
+1,0,1,-2.5,0,-2.2,R-HSA-109582,Hemostasis,M101,2,0
+1,0,1,-2.2,0,-2.6,GO:0050767,regulation of neurogenesis,M101,2,0
+0,1,1,0,-3.2,-4.3,WP4211,Transcriptional cascade regulating adipogenesis,M011,2,0
+0,1,1,0,-2.1,-3.2,WP366,TGF beta signaling pathway,M011,2,0
+1,0,1,-2.9,0,-2.9,GO:0060349,bone morphogenesis,M101,2,0
+1,1,0,-5.5,-2.9,0,GO:0097154,GABAergic neuron differentiation,M110,2,0
+1,0,1,-2.4,0,-5.3,GO:0070665,positive regulation of leukocyte proliferation,M101,2,0
+0,1,1,0,-2.2,-2.2,GO:0061180,mammary gland epithelium development,M011,2,0
+0,1,1,0,-3,-2.5,R-HSA-8878171,Transcriptional regulation by RUNX1,M011,2,0
+1,0,1,-3.1,0,-3.1,GO:0048663,neuron fate commitment,M101,2,0
+1,1,0,-6.9,-3.3,0,GO:0071363,cellular response to growth factor stimulus,M110,2,0
+0,1,1,0,-2.1,-2.1,R-HSA-181438,Toll Like Receptor 2 (TLR2) Cascade,M011,2,0
+1,0,1,-3.5,0,-3.5,GO:0022407,regulation of cell-cell adhesion,M101,2,0
+1,1,0,-3.5,-2.8,0,GO:0003143,embryonic heart tube morphogenesis,M110,2,0
+1,0,1,-2.4,0,-2.4,GO:0050731,positive regulation of peptidyl-tyrosine phosphorylation,M101,2,0
+1,0,1,-2,0,-2,WP4657,22q11 2 copy number variation syndrome,M101,2,0
+0,1,1,0,-2.7,-2.7,R-HSA-8939245,RUNX1 regulates transcription of genes involved in BCR signaling,M011,2,0
+0,1,1,0,-3.3,-4.2,M60,PID NFAT TFPATHWAY,M011,2,0
+0,1,1,0,-2.7,-4.4,WP5083,Neuroinflammation and glutamatergic signaling,M011,2,0
+1,0,1,-2.2,0,-2.2,GO:0090102,cochlea development,M101,2,0
+1,0,1,-2.5,0,-3.7,GO:0010721,negative regulation of cell development,M101,2,0
+0,1,1,0,-2.2,-2.7,GO:0001890,placenta development,M011,2,0
+1,0,1,-2.5,0,-3,GO:0051250,negative regulation of lymphocyte activation,M101,2,0
+0,1,1,0,-2.2,-3.6,GO:0050764,regulation of phagocytosis,M011,2,0
+1,1,0,-2.2,-2.2,0,M34,PID TCR PATHWAY,M110,2,0
+0,1,1,0,-2.3,-2.9,R-HSA-9843745,Adipogenesis,M011,2,0
+0,1,1,0,-5.7,-5,GO:0002573,myeloid leukocyte differentiation,M011,2,0
+0,1,1,0,-3.1,-3.8,hsa04658,Th1 and Th2 cell differentiation,M011,2,0
+0,1,1,0,-2.2,-3.2,GO:0098868,bone growth,M011,2,0
+1,0,1,-2.4,0,-2.4,GO:0050868,negative regulation of T cell activation,M101,2,0
+1,0,1,-2.2,0,-3.6,GO:0001763,morphogenesis of a branching structure,M101,2,0
+1,0,1,-2.3,0,-2.3,GO:0051145,smooth muscle cell differentiation,M101,2,0
+0,1,1,0,-2.1,-4.4,GO:0010001,glial cell differentiation,M011,2,0
+1,0,1,-3.4,0,-3.9,GO:0022409,positive regulation of cell-cell adhesion,M101,2,0
+0,1,1,0,-6.9,-4.1,hsa05200,Pathways in cancer,M011,2,0
+1,0,1,-3.4,0,-3.4,GO:0021780,glial cell fate specification,M101,2,0
+0,1,1,0,-2.8,-4,hsa04659,Th17 cell differentiation,M011,2,0
+0,1,1,0,-2.3,-2.3,GO:0071241,cellular response to inorganic substance,M011,2,0
+0,1,1,0,-3.7,-8.7,WP23,B cell receptor signaling pathway,M011,2,0
+1,0,1,-2.2,0,-4.3,GO:0046635,positive regulation of alpha-beta T cell activation,M101,2,0
+1,0,1,-4,0,-2.6,GO:0010632,regulation of epithelial cell migration,M101,2,0
+1,0,1,-2.6,0,-2.6,GO:0051960,regulation of nervous system development,M101,2,0
+0,1,1,0,-3.5,-2.9,GO:0042113,B cell activation,M011,2,0
+0,1,1,0,-2.4,-2.8,GO:0002064,epithelial cell development,M011,2,0
+1,1,0,-4.3,-2.7,0,GO:0048736,appendage development,M110,2,0
+1,0,1,-2.3,0,-2.8,GO:0002695,negative regulation of leukocyte activation,M101,2,0
+0,1,1,0,-2.6,-6,GO:0042063,gliogenesis,M011,2,0
+1,0,1,-2.1,0,-2.1,GO:0014032,neural crest cell development,M101,2,0
+0,1,1,0,-3.8,-3.1,GO:0030218,erythrocyte differentiation,M011,2,0
+1,0,1,-2.9,0,-2.2,GO:0021879,forebrain neuron differentiation,M101,2,0
+1,0,1,-3.7,0,-2.9,GO:0021872,forebrain generation of neurons,M101,2,0
+0,1,1,0,-3.3,-2.5,GO:0021988,olfactory lobe development,M011,2,0
+1,0,1,-2.6,0,-5,GO:0030888,regulation of B cell proliferation,M101,2,0
+1,0,1,-2.5,0,-3.9,GO:0050670,regulation of lymphocyte proliferation,M101,2,0
+1,0,1,-2.6,0,-3.4,GO:0043300,regulation of leukocyte degranulation,M101,2,0
+1,0,1,-3.4,0,-2.2,GO:0003208,cardiac ventricle morphogenesis,M101,2,0
+1,0,1,-4.4,0,-2,GO:0002830,positive regulation of type 2 immune response,M101,2,0
+1,0,1,-2.5,0,-2,GO:0001936,regulation of endothelial cell proliferation,M101,2,0
+1,0,1,-3.5,0,-2.8,GO:2000147,positive regulation of cell motility,M101,2,0
+0,1,1,0,-2.5,-2.1,GO:0048872,homeostasis of number of cells,M011,2,0
+0,1,1,0,-2.9,-2.2,WP2355,Corticotropin releasing hormone signaling pathway,M011,2,0
+1,1,0,-2.1,-2.1,0,R-HSA-8875878,MET promotes cell motility,M110,2,0
+0,1,1,0,-3,-5.9,GO:0050777,negative regulation of immune response,M011,2,0
+0,1,1,0,-2.7,-2.7,GO:0071425,hematopoietic stem cell proliferation,M011,2,0
+1,0,1,-2.3,0,-3.9,GO:0050728,negative regulation of inflammatory response,M101,2,0
+1,1,0,-2,-3,0,GO:0031175,neuron projection development,M110,2,0
+1,0,1,-3.1,0,-5.1,GO:0061061,muscle structure development,M101,2,0
+1,0,1,-2.4,0,-3.6,GO:1902106,negative regulation of leukocyte differentiation,M101,2,0
+0,1,1,0,-2.7,-3.2,GO:0030031,cell projection assembly,M011,2,0
+1,0,1,-5,0,-3.6,GO:0048706,embryonic skeletal system development,M101,2,0
+0,1,1,0,-2.6,-3.2,GO:0022612,gland morphogenesis,M011,2,0
+1,0,1,-2.2,0,-2.2,GO:0002067,glandular epithelial cell differentiation,M101,2,0
+1,1,0,-3.1,-3.1,0,R-HSA-9006934,Signaling by Receptor Tyrosine Kinases,M110,2,0
+0,1,1,0,-7.2,-4.3,WP5434,Pathways in cancer,M011,2,0
+1,0,1,-4.3,0,-3.1,GO:0002520,immune system development,M101,2,0
+1,1,0,-2.5,-3.3,0,GO:0033077,T cell differentiation in thymus,M110,2,0
+1,0,1,-2.2,0,-2.7,GO:0048754,branching morphogenesis of an epithelial tube,M101,2,0
+1,0,1,-2,0,-2.6,GO:0072009,nephron epithelium development,M101,2,0
+0,1,1,0,-2.5,-4.5,GO:0031348,negative regulation of defense response,M011,2,0
+1,0,1,-3.6,0,-7.4,WP3945,TYROBP causal network in microglia,M101,2,0
+1,0,1,-2.3,0,-5,GO:0048709,oligodendrocyte differentiation,M101,2,0
+1,0,1,-3.3,0,-2,GO:0060541,respiratory system development,M101,2,0
+1,0,1,-2.5,0,-2,GO:0071559,response to transforming growth factor beta,M101,2,0
+0,1,1,0,-2.8,-2.4,GO:0048545,response to steroid hormone,M011,2,0
+0,1,1,0,-3.4,-4.8,GO:0045588,positive regulation of gamma-delta T cell differentiation,M011,2,0
+1,0,1,-2.7,0,-2.7,GO:0001708,cell fate specification,M101,2,0
+0,1,1,0,-3.3,-2.5,WP3863,T cell antigen receptor TCR pathway during Staphylococcus aureus infection,M011,2,0
+1,1,0,-2.4,-3.4,0,GO:0048339,paraxial mesoderm development,M110,2,0
+1,0,1,-2.1,0,-4.3,GO:0032946,positive regulation of mononuclear cell proliferation,M101,2,0
+1,1,0,-2.4,-3.1,0,hsa04935,"Growth hormone synthesis, secretion and action",M110,2,0
+1,1,0,-2.1,-2.7,0,GO:2000736,regulation of stem cell differentiation,M110,2,0
+1,0,1,-2.1,0,-3.4,GO:0051962,positive regulation of nervous system development,M101,2,0
+1,1,0,-2.3,-3.1,0,hsa04660,T cell receptor signaling pathway,M110,2,0
+1,0,1,-3,0,-6.6,GO:0051251,positive regulation of lymphocyte activation,M101,2,0
+0,1,1,0,-3.1,-4,GO:0140467,integrated stress response signaling,M011,2,0
+0,1,1,0,-3.1,-5.8,hsa04380,Osteoclast differentiation,M011,2,0
+0,1,1,0,-4.5,-7.4,WP4149,White fat cell differentiation,M011,2,0
+0,1,1,0,-2.5,-2.5,WP395,IL 4 signaling pathway,M011,2,0
+0,1,1,0,-5.3,-2.6,WP4540,Hippo signaling regulation pathways,M011,2,0
+1,0,1,-2,0,-2,GO:0030323,respiratory tube development,M101,2,0
+0,1,1,0,-2.6,-3.7,GO:0001819,positive regulation of cytokine production,M011,2,0
+0,1,1,0,-2.9,-2.9,GO:0060100,"positive regulation of phagocytosis, engulfment",M011,2,0
+0,1,1,0,-3.2,-3.2,GO:0071396,cellular response to lipid,M011,2,0
+0,1,1,0,-2.4,-4.1,M8626,SIG BCR SIGNALING PATHWAY,M011,2,0
+1,0,1,-2,0,-2,GO:0043301,negative regulation of leukocyte degranulation,M101,2,0
+1,0,1,-2.5,0,-2.5,M141,PID PI3KCI PATHWAY,M101,2,0
+0,1,1,0,-2.1,-2.1,R-HSA-168179,Toll Like Receptor TLR1:TLR2 Cascade,M011,2,0
+0,1,1,0,-2.7,-4.5,GO:0001944,vasculature development,M011,2,0
+0,1,1,0,-3.5,-2.4,R-HSA-9758941,Gastrulation,M011,2,0
+1,1,0,-3.5,-2.6,0,R-HSA-9680350,Signaling by CSF1 (M-CSF) in myeloid cells,M110,2,0
+1,1,0,-2.2,-2.2,0,GO:0050852,T cell receptor signaling pathway,M110,2,0
+0,1,1,0,-4.5,-4.5,WP5373,Osteoarthritic chondrocyte hypertrophy,M011,2,0
+1,0,1,-2.4,0,-4.8,GO:0070663,regulation of leukocyte proliferation,M101,2,0
+1,0,1,-4.4,0,-3.7,R-HSA-6785807,Interleukin-4 and Interleukin-13 signaling,M101,2,0
+0,1,1,0,-4.1,-3.3,hsa05221,Acute myeloid leukemia,M011,2,0
+1,0,1,-2.1,0,-2.1,WP4808,Endochondral ossification with skeletal dysplasias,M101,2,0
+1,0,1,-3.4,0,-2.4,R-HSA-912631,Regulation of signaling by CBL,M101,2,0
+0,1,1,0,-2.4,-3.1,M195,PID CMYB PATHWAY,M011,2,0
+0,1,1,0,-2.8,-2.8,GO:0045598,regulation of fat cell differentiation,M011,2,0
+0,1,1,0,-2.6,-3.6,GO:0071345,cellular response to cytokine stimulus,M011,2,0
+1,1,0,-3.5,-2.4,0,GO:0007498,mesoderm development,M110,2,0
+1,0,1,-2.9,0,-2.3,GO:0014033,neural crest cell differentiation,M101,2,0
+1,0,1,-2,0,-3.4,GO:0061138,morphogenesis of a branching epithelium,M101,2,0
+1,0,1,-2.4,0,-2.7,GO:0051046,regulation of secretion,M101,2,0
+1,1,0,-2.5,-2.5,0,GO:0035136,forelimb morphogenesis,M110,2,0
+1,0,1,-2.9,0,-2.9,GO:0043304,regulation of mast cell degranulation,M101,2,0
+0,0,1,0,0,-2.1,R-HSA-8878159,Transcriptional regulation by RUNX3,M001,1,0
+1,0,0,-2.9,0,0,GO:1904018,positive regulation of vasculature development,M100,1,0
+0,0,1,0,0,-4.2,GO:0032808,lacrimal gland development,M001,1,0
+0,0,1,0,0,-2.7,GO:0045060,negative thymic T cell selection,M001,1,0
+0,0,1,0,0,-2.2,GO:0009617,response to bacterium,M001,1,0
+0,1,0,0,-3.7,0,hsa04015,Rap1 signaling pathway,M010,1,0
+0,1,0,0,-2.2,0,R-HSA-2404192,Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R),M010,1,0
+1,0,0,-2,0,0,GO:0019082,viral protein processing,M100,1,0
+0,1,0,0,-2.2,0,GO:0019722,calcium-mediated signaling,M010,1,0
+0,0,1,0,0,-2.2,GO:2000179,positive regulation of neural precursor cell proliferation,M001,1,0
+0,0,1,0,0,-2.2,GO:0042098,T cell proliferation,M001,1,0
+0,0,1,0,0,-2.4,GO:0045063,T-helper 1 cell differentiation,M001,1,0
+0,0,1,0,0,-3.7,GO:1901741,positive regulation of myoblast fusion,M001,1,0
+1,0,0,-2.5,0,0,WP5224,2q37 copy number variation syndrome,M100,1,0
+0,0,1,0,0,-2.9,GO:0051056,regulation of small GTPase mediated signal transduction,M001,1,0
+0,0,1,0,0,-2.7,R-HSA-975577,N-Glycan antennae elongation,M001,1,0
+0,1,0,0,-2.4,0,hsa04915,Estrogen signaling pathway,M010,1,0
+0,1,0,0,-3.3,0,GO:0099536,synaptic signaling,M010,1,0
+0,1,0,0,-2.7,0,GO:0045010,actin nucleation,M010,1,0
+0,1,0,0,-3.9,0,GO:0002244,hematopoietic progenitor cell differentiation,M010,1,0
+0,1,0,0,-2.4,0,GO:0002262,myeloid cell homeostasis,M010,1,0
+1,0,0,-2.4,0,0,GO:2000392,regulation of lamellipodium morphogenesis,M100,1,0
+0,0,1,0,0,-2.4,GO:0032835,glomerulus development,M001,1,0
+1,0,0,-2.3,0,0,GO:0003170,heart valve development,M100,1,0
+0,1,0,0,-3.8,0,GO:0001818,negative regulation of cytokine production,M010,1,0
+0,1,0,0,-3.7,0,hsa04724,Glutamatergic synapse,M010,1,0
+1,0,0,-2.7,0,0,GO:0045630,positive regulation of T-helper 2 cell differentiation,M100,1,0
+0,1,0,0,-4,0,GO:0030225,macrophage differentiation,M010,1,0
+0,0,1,0,0,-2.4,GO:0051896,regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction,M001,1,0
+0,0,1,0,0,-2.7,GO:0002576,platelet degranulation,M001,1,0
+1,0,0,-3.9,0,0,GO:0010562,positive regulation of phosphorus metabolic process,M100,1,0
+1,0,0,-3.9,0,0,GO:0045937,positive regulation of phosphate metabolic process,M100,1,0
+0,1,0,0,-2.9,0,R-HSA-2219530,Constitutive Signaling by Aberrant PI3K in Cancer,M010,1,0
+0,0,1,0,0,-2.4,GO:0045830,positive regulation of isotype switching,M001,1,0
+0,0,1,0,0,-2.1,GO:0006636,unsaturated fatty acid biosynthetic process,M001,1,0
+0,1,0,0,-3.2,0,GO:0071384,cellular response to corticosteroid stimulus,M010,1,0
+0,1,0,0,-2.6,0,GO:0070849,response to epidermal growth factor,M010,1,0
+0,0,1,0,0,-2.9,GO:0060070,canonical Wnt signaling pathway,M001,1,0
+0,1,0,0,-2.1,0,WP69,T cell receptor signaling pathway,M010,1,0
+0,1,0,0,-2.2,0,R-HSA-2428928,IRS-related events triggered by IGF1R,M010,1,0
+0,1,0,0,-2.4,0,GO:0048565,digestive tract development,M010,1,0
+0,0,1,0,0,-3.5,R-HSA-76002,"Platelet activation, signaling and aggregation",M001,1,0
+0,0,1,0,0,-2.2,GO:0043306,positive regulation of mast cell degranulation,M001,1,0
+0,0,1,0,0,-2.6,GO:0150077,regulation of neuroinflammatory response,M001,1,0
+0,0,1,0,0,-2.9,GO:0045579,positive regulation of B cell differentiation,M001,1,0
+0,1,0,0,-2.1,0,hsa05163,Human cytomegalovirus infection,M010,1,0
+0,0,1,0,0,-2.9,GO:0046640,regulation of alpha-beta T cell proliferation,M001,1,0
+0,0,1,0,0,-2,GO:0018904,ether metabolic process,M001,1,0
+0,0,1,0,0,-4.5,GO:0021795,cerebral cortex cell migration,M001,1,0
+1,0,0,-2.6,0,0,WP4830,GDNF RET signaling axis,M100,1,0
+0,0,1,0,0,-2.3,GO:0045620,negative regulation of lymphocyte differentiation,M001,1,0
+1,0,0,-2.1,0,0,M177,PID EPHA FWDPATHWAY,M100,1,0
+0,1,0,0,-2.1,0,WP5087,Pleural mesothelioma,M010,1,0
+0,0,1,0,0,-2.1,WP2876,Pregnane X receptor pathway,M001,1,0
+0,0,1,0,0,-2.4,GO:0045059,positive thymic T cell selection,M001,1,0
+0,0,1,0,0,-2.4,GO:0030854,positive regulation of granulocyte differentiation,M001,1,0
+1,0,0,-2.4,0,0,GO:0001779,natural killer cell differentiation,M100,1,0
+0,1,0,0,-4.4,0,GO:0048589,developmental growth,M010,1,0
+1,0,0,-2.5,0,0,GO:0032656,regulation of interleukin-13 production,M100,1,0
+0,0,1,0,0,-2.2,GO:0060441,epithelial tube branching involved in lung morphogenesis,M001,1,0
+0,0,1,0,0,-2.1,GO:0042102,positive regulation of T cell proliferation,M001,1,0
+0,0,1,0,0,-3.7,WP2858,Ectoderm differentiation,M001,1,0
+0,1,0,0,-3.2,0,GO:1902414,protein localization to cell junction,M010,1,0
+0,1,0,0,-2.4,0,WP3972,PDGFR beta pathway,M010,1,0
+1,0,0,-2.7,0,0,GO:0035116,embryonic hindlimb morphogenesis,M100,1,0
+0,0,1,0,0,-2.8,GO:0120035,regulation of plasma membrane bounded cell projection organization,M001,1,0
+0,0,1,0,0,-2.7,GO:0031344,regulation of cell projection organization,M001,1,0
+0,0,1,0,0,-2.1,GO:0002287,alpha-beta T cell activation involved in immune response,M001,1,0
+0,1,0,0,-3.1,0,GO:0099537,trans-synaptic signaling,M010,1,0
+0,1,0,0,-3.2,0,GO:0035019,somatic stem cell population maintenance,M010,1,0
+0,1,0,0,-2.4,0,GO:0030838,positive regulation of actin filament polymerization,M010,1,0
+0,0,1,0,0,-2.2,GO:0090103,cochlea morphogenesis,M001,1,0
+0,1,0,0,-2.6,0,GO:0050804,modulation of chemical synaptic transmission,M010,1,0
+1,0,0,-2,0,0,GO:0001710,mesodermal cell fate commitment,M100,1,0
+0,0,1,0,0,-2.2,GO:0051098,regulation of binding,M001,1,0
+1,0,0,-2.2,0,0,GO:0033081,regulation of T cell differentiation in thymus,M100,1,0
+0,1,0,0,-2.6,0,GO:0099177,regulation of trans-synaptic signaling,M010,1,0
+0,0,1,0,0,-2.2,GO:0046629,gamma-delta T cell activation,M001,1,0
+0,0,1,0,0,-2,WP4159,GABA receptor signaling,M001,1,0
+0,1,0,0,-3.7,0,R-HSA-8939247,RUNX1 regulates transcription of genes involved in interleukin signaling,M010,1,0
+0,0,1,0,0,-2.1,WP3640,Imatinib and chronic myeloid leukemia,M001,1,0
+0,1,0,0,-3.5,0,GO:0002335,mature B cell differentiation,M010,1,0
+0,0,1,0,0,-3.1,WP3612,Photodynamic therapy induced NFE2L2 NRF2 survival signaling,M001,1,0
+1,0,0,-2,0,0,R-HSA-6803157,Antimicrobial peptides,M100,1,0
+0,1,0,0,-2.2,0,GO:0016553,base conversion or substitution editing,M010,1,0
+0,1,0,0,-2.6,0,GO:0045616,regulation of keratinocyte differentiation,M010,1,0
+0,1,0,0,-2.5,0,GO:0002705,positive regulation of leukocyte mediated immunity,M010,1,0
+0,0,1,0,0,-2.1,R-HSA-201681,TCF dependent signaling in response to WNT,M001,1,0
+0,1,0,0,-2.7,0,GO:0003334,keratinocyte development,M010,1,0
+0,0,1,0,0,-2.5,WP5385,Growth factors and hormones in beta cell proliferation,M001,1,0
+0,1,0,0,-2.4,0,CORUM:5233,TNF-alpha/NF-kappa B signaling complex 5,M010,1,0
+1,0,0,-2.4,0,0,GO:0021877,forebrain neuron fate commitment,M100,1,0
+0,0,1,0,0,-2.6,GO:0046639,negative regulation of alpha-beta T cell differentiation,M001,1,0
+0,0,1,0,0,-5.4,WP5198,Inflammatory bowel disease signaling,M001,1,0
+0,1,0,0,-2.2,0,hsa04657,IL-17 signaling pathway,M010,1,0
+0,1,0,0,-3.8,0,GO:0007612,learning,M010,1,0
+0,0,1,0,0,-2.6,GO:0030879,mammary gland development,M001,1,0
+0,0,1,0,0,-3.1,R-HSA-8951430,RUNX3 regulates WNT signaling,M001,1,0
+0,0,1,0,0,-2.3,GO:0032655,regulation of interleukin-12 production,M001,1,0
+0,0,1,0,0,-2.1,R-HSA-201722,Formation of the beta-catenin:TCF transactivating complex,M001,1,0
+0,0,1,0,0,-2.4,GO:0060143,positive regulation of syncytium formation by plasma membrane fusion,M001,1,0
+0,1,0,0,-2.5,0,WP5381,Smith Magenis and Potocki Lupski syndrome copy number variation,M010,1,0
+0,1,0,0,-2.1,0,GO:0045787,positive regulation of cell cycle,M010,1,0
+0,0,1,0,0,-2.7,GO:0042088,T-helper 1 type immune response,M001,1,0
+0,1,0,0,-4.5,0,GO:0035418,protein localization to synapse,M010,1,0
+0,1,0,0,-2.6,0,M65,PID FRA PATHWAY,M010,1,0
+0,0,1,0,0,-2.2,M22,PID GMCSF PATHWAY,M001,1,0
+0,0,1,0,0,-2,WP167,Eicosanoid synthesis,M001,1,0
+1,0,0,-2.4,0,0,GO:0061371,determination of heart left/right asymmetry,M100,1,0
+0,1,0,0,-3,0,GO:0018108,peptidyl-tyrosine phosphorylation,M010,1,0
+0,1,0,0,-2.3,0,hsa04218,Cellular senescence,M010,1,0
+0,0,1,0,0,-2.7,GO:0002698,negative regulation of immune effector process,M001,1,0
+0,0,1,0,0,-2.7,GO:0002861,regulation of inflammatory response to antigenic stimulus,M001,1,0
+0,1,0,0,-2.6,0,GO:0021772,olfactory bulb development,M010,1,0
+0,0,1,0,0,-4.2,M28,PID IL4 2PATHWAY,M001,1,0
+0,1,0,0,-3.4,0,GO:0030216,keratinocyte differentiation,M010,1,0
+0,1,0,0,-3.1,0,GO:0045669,positive regulation of osteoblast differentiation,M010,1,0
+0,1,0,0,-3.1,0,GO:0010863,positive regulation of phospholipase C activity,M010,1,0
+0,1,0,0,-2.4,0,GO:0021783,preganglionic parasympathetic fiber development,M010,1,0
+1,0,0,-2.1,0,0,GO:0038084,vascular endothelial growth factor signaling pathway,M100,1,0
+0,0,1,0,0,-4,GO:0021801,cerebral cortex radial glia-guided migration,M001,1,0
+1,0,0,-2.3,0,0,M48,PID MET PATHWAY,M100,1,0
+0,1,0,0,-2.2,0,GO:0071774,response to fibroblast growth factor,M010,1,0
+0,1,0,0,-2.6,0,WP4262,Breast cancer pathway,M010,1,0
+0,1,0,0,-2.4,0,R-HSA-1912408,Pre-NOTCH Transcription and Translation,M010,1,0
+0,0,1,0,0,-3.8,GO:0050680,negative regulation of epithelial cell proliferation,M001,1,0
+1,0,0,-2.2,0,0,GO:0048935,peripheral nervous system neuron development,M100,1,0
+1,0,0,-3.4,0,0,WP5348,11p11 2 copy number variation syndrome,M100,1,0
+1,0,0,-3.3,0,0,GO:0001709,cell fate determination,M100,1,0
+0,1,0,0,-2.4,0,GO:1990778,protein localization to cell periphery,M010,1,0
+1,0,0,-2.4,0,0,R-HSA-6811438,Intra-Golgi traffic,M100,1,0
+0,0,1,0,0,-3.2,M255,PID HIF1 TFPATHWAY,M001,1,0
+0,1,0,0,-2,0,GO:0070102,interleukin-6-mediated signaling pathway,M010,1,0
+0,1,0,0,-3.1,0,WP3655,Hypothetical craniofacial development pathway,M010,1,0
+0,0,1,0,0,-3.9,GO:0032330,regulation of chondrocyte differentiation,M001,1,0
+0,0,1,0,0,-3.2,GO:0002822,regulation of adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains,M001,1,0
+0,1,0,0,-2.6,0,GO:0007632,visual behavior,M010,1,0
+0,0,1,0,0,-2.1,GO:0032673,regulation of interleukin-4 production,M001,1,0
+1,0,0,-3.1,0,0,GO:0043535,regulation of blood vessel endothelial cell migration,M100,1,0
+0,0,1,0,0,-2.4,GO:0008347,glial cell migration,M001,1,0
+0,1,0,0,-2,0,GO:0060911,cardiac cell fate commitment,M010,1,0
+0,0,1,0,0,-2.2,R-HSA-383280,Nuclear Receptor transcription pathway,M001,1,0
+0,1,0,0,-2.1,0,WP4880,Host pathogen interaction of human coronaviruses interferon induction,M010,1,0
+0,0,1,0,0,-3.7,CORUM:2695,ETS2-FOS-JUN complex,M001,1,0
+0,1,0,0,-2.7,0,GO:0007610,behavior,M010,1,0
+0,1,0,0,-2.9,0,R-HSA-112315,Transmission across Chemical Synapses,M010,1,0
+0,1,0,0,-2.1,0,hsa04971,Gastric acid secretion,M010,1,0
+0,1,0,0,-2.4,0,GO:0046777,protein autophosphorylation,M010,1,0
+1,0,0,-3,0,0,GO:0043516,"regulation of DNA damage response, signal transduction by p53 class mediator",M100,1,0
+0,0,1,0,0,-3.2,GO:0002891,positive regulation of immunoglobulin mediated immune response,M001,1,0
+0,0,1,0,0,-2.2,GO:0031214,biomineral tissue development,M001,1,0
+1,0,0,-2.7,0,0,GO:0042092,type 2 immune response,M100,1,0
+0,0,1,0,0,-2.9,M279,PID RB 1PATHWAY,M001,1,0
+0,0,1,0,0,-2.2,R-HSA-975576,N-glycan antennae elongation in the medial/trans-Golgi,M001,1,0
+0,1,0,0,-2.1,0,R-HSA-163685,Integration of energy metabolism,M010,1,0
+0,1,0,0,-2.3,0,GO:0055123,digestive system development,M010,1,0
+0,1,0,0,-2.7,0,WP28,Selenium metabolism and selenoproteins,M010,1,0
+0,0,1,0,0,-2.9,GO:0002712,regulation of B cell mediated immunity,M001,1,0
+0,1,0,0,-2,0,M115,PID REG GR PATHWAY,M010,1,0
+1,0,0,-3.1,0,0,CORUM:2536,PLC-gamma-2-SLP-76-Lyn-Grb2 complex,M100,1,0
+1,0,0,-2.1,0,0,GO:0090049,regulation of cell migration involved in sprouting angiogenesis,M100,1,0
+1,0,0,-2.5,0,0,GO:0060251,regulation of glial cell proliferation,M100,1,0
+0,1,0,0,-2.1,0,GO:0071354,cellular response to interleukin-6,M010,1,0
+0,1,0,0,-3.2,0,GO:0021545,cranial nerve development,M010,1,0
+0,0,1,0,0,-2.7,GO:0042908,xenobiotic transport,M001,1,0
+0,0,1,0,0,-2.1,GO:0048596,embryonic camera-type eye morphogenesis,M001,1,0
+0,1,0,0,-3,0,GO:0021510,spinal cord development,M010,1,0
+0,0,1,0,0,-2.9,GO:0002720,positive regulation of cytokine production involved in immune response,M001,1,0
+0,1,0,0,-3.5,0,GO:0030183,B cell differentiation,M010,1,0
+1,0,0,-2,0,0,GO:0007368,determination of left/right symmetry,M100,1,0
+0,0,1,0,0,-7.3,GO:0050871,positive regulation of B cell activation,M001,1,0
+0,1,0,0,-2.4,0,GO:0035640,exploration behavior,M010,1,0
+0,1,0,0,-2.7,0,M15,PID LYSOPHOSPHOLIPID PATHWAY,M010,1,0
+1,0,0,-2.1,0,0,R-HSA-9830369,Kidney development,M100,1,0
+0,1,0,0,-2,0,R-HSA-1433559,Regulation of KIT signaling,M010,1,0
+1,0,0,-2.4,0,0,GO:0021902,commitment of neuronal cell to specific neuron type in forebrain,M100,1,0
+1,0,0,-3.8,0,0,GO:0021892,cerebral cortex GABAergic interneuron differentiation,M100,1,0
+0,0,1,0,0,-5.4,WP4844,Influence of laminopathies on Wnt signaling,M001,1,0
+0,0,1,0,0,-3.6,WP3892,Development of pulmonary dendritic cells and macrophage subsets,M001,1,0
+1,0,0,-3.7,0,0,GO:2000106,regulation of leukocyte apoptotic process,M100,1,0
+0,1,0,0,-3.4,0,GO:0098916,anterograde trans-synaptic signaling,M010,1,0
+0,0,1,0,0,-3.8,GO:0002063,chondrocyte development,M001,1,0
+0,0,1,0,0,-2.3,GO:0048048,embryonic eye morphogenesis,M001,1,0
+0,1,0,0,-2.3,0,GO:0007409,axonogenesis,M010,1,0
+0,1,0,0,-2,0,WP4337,ncRNAs involved in STAT3 signaling in hepatocellular carcinoma,M010,1,0
+0,0,1,0,0,-3.5,GO:0050769,positive regulation of neurogenesis,M001,1,0
+1,0,0,-2.1,0,0,GO:0071560,cellular response to transforming growth factor beta stimulus,M100,1,0
+0,0,1,0,0,-2.2,GO:0042093,T-helper cell differentiation,M001,1,0
+1,0,0,-2.4,0,0,GO:0060253,negative regulation of glial cell proliferation,M100,1,0
+0,0,1,0,0,-2.4,GO:0001837,epithelial to mesenchymal transition,M001,1,0
+0,0,1,0,0,-2.3,GO:0002704,negative regulation of leukocyte mediated immunity,M001,1,0
+0,0,1,0,0,-3.9,GO:0002702,positive regulation of production of molecular mediator of immune response,M001,1,0
+1,0,0,-2.3,0,0,GO:1901796,regulation of signal transduction by p53 class mediator,M100,1,0
+0,0,1,0,0,-2.9,GO:0046633,alpha-beta T cell proliferation,M001,1,0
+0,0,1,0,0,-2,GO:1990858,cellular response to lectin,M001,1,0
+1,0,0,-2.4,0,0,GO:2000108,positive regulation of leukocyte apoptotic process,M100,1,0
+0,1,0,0,-3.7,0,GO:0010518,positive regulation of phospholipase activity,M010,1,0
+0,0,1,0,0,-2.7,GO:2000739,regulation of mesenchymal stem cell differentiation,M001,1,0
+0,0,1,0,0,-2.2,GO:0032103,positive regulation of response to external stimulus,M001,1,0
+0,0,1,0,0,-3.8,GO:0032943,mononuclear cell proliferation,M001,1,0
+0,1,0,0,-2.5,0,GO:0051345,positive regulation of hydrolase activity,M010,1,0
+0,0,1,0,0,-3.5,WP170,Nuclear receptors,M001,1,0
+0,0,1,0,0,-2,GO:0036037,"CD8-positive, alpha-beta T cell activation",M001,1,0
+0,0,1,0,0,-3.2,GO:0033630,positive regulation of cell adhesion mediated by integrin,M001,1,0
+0,0,1,0,0,-2.1,GO:0030522,intracellular receptor signaling pathway,M001,1,0
+1,0,0,-2.6,0,0,GO:0003176,aortic valve development,M100,1,0
+0,0,1,0,0,-2.1,GO:0072073,kidney epithelium development,M001,1,0
+1,0,0,-2.1,0,0,R-HSA-6806834,Signaling by MET,M100,1,0
+0,0,1,0,0,-3.5,GO:0002718,regulation of cytokine production involved in immune response,M001,1,0
+0,0,1,0,0,-3.1,GO:0043368,positive T cell selection,M001,1,0
+0,1,0,0,-3.1,0,hsa04540,Gap junction,M010,1,0
+1,0,0,-2.2,0,0,GO:0010921,regulation of phosphatase activity,M100,1,0
+0,1,0,0,-2.7,0,WP4685,Melanoma,M010,1,0
+0,1,0,0,-2.9,0,WP3932,Focal adhesion PI3K Akt mTOR signaling pathway,M010,1,0
+0,1,0,0,-2.5,0,GO:0007219,Notch signaling pathway,M010,1,0
+0,0,1,0,0,-2.5,WP3995,Prion disease pathway,M001,1,0
+0,0,1,0,0,-2.2,GO:0031349,positive regulation of defense response,M001,1,0
+0,0,1,0,0,-2.7,GO:0015908,fatty acid transport,M001,1,0
+1,0,0,-2.4,0,0,GO:0008064,regulation of actin polymerization or depolymerization,M100,1,0
+0,1,0,0,-4.4,0,GO:0040007,growth,M010,1,0
+0,0,1,0,0,-2.5,GO:0043392,negative regulation of DNA binding,M001,1,0
+0,1,0,0,-3,0,GO:0018212,peptidyl-tyrosine modification,M010,1,0
+0,1,0,0,-2.7,0,GO:0048667,cell morphogenesis involved in neuron differentiation,M010,1,0
+0,1,0,0,-2.6,0,GO:0120039,plasma membrane bounded cell projection morphogenesis,M010,1,0
+0,0,1,0,0,-2.3,GO:0045600,positive regulation of fat cell differentiation,M001,1,0
+0,0,1,0,0,-2.1,GO:0032332,positive regulation of chondrocyte differentiation,M001,1,0
+0,1,0,0,-2.1,0,GO:0098655,monoatomic cation transmembrane transport,M010,1,0
+0,1,0,0,-3.5,0,GO:0035249,"synaptic transmission, glutamatergic",M010,1,0
+0,0,1,0,0,-3.4,GO:0150063,visual system development,M001,1,0
+0,0,1,0,0,-2.7,GO:0042692,muscle cell differentiation,M001,1,0
+0,0,1,0,0,-2.2,GO:0060840,artery development,M001,1,0
+0,1,0,0,-2.1,0,GO:0060603,mammary gland duct morphogenesis,M010,1,0
+1,0,0,-3.1,0,0,GO:0060562,epithelial tube morphogenesis,M100,1,0
+0,1,0,0,-2.8,0,hsa05161,Hepatitis B,M010,1,0
+1,0,0,-2,0,0,R-HSA-4085001,Sialic acid metabolism,M100,1,0
+1,0,0,-2.7,0,0,WP3893,Development and heterogeneity of the ILC family,M100,1,0
+0,0,1,0,0,-2.2,hsa05216,Thyroid cancer,M001,1,0
+0,0,1,0,0,-2.7,R-HSA-210990,PECAM1 interactions,M001,1,0
+0,1,0,0,-2.4,0,GO:1900153,"positive regulation of nuclear-transcribed mRNA catabolic process, deadenylation-dependent decay",M010,1,0
+0,0,1,0,0,-2.9,WP1591,Heart development,M001,1,0
+0,0,1,0,0,-2.9,WP2877,Vitamin D receptor pathway,M001,1,0
+0,0,1,0,0,-2.6,WP1541,Energy metabolism,M001,1,0
+0,0,1,0,0,-2.3,GO:0033628,regulation of cell adhesion mediated by integrin,M001,1,0
+0,0,1,0,0,-2.7,GO:0046632,alpha-beta T cell differentiation,M001,1,0
+0,0,1,0,0,-4.5,GO:0030890,positive regulation of B cell proliferation,M001,1,0
+0,0,1,0,0,-3.5,GO:0002886,regulation of myeloid leukocyte mediated immunity,M001,1,0
+1,0,0,-2.5,0,0,GO:0001947,heart looping,M100,1,0
+0,0,1,0,0,-2.4,GO:1903305,regulation of regulated secretory pathway,M001,1,0
+0,0,1,0,0,-2.9,WP5174,Ulcerative colitis signaling,M001,1,0
+0,0,1,0,0,-3.1,GO:0060018,astrocyte fate commitment,M001,1,0
+0,1,0,0,-2,0,WP3877,MYD88 distinct input output pathway,M010,1,0
+1,0,0,-2,0,0,R-HSA-2173791,TGF-beta receptor signaling in EMT (epithelial to mesenchymal transition),M100,1,0
+0,0,1,0,0,-2.8,GO:0035272,exocrine system development,M001,1,0
+0,0,1,0,0,-2.4,GO:0048864,stem cell development,M001,1,0
+0,0,1,0,0,-2.2,GO:0043547,positive regulation of GTPase activity,M001,1,0
+1,0,0,-4.5,0,0,GO:0010634,positive regulation of epithelial cell migration,M100,1,0
+0,0,1,0,0,-3.1,GO:1901503,ether biosynthetic process,M001,1,0
+1,0,0,-2.6,0,0,GO:0010595,positive regulation of endothelial cell migration,M100,1,0
+0,0,1,0,0,-3.1,GO:0071277,cellular response to calcium ion,M001,1,0
+0,0,1,0,0,-3.3,GO:0001937,negative regulation of endothelial cell proliferation,M001,1,0
+0,1,0,0,-2,0,GO:0060576,intestinal epithelial cell development,M010,1,0
+0,0,1,0,0,-2.2,GO:2000738,positive regulation of stem cell differentiation,M001,1,0
+0,1,0,0,-2.1,0,hsa04970,Salivary secretion,M010,1,0
+0,0,1,0,0,-2.5,GO:0032715,negative regulation of interleukin-6 production,M001,1,0
+0,0,1,0,0,-3.5,GO:0042100,B cell proliferation,M001,1,0
+0,0,1,0,0,-2.9,M1315,SIG PIP3 SIGNALING IN B LYMPHOCYTES,M001,1,0
+0,0,1,0,0,-2.2,GO:0051282,regulation of sequestering of calcium ion,M001,1,0
+0,0,1,0,0,-3.3,WP4216,Chromosomal and microsatellite instability in colorectal cancer,M001,1,0
+0,1,0,0,-2.1,0,GO:0120163,negative regulation of cold-induced thermogenesis,M010,1,0
+0,1,0,0,-2.4,0,R-HSA-109704,PI3K Cascade,M010,1,0
+0,1,0,0,-2,0,GO:0021561,facial nerve development,M010,1,0
+0,0,1,0,0,-3.7,hsa05321,Inflammatory bowel disease,M001,1,0
+0,0,1,0,0,-2.7,GO:0045581,negative regulation of T cell differentiation,M001,1,0
+0,0,1,0,0,-2.2,GO:0022408,negative regulation of cell-cell adhesion,M001,1,0
+0,0,1,0,0,-2.2,hsa04913,Ovarian steroidogenesis,M001,1,0
+1,0,0,-2.2,0,0,GO:0001756,somitogenesis,M100,1,0
+0,1,0,0,-2,0,hsa04514,Cell adhesion molecules,M010,1,0
+0,0,1,0,0,-2.6,GO:0002252,immune effector process,M001,1,0
+1,0,0,-2.1,0,0,GO:0007422,peripheral nervous system development,M100,1,0
+0,0,1,0,0,-3.2,WP2882,Nuclear receptors meta pathway,M001,1,0
+0,0,1,0,0,-2.1,WP299,Nuclear receptors in lipid metabolism and toxicity,M001,1,0
+1,0,0,-2.2,0,0,R-HSA-9830674,Formation of the ureteric bud,M100,1,0
+0,0,1,0,0,-2.7,WP2895,Differentiation of white and brown adipocyte,M001,1,0
+0,1,0,0,-2.4,0,WP195,IL 1 signaling pathway,M010,1,0
+0,1,0,0,-2.3,0,GO:0007605,sensory perception of sound,M010,1,0
+1,0,0,-2.1,0,0,GO:0035306,positive regulation of dephosphorylation,M100,1,0
+0,0,1,0,0,-5.7,GO:0050864,regulation of B cell activation,M001,1,0
+0,0,1,0,0,-2.1,hsa04666,Fc gamma R-mediated phagocytosis,M001,1,0
+0,0,1,0,0,-2.5,GO:0030282,bone mineralization,M001,1,0
+0,1,0,0,-3.3,0,GO:0010517,regulation of phospholipase activity,M010,1,0
+0,0,1,0,0,-2.2,R-HSA-5617472,Activation of anterior HOX genes in hindbrain development during early embryogenesis,M001,1,0
+0,0,1,0,0,-2.7,GO:0090184,positive regulation of kidney development,M001,1,0
+0,1,0,0,-2,0,GO:0035235,ionotropic glutamate receptor signaling pathway,M010,1,0
+0,0,1,0,0,-2.3,GO:0002820,negative regulation of adaptive immune response,M001,1,0
+0,1,0,0,-2.2,0,WP3413,NOTCH1 regulation of endothelial cell calcification,M010,1,0
+0,0,1,0,0,-2.3,GO:0150104,transport across blood-brain barrier,M001,1,0
+1,0,0,-3.2,0,0,GO:0035282,segmentation,M100,1,0
+0,1,0,0,-2.9,0,GO:1900274,regulation of phospholipase C activity,M010,1,0
+0,1,0,0,-2.7,0,GO:0021955,central nervous system neuron axonogenesis,M010,1,0
+0,0,1,0,0,-3.1,R-HSA-5621480,Dectin-2 family,M001,1,0
+0,1,0,0,-3.1,0,hsa04020,Calcium signaling pathway,M010,1,0
+0,0,1,0,0,-2.5,GO:0043367,"CD4-positive, alpha-beta T cell differentiation",M001,1,0
+0,0,1,0,0,-2.1,WP3678,Amplification and expansion of oncogenic pathways as metastatic traits,M001,1,0
+0,0,1,0,0,-2.5,GO:0045661,regulation of myoblast differentiation,M001,1,0
+0,0,1,0,0,-3.1,R-HSA-9012999,RHO GTPase cycle,M001,1,0
+0,0,1,0,0,-2.4,hsa05142,Chagas disease,M001,1,0
+0,1,0,0,-2.1,0,R-HSA-422356,Regulation of insulin secretion,M010,1,0
+0,1,0,0,-2.3,0,GO:0050808,synapse organization,M010,1,0
+0,1,0,0,-2.7,0,CORUM:1372,Rb-tal-1-E2A-Lmo2-Ldb1 complex,M010,1,0
+0,0,1,0,0,-2.4,GO:0034391,regulation of smooth muscle cell apoptotic process,M001,1,0
+0,0,1,0,0,-3.5,hsa04976,Bile secretion,M001,1,0
+0,1,0,0,-2,0,GO:0035641,locomotory exploration behavior,M010,1,0
+1,0,0,-3.3,0,0,M124,PID CXCR4 PATHWAY,M100,1,0
+1,0,0,-2.2,0,0,GO:1905278,positive regulation of epithelial tube formation,M100,1,0
+0,1,0,0,-2.7,0,GO:0002313,mature B cell differentiation involved in immune response,M010,1,0
+0,1,0,0,-2.2,0,R-HSA-8939211,ESR-mediated signaling,M010,1,0
+0,0,1,0,0,-2,GO:0120032,regulation of plasma membrane bounded cell projection assembly,M001,1,0
+0,1,0,0,-2.7,0,GO:0072008,glomerular mesangial cell differentiation,M010,1,0
+0,1,0,0,-2.1,0,hsa04625,C-type lectin receptor signaling pathway,M010,1,0
+0,1,0,0,-3.4,0,GO:0007268,chemical synaptic transmission,M010,1,0
+1,0,0,-2.2,0,0,GO:1905276,regulation of epithelial tube formation,M100,1,0
+0,1,0,0,-2.6,0,GO:0051384,response to glucocorticoid,M010,1,0
+0,0,1,0,0,-2.7,GO:0006351,DNA-templated transcription,M001,1,0
+0,0,1,0,0,-2.4,GO:0010885,regulation of cholesterol storage,M001,1,0
+1,0,0,-2.2,0,0,GO:1901524,regulation of mitophagy,M100,1,0
+0,1,0,0,-2.4,0,M213,PID AR NONGENOMIC PATHWAY,M010,1,0
+1,0,0,-3.1,0,0,R-HSA-187037,Signaling by NTRK1 (TRKA),M100,1,0
+0,0,1,0,0,-2,WP399,Wnt signaling pathway and pluripotency,M001,1,0
+0,0,1,0,0,-2.9,GO:0014015,positive regulation of gliogenesis,M001,1,0
+0,1,0,0,-2.2,0,hsa05203,Viral carcinogenesis,M010,1,0
+1,0,0,-2.7,0,0,R-HSA-166520,Signaling by NTRKs,M100,1,0
+0,1,0,0,-2.6,0,GO:0009913,epidermal cell differentiation,M010,1,0
+0,0,1,0,0,-2.9,GO:0045191,regulation of isotype switching,M001,1,0
+0,1,0,0,-2.7,0,hsa05224,Breast cancer,M010,1,0
+1,0,0,-2.1,0,0,GO:0030278,regulation of ossification,M100,1,0
+0,0,1,0,0,-2.1,GO:0062013,positive regulation of small molecule metabolic process,M001,1,0
+1,0,0,-2.4,0,0,GO:0043584,nose development,M100,1,0
+0,0,1,0,0,-2.4,GO:0042509,regulation of tyrosine phosphorylation of STAT protein,M001,1,0
+1,0,0,-2.3,0,0,GO:0030833,regulation of actin filament polymerization,M100,1,0
+0,0,1,0,0,-2.4,WP2873,Aryl hydrocarbon receptor pathway,M001,1,0
+0,0,1,0,0,-3.1,GO:0021814,cell motility involved in cerebral cortex radial glia guided migration,M001,1,0
+0,1,0,0,-2.6,0,hsa04620,Toll-like receptor signaling pathway,M010,1,0
+0,0,1,0,0,-2.5,GO:0030852,regulation of granulocyte differentiation,M001,1,0
+0,1,0,0,-3,0,R-HSA-112314,Neurotransmitter receptors and postsynaptic signal transmission,M010,1,0
+0,0,1,0,0,-2.4,GO:2000515,"negative regulation of CD4-positive, alpha-beta T cell activation",M001,1,0
+0,0,1,0,0,-4.3,GO:2000648,positive regulation of stem cell proliferation,M001,1,0
+0,1,0,0,-3.1,0,GO:0060193,positive regulation of lipase activity,M010,1,0
+0,0,1,0,0,-5.7,GO:0046631,alpha-beta T cell activation,M001,1,0
+0,1,0,0,-2.2,0,GO:0098662,inorganic cation transmembrane transport,M010,1,0
+0,1,0,0,-3.2,0,WP4585,Cancer immunotherapy by PD 1 blockade,M010,1,0
+0,0,1,0,0,-2.7,GO:0010883,regulation of lipid storage,M001,1,0
+0,1,0,0,-2.2,0,GO:1900151,"regulation of nuclear-transcribed mRNA catabolic process, deadenylation-dependent decay",M010,1,0
+0,0,1,0,0,-4,WP4879,Overlap between signal transduction pathways contributing to LMNA laminopathies,M001,1,0
+1,0,0,-2.2,0,0,GO:0001764,neuron migration,M100,1,0
+0,1,0,0,-2.7,0,GO:0008542,visual learning,M010,1,0
+0,0,1,0,0,-4,M7,PID FCER1 PATHWAY,M001,1,0
+0,1,0,0,-2.2,0,GO:0048486,parasympathetic nervous system development,M010,1,0
+0,0,1,0,0,-2.4,WP2018,RANKL RANK signaling pathway,M001,1,0
+0,1,0,0,-2,0,GO:1904238,pericyte cell differentiation,M010,1,0
+0,0,1,0,0,-3.9,GO:0050671,positive regulation of lymphocyte proliferation,M001,1,0
+0,0,1,0,0,-2.9,GO:0043371,"negative regulation of CD4-positive, alpha-beta T cell differentiation",M001,1,0
+0,0,1,0,0,-2.7,GO:0019221,cytokine-mediated signaling pathway,M001,1,0
+0,1,0,0,-3,0,WP4172,PI3K Akt signaling pathway,M010,1,0
+1,0,0,-2.7,0,0,GO:0021529,spinal cord oligodendrocyte cell differentiation,M100,1,0
+0,0,1,0,0,-2,R-HSA-4641265,Repression of WNT target genes,M001,1,0
+0,1,0,0,-2.8,0,GO:0031644,regulation of nervous system process,M010,1,0
+0,0,1,0,0,-2.3,GO:0046620,regulation of organ growth,M001,1,0
+1,0,0,-2.4,0,0,WP4146,Macrophage markers,M100,1,0
+0,0,1,0,0,-4.2,GO:0070661,leukocyte proliferation,M001,1,0
+0,0,1,0,0,-2,GO:0001516,prostaglandin biosynthetic process,M001,1,0
+0,0,1,0,0,-2.5,R-HSA-8853884,Transcriptional Regulation by VENTX,M001,1,0
+0,0,1,0,0,-2.1,M162,PID RXR VDR PATHWAY,M001,1,0
+1,0,0,-2.4,0,0,GO:0030832,regulation of actin filament length,M100,1,0
+0,0,1,0,0,-2.2,GO:1904936,interneuron migration,M001,1,0
+0,0,1,0,0,-2.4,R-HSA-354192,Integrin signaling,M001,1,0
+0,0,1,0,0,-2.4,GO:0060509,type I pneumocyte differentiation,M001,1,0
+0,0,1,0,0,-3.7,GO:2000741,positive regulation of mesenchymal stem cell differentiation,M001,1,0
+0,0,1,0,0,-2.5,GO:0032735,positive regulation of interleukin-12 production,M001,1,0
+0,1,0,0,-2,0,hsa05130,Pathogenic Escherichia coli infection,M010,1,0
+0,0,1,0,0,-3,WP363,Wnt signaling pathway,M001,1,0
+1,0,0,-2.9,0,0,GO:0045628,regulation of T-helper 2 cell differentiation,M100,1,0
+0,1,0,0,-2.9,0,WP4674,Head and neck squamous cell carcinoma,M010,1,0
+1,0,0,-2.7,0,0,R-HSA-9027276,Erythropoietin activates Phosphoinositide-3-kinase (PI3K),M100,1,0
+1,0,0,-2.3,0,0,GO:0035924,cellular response to vascular endothelial growth factor stimulus,M100,1,0
+0,1,0,0,-2,0,WP3851,TLR4 signaling and tolerance,M010,1,0
+0,0,1,0,0,-3.4,GO:0002263,cell activation involved in immune response,M001,1,0
+0,0,1,0,0,-2.6,GO:0032774,RNA biosynthetic process,M001,1,0
+0,1,0,0,-2.4,0,GO:0016045,detection of bacterium,M010,1,0
+0,0,1,0,0,-2.2,GO:1901739,regulation of myoblast fusion,M001,1,0
+0,1,0,0,-3.2,0,hsa04151,PI3K-Akt signaling pathway,M010,1,0
+1,0,0,-2.4,0,0,GO:0043518,"negative regulation of DNA damage response, signal transduction by p53 class mediator",M100,1,0
+0,0,1,0,0,-2.2,R-HSA-450282,MAPK targets/ Nuclear events mediated by MAP kinases,M001,1,0
+0,0,1,0,0,-4,GO:0022030,telencephalon glial cell migration,M001,1,0
+0,0,1,0,0,-2.2,WP2571,Polycystic kidney disease pathway,M001,1,0
+0,1,0,0,-2.8,0,hsa05207,Chemical carcinogenesis - receptor activation,M010,1,0
+0,0,1,0,0,-2,GO:0030224,monocyte differentiation,M001,1,0
+0,1,0,0,-2.2,0,GO:0072109,glomerular mesangium development,M010,1,0
+0,0,1,0,0,-2.7,GO:0045061,thymic T cell selection,M001,1,0
+0,0,1,0,0,-3.4,R-HSA-4411364,Binding of TCF/LEF:CTNNB1 to target gene promoters,M001,1,0
+0,0,1,0,0,-2.3,GO:0010232,vascular transport,M001,1,0
+1,0,0,-2.7,0,0,GO:0009100,glycoprotein metabolic process,M100,1,0
+0,0,1,0,0,-2.8,GO:2000177,regulation of neural precursor cell proliferation,M001,1,0
+1,0,0,-2.6,0,0,GO:0035137,hindlimb morphogenesis,M100,1,0
+0,1,0,0,-2,0,WP75,Toll like receptor signaling pathway,M010,1,0
+1,0,0,-3.7,0,0,GO:0055059,asymmetric neuroblast division,M100,1,0
+0,1,0,0,-2.9,0,GO:0019827,stem cell population maintenance,M010,1,0
+0,1,0,0,-2.4,0,hsa05206,MicroRNAs in cancer,M010,1,0
+0,1,0,0,-3.6,0,R-HSA-9018519,Estrogen-dependent gene expression,M010,1,0
+0,0,1,0,0,-2.2,GO:0006690,icosanoid metabolic process,M001,1,0
+0,0,1,0,0,-2.5,GO:0060271,cilium assembly,M001,1,0
+0,0,1,0,0,-3.2,M17200,SA B CELL RECEPTOR COMPLEXES,M001,1,0
+0,1,0,0,-3.2,0,GO:0032663,regulation of interleukin-2 production,M010,1,0
+1,0,0,-2.2,0,0,GO:0048332,mesoderm morphogenesis,M100,1,0
+0,0,1,0,0,-3.1,R-HSA-983705,Signaling by the B Cell Receptor (BCR),M001,1,0
+1,0,0,-3.4,0,0,GO:0008356,asymmetric cell division,M100,1,0
+0,1,0,0,-2.6,0,GO:0021602,cranial nerve morphogenesis,M010,1,0
+1,0,0,-3.1,0,0,GO:0045766,positive regulation of angiogenesis,M100,1,0
+0,1,0,0,-2.2,0,GO:0098609,cell-cell adhesion,M010,1,0
+1,0,0,-2,0,0,GO:0003179,heart valve morphogenesis,M100,1,0
+0,0,1,0,0,-2.8,GO:0042129,regulation of T cell proliferation,M001,1,0
+1,0,0,-2.4,0,0,M190,PID TCR JNK PATHWAY,M100,1,0
+0,1,0,0,-5.1,0,WP4223,Ras signaling,M010,1,0
+1,0,0,-3.7,0,0,GO:0021895,cerebral cortex neuron differentiation,M100,1,0
+0,0,1,0,0,-2.1,R-HSA-9013148,CDC42 GTPase cycle,M001,1,0
+1,0,0,-4,0,0,GO:0003206,cardiac chamber morphogenesis,M100,1,0
+0,1,0,0,-2.6,0,GO:0061564,axon development,M010,1,0
+0,1,0,0,-2.2,0,GO:2000463,positive regulation of excitatory postsynaptic potential,M010,1,0
+0,0,1,0,0,-3.2,GO:0002714,positive regulation of B cell mediated immunity,M001,1,0
+0,0,1,0,0,-2.2,GO:0002052,positive regulation of neuroblast proliferation,M001,1,0
+0,0,1,0,0,-2.1,hsa05132,Salmonella infection,M001,1,0
+1,0,0,-2.6,0,0,M33,PID GLYPICAN 1PATHWAY,M100,1,0
+0,1,0,0,-2.7,0,M88,PID CD8 TCR PATHWAY,M010,1,0
+1,0,0,-2.2,0,0,GO:1903146,regulation of autophagy of mitochondrion,M100,1,0
+1,0,0,-2.9,0,0,GO:0071772,response to BMP,M100,1,0
+0,0,1,0,0,-2.4,GO:0046847,filopodium assembly,M001,1,0
+0,0,1,0,0,-2.6,GO:0032675,regulation of interleukin-6 production,M001,1,0
+0,0,1,0,0,-2.7,GO:0035710,"CD4-positive, alpha-beta T cell activation",M001,1,0
+0,1,0,0,-2.9,0,GO:0002763,positive regulation of myeloid leukocyte differentiation,M010,1,0
+0,1,0,0,-2.5,0,GO:0007411,axon guidance,M010,1,0
+0,0,1,0,0,-2.9,GO:0002889,regulation of immunoglobulin mediated immune response,M001,1,0
+1,0,0,-2.2,0,0,WP1991,SRF and miRs in smooth muscle differentiation and proliferation,M100,1,0
+0,0,1,0,0,-3.1,GO:0021815,modulation of microtubule cytoskeleton involved in cerebral cortex radial glia guided migration,M001,1,0
+0,0,1,0,0,-2.4,GO:1905459,regulation of vascular associated smooth muscle cell apoptotic process,M001,1,0
+0,0,1,0,0,-2.8,hsa04148,Efferocytosis,M001,1,0
+0,0,1,0,0,-2.5,GO:0030111,regulation of Wnt signaling pathway,M001,1,0
+0,1,0,0,-3.8,0,GO:1903539,protein localization to postsynaptic membrane,M010,1,0
+1,0,0,-3.8,0,0,GO:0055057,neuroblast division,M100,1,0
+1,0,0,-3.8,0,0,WP5417,Cell lineage map for neuronal differentiation,M100,1,0
+1,0,0,-2,0,0,GO:0045618,positive regulation of keratinocyte differentiation,M100,1,0
+0,1,0,0,-2,0,GO:0021610,facial nerve morphogenesis,M010,1,0
+0,1,0,0,-2.3,0,hsa04725,Cholinergic synapse,M010,1,0
+0,1,0,0,-2.3,0,R-HSA-6811558,"PI5P, PP2A and IER3 Regulate PI3K/AKT Signaling",M010,1,0
+0,0,1,0,0,-2.9,GO:0002639,positive regulation of immunoglobulin production,M001,1,0
+0,0,1,0,0,-2.5,hsa05210,Colorectal cancer,M001,1,0
+0,1,0,0,-2.4,0,GO:0072007,mesangial cell differentiation,M010,1,0
+0,1,0,0,-2.3,0,GO:0035264,multicellular organism growth,M010,1,0
+0,0,1,0,0,-2.1,GO:0002293,alpha-beta T cell differentiation involved in immune response,M001,1,0
+1,0,0,-2.6,0,0,GO:0042327,positive regulation of phosphorylation,M100,1,0
+1,0,0,-4.1,0,0,GO:0048534,hematopoietic or lymphoid organ development,M100,1,0
+0,1,0,0,-2.1,0,R-HSA-74751,Insulin receptor signalling cascade,M010,1,0
+0,0,1,0,0,-2.2,GO:0006691,leukotriene metabolic process,M001,1,0
+0,1,0,0,-3.9,0,hsa04014,Ras signaling pathway,M010,1,0
+0,0,1,0,0,-4.9,WP5218,Extrafollicular and follicular B cell activation by SARS CoV 2,M001,1,0
+0,0,1,0,0,-2.1,GO:0071248,cellular response to metal ion,M001,1,0
+0,1,0,0,-2.2,0,M176,PID FOXM1 PATHWAY,M010,1,0
+0,0,1,0,0,-2.7,GO:0042492,gamma-delta T cell differentiation,M001,1,0
+0,1,0,0,-3.1,0,GO:0061158,3'-UTR-mediated mRNA destabilization,M010,1,0
+0,1,0,0,-2.5,0,R-HSA-9664323,FCGR3A-mediated IL10 synthesis,M010,1,0
+0,0,1,0,0,-3.8,GO:0046651,lymphocyte proliferation,M001,1,0
+0,0,1,0,0,-2.3,GO:0034103,regulation of tissue remodeling,M001,1,0
+1,0,0,-2.9,0,0,GO:0071773,cellular response to BMP stimulus,M100,1,0
+0,0,1,0,0,-2.1,GO:0001649,osteoblast differentiation,M001,1,0
+0,0,1,0,0,-2,GO:0071715,icosanoid transport,M001,1,0
+0,0,1,0,0,-3.2,GO:0061035,regulation of cartilage development,M001,1,0
+0,1,0,0,-2.6,0,M166,PID ATF2 PATHWAY,M010,1,0
+0,0,1,0,0,-2.3,GO:0043030,regulation of macrophage activation,M001,1,0
+1,0,0,-2.2,0,0,GO:0007015,actin filament organization,M100,1,0
+0,1,0,0,-3.1,0,GO:0097120,receptor localization to synapse,M010,1,0
+0,0,1,0,0,-2.5,WP4842,Mammalian disorder of sexual development,M001,1,0
+0,1,0,0,-2.2,0,WP3651,Pathways affected in adenoid cystic carcinoma,M010,1,0
+0,1,0,0,-2.9,0,hsa04912,GnRH signaling pathway,M010,1,0
+0,1,0,0,-3.4,0,GO:0000902,cell morphogenesis,M010,1,0
+0,1,0,0,-2.3,0,WP231,TNF alpha signaling pathway,M010,1,0
+0,0,1,0,0,-2.1,GO:0010876,lipid localization,M001,1,0
+0,1,0,0,-3.2,0,GO:0031960,response to corticosteroid,M010,1,0
+0,0,1,0,0,-3,GO:0045662,negative regulation of myoblast differentiation,M001,1,0
+0,0,1,0,0,-2,GO:0071417,cellular response to organonitrogen compound,M001,1,0
+0,1,0,0,-3.6,0,R-HSA-9834899,Specification of the neural plate border,M010,1,0
+1,0,0,-2.6,0,0,WP706,Sudden infant death syndrome SIDS susceptibility pathways,M100,1,0
+0,1,0,0,-2.7,0,hsa05211,Renal cell carcinoma,M010,1,0
+0,1,0,0,-3.1,0,R-HSA-8935964,RUNX1 regulates expression of components of tight junctions,M010,1,0
+0,1,0,0,-2.4,0,GO:0045667,regulation of osteoblast differentiation,M010,1,0
+0,0,1,0,0,-2.9,GO:1903530,regulation of secretion by cell,M001,1,0
+0,0,1,0,0,-3,GO:0120031,plasma membrane bounded cell projection assembly,M001,1,0
+0,0,1,0,0,-2.7,R-HSA-983695,Antigen activates B Cell Receptor (BCR) leading to generation of second messengers,M001,1,0
+0,0,1,0,0,-2.4,GO:0002460,adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains,M001,1,0
+0,1,0,0,-2.7,0,GO:1902170,cellular response to reactive nitrogen species,M010,1,0
+0,0,1,0,0,-2.1,R-HSA-9730414,MITF-M-regulated melanocyte development,M001,1,0
+0,1,0,0,-2.2,0,R-HSA-199418,Negative regulation of the PI3K/AKT network,M010,1,0
+0,1,0,0,-2.4,0,GO:0032793,positive regulation of CREB transcription factor activity,M010,1,0
+0,0,1,0,0,-3.6,GO:0032102,negative regulation of response to external stimulus,M001,1,0
+1,0,0,-2.9,0,0,GO:0048538,thymus development,M100,1,0
+0,0,1,0,0,-3.5,GO:0022029,telencephalon cell migration,M001,1,0
+1,0,0,-2.2,0,0,R-HSA-73980,RNA Polymerase III Transcription Termination,M100,1,0
+0,0,1,0,0,-2.5,GO:0060351,cartilage development involved in endochondral bone morphogenesis,M001,1,0
+0,0,1,0,0,-2.1,GO:2001185,"regulation of CD8-positive, alpha-beta T cell activation",M001,1,0
+0,0,1,0,0,-2.7,GO:0006991,response to sterol depletion,M001,1,0
+0,1,0,0,-3.4,0,GO:0008306,associative learning,M010,1,0
+0,1,0,0,-2.9,0,GO:0071364,cellular response to epidermal growth factor stimulus,M010,1,0
+0,1,0,0,-2.2,0,GO:0030001,metal ion transport,M010,1,0
+0,1,0,0,-2.7,0,GO:0071385,cellular response to glucocorticoid stimulus,M010,1,0
+0,0,1,0,0,-2,GO:0002292,T cell differentiation involved in immune response,M001,1,0
+0,0,1,0,0,-2.1,GO:0006959,humoral immune response,M001,1,0
+0,1,0,0,-2.6,0,GO:0060191,regulation of lipase activity,M010,1,0
+1,0,0,-2,0,0,M257,PID EPHRINB REV PATHWAY,M100,1,0
+0,0,1,0,0,-4.3,GO:0021799,cerebral cortex radially oriented cell migration,M001,1,0
+1,0,0,-2.4,0,0,GO:0002071,glandular epithelial cell maturation,M100,1,0
+1,0,0,-3,0,0,R-HSA-198725,Nuclear Events (kinase and transcription factor activation),M100,1,0
+0,1,0,0,-3.4,0,GO:0002320,lymphoid progenitor cell differentiation,M010,1,0
+1,0,0,-2.1,0,0,GO:0070670,response to interleukin-4,M100,1,0
+1,0,0,-2.7,0,0,GO:1902253,regulation of intrinsic apoptotic signaling pathway by p53 class mediator,M100,1,0
+0,0,1,0,0,-2.2,R-HSA-5619507,Activation of HOX genes during differentiation,M001,1,0
+0,1,0,0,-2.8,0,GO:0002312,B cell activation involved in immune response,M010,1,0
+0,0,1,0,0,-4.3,GO:0046641,positive regulation of alpha-beta T cell proliferation,M001,1,0
+1,0,0,-2.2,0,0,GO:0048934,peripheral nervous system neuron differentiation,M100,1,0
+0,0,1,0,0,-3.3,GO:0051897,positive regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction,M001,1,0
+0,1,0,0,-3.4,0,GO:0062237,protein localization to postsynapse,M010,1,0
+0,1,0,0,-2.5,0,M276,PID FGF PATHWAY,M010,1,0
+0,0,1,0,0,-3.1,GO:0003417,growth plate cartilage development,M001,1,0
+1,0,0,-2.8,0,0,GO:0048857,neural nucleus development,M100,1,0
+0,0,1,0,0,-3.7,CORUM:2694,ERG-JUN-FOS DNA-protein complex,M001,1,0
+0,0,1,0,0,-2.4,hsa04921,Oxytocin signaling pathway,M001,1,0
+0,0,1,0,0,-2.9,GO:0046456,icosanoid biosynthetic process,M001,1,0
+0,0,1,0,0,-2.9,GO:0002532,production of molecular mediator involved in inflammatory response,M001,1,0
+1,0,0,-2,0,0,GO:0060326,cell chemotaxis,M100,1,0
+0,0,1,0,0,-2,GO:0072001,renal system development,M001,1,0
+1,0,0,-2.1,0,0,WP4559,Interactions between immune cells and microRNAs in tumor microenvironment,M100,1,0
+0,1,0,0,-2.7,0,GO:0032703,negative regulation of interleukin-2 production,M010,1,0
+0,1,0,0,-2.4,0,R-HSA-112399,IRS-mediated signalling,M010,1,0
+0,1,0,0,-2.3,0,R-HSA-418594,G alpha (i) signalling events,M010,1,0
+1,0,0,-2.2,0,0,M193,PID NEPHRIN NEPH1 PATHWAY,M100,1,0
+0,0,1,0,0,-2,GO:1902692,regulation of neuroblast proliferation,M001,1,0
+1,0,0,-4.5,0,0,GO:0003151,outflow tract morphogenesis,M100,1,0
+0,0,1,0,0,-2,GO:0014013,regulation of gliogenesis,M001,1,0
+0,0,1,0,0,-2.5,R-HSA-9825892,Regulation of MITF-M-dependent genes involved in cell cycle and proliferation,M001,1,0
+0,0,1,0,0,-3.3,GO:0021885,forebrain cell migration,M001,1,0
+0,1,0,0,-2.5,0,GO:0045638,negative regulation of myeloid cell differentiation,M010,1,0
+0,1,0,0,-2.2,0,WP5402,10q22q23 copy number variation,M010,1,0
+1,0,0,-2.2,0,0,GO:0061053,somite development,M100,1,0
+0,0,1,0,0,-3.3,R-HSA-9013149,RAC1 GTPase cycle,M001,1,0
+1,0,0,-2.5,0,0,GO:0043536,positive regulation of blood vessel endothelial cell migration,M100,1,0
+0,1,0,0,-2,0,GO:0048015,phosphatidylinositol-mediated signaling,M010,1,0
+0,0,1,0,0,-2.2,GO:0150079,negative regulation of neuroinflammatory response,M001,1,0
+0,0,1,0,0,-2,GO:1990840,response to lectin,M001,1,0
+0,1,0,0,-2,0,GO:0030510,regulation of BMP signaling pathway,M010,1,0
+0,0,1,0,0,-2.1,GO:0045087,innate immune response,M001,1,0
+1,0,0,-2,0,0,GO:0031929,TOR signaling,M100,1,0
+0,0,1,0,0,-2.2,GO:0002294,"CD4-positive, alpha-beta T cell differentiation involved in immune response",M001,1,0
+1,0,0,-2,0,0,GO:0032674,regulation of interleukin-5 production,M100,1,0
+0,0,1,0,0,-2,GO:0002223,stimulatory C-type lectin receptor signaling pathway,M001,1,0
+0,1,0,0,-2,0,hsa04960,Aldosterone-regulated sodium reabsorption,M010,1,0
+0,0,1,0,0,-3.1,GO:0002637,regulation of immunoglobulin production,M001,1,0
+0,0,1,0,0,-2.7,GO:0048821,erythrocyte development,M001,1,0
+1,0,0,-2.7,0,0,GO:0035115,embryonic forelimb morphogenesis,M100,1,0
+0,1,0,0,-3.5,0,GO:0071383,cellular response to steroid hormone stimulus,M010,1,0
+0,1,0,0,-2.5,0,WP2374,Oncostatin M signaling pathway,M010,1,0
+0,1,0,0,-2.3,0,GO:0007611,learning or memory,M010,1,0
+0,0,1,0,0,-3.4,GO:0048880,sensory system development,M001,1,0
+0,1,0,0,-3.5,0,GO:0010837,regulation of keratinocyte proliferation,M010,1,0
+1,0,0,-2.5,0,0,GO:1905314,semi-lunar valve development,M100,1,0
+0,0,1,0,0,-2,GO:0002829,negative regulation of type 2 immune response,M001,1,0
+1,0,0,-2.2,0,0,GO:0070243,regulation of thymocyte apoptotic process,M100,1,0
+1,0,0,-2,0,0,GO:0002467,germinal center formation,M100,1,0
+1,0,0,-2.7,0,0,GO:0007369,gastrulation,M100,1,0
+0,0,1,0,0,-2.4,GO:0050873,brown fat cell differentiation,M001,1,0
+1,0,0,-3.3,0,0,GO:0003205,cardiac chamber development,M100,1,0
+0,1,0,0,-2.4,0,GO:0098660,inorganic ion transmembrane transport,M010,1,0
+0,0,1,0,0,-3.8,GO:0050853,B cell receptor signaling pathway,M001,1,0
+1,0,0,-2.8,0,0,GO:0070228,regulation of lymphocyte apoptotic process,M100,1,0
+0,0,1,0,0,-3.8,GO:0045444,fat cell differentiation,M001,1,0
+0,1,0,0,-3.7,0,WP4541,Hippo Merlin signaling dysregulation,M010,1,0
+1,0,0,-2.4,0,0,GO:0009101,glycoprotein biosynthetic process,M100,1,0
+0,0,1,0,0,-3.7,CORUM:2693,NFAT-JUN-FOS DNA-protein complex,M001,1,0
+0,0,1,0,0,-2.3,GO:0070542,response to fatty acid,M001,1,0
+1,0,0,-2.3,0,0,GO:0003180,aortic valve morphogenesis,M100,1,0
+0,1,0,0,-2.5,0,GO:0044344,cellular response to fibroblast growth factor stimulus,M010,1,0
+1,0,0,-2.5,0,0,GO:0010594,regulation of endothelial cell migration,M100,1,0
+0,1,0,0,-3,0,GO:0048871,multicellular organismal-level homeostasis,M010,1,0
+0,0,1,0,0,-2.4,GO:0043383,negative T cell selection,M001,1,0
+0,0,1,0,0,-2.6,WP98,Prostaglandin synthesis and regulation,M001,1,0
+0,1,0,0,-2.2,0,GO:0002821,positive regulation of adaptive immune response,M010,1,0
+0,0,1,0,0,-2.6,GO:0072006,nephron development,M001,1,0
+0,1,0,0,-2.2,0,R-HSA-2428924,IGF1R signaling cascade,M010,1,0
+0,1,0,0,-3.5,0,WP5353,Macrophage stimulating protein MSP signaling network map,M010,1,0
+0,0,1,0,0,-2.3,WP4816,TGF beta receptor signaling in skeletal dysplasias,M001,1,0
+0,1,0,0,-2.1,0,R-HSA-8941326,RUNX2 regulates bone development,M010,1,0
+0,1,0,0,-3,0,GO:0002437,inflammatory response to antigenic stimulus,M010,1,0
+0,0,1,0,0,-2.7,GO:1905563,negative regulation of vascular endothelial cell proliferation,M001,1,0
+1,0,0,-2.5,0,0,R-HSA-2871809,FCERI mediated Ca+2 mobilization,M100,1,0
+0,1,0,0,-2.6,0,GO:0048858,cell projection morphogenesis,M010,1,0
+1,0,0,-2.2,0,0,GO:0071353,cellular response to interleukin-4,M100,1,0
+0,1,0,0,-2.4,0,GO:0045647,negative regulation of erythrocyte differentiation,M010,1,0
+0,1,0,0,-2.5,0,GO:0097485,neuron projection guidance,M010,1,0
+0,0,1,0,0,-3.4,GO:0002366,leukocyte activation involved in immune response,M001,1,0
+0,1,0,0,-2.4,0,R-HSA-8878166,Transcriptional regulation by RUNX2,M010,1,0
+0,0,1,0,0,-2.5,WP4719,Eicosanoid metabolism via cyclooxygenases COX,M001,1,0
+0,0,1,0,0,-2,GO:0060491,regulation of cell projection assembly,M001,1,0
+0,1,0,0,-2.3,0,GO:0021675,nerve development,M010,1,0
+0,0,1,0,0,-2.2,GO:0019370,leukotriene biosynthetic process,M001,1,0
+0,0,1,0,0,-2.4,GO:0097305,response to alcohol,M001,1,0
+0,1,0,0,-3.4,0,M236,PID DELTA NP63 PATHWAY,M010,1,0
+0,1,0,0,-2.8,0,WP3931,Embryonic stem cell pluripotency pathways,M010,1,0
+0,0,1,0,0,-3.3,GO:0051101,regulation of DNA binding,M001,1,0
+0,0,1,0,0,-2.2,GO:0002250,adaptive immune response,M001,1,0
+0,1,0,0,-2.6,0,GO:0048812,neuron projection morphogenesis,M010,1,0
+0,1,0,0,-3.8,0,R-HSA-112316,Neuronal System,M010,1,0
+0,1,0,0,-2.9,0,GO:0021952,central nervous system projection neuron axonogenesis,M010,1,0
+0,0,1,0,0,-3.2,M44,PID HIF2PATHWAY,M001,1,0
+0,0,1,0,0,-2.2,R-HSA-76009,Platelet Aggregation (Plug Formation),M001,1,0
+0,1,0,0,-2.7,0,WP2526,PDGF pathway,M010,1,0
+0,1,0,0,-2.1,0,R-HSA-2219528,PI3K/AKT Signaling in Cancer,M010,1,0
+0,0,1,0,0,-2.6,GO:0042531,positive regulation of tyrosine phosphorylation of STAT protein,M001,1,0
+0,0,1,0,0,-2,GO:0046457,prostanoid biosynthetic process,M001,1,0
+0,0,1,0,0,-2.4,WP560,TGF beta receptor signaling,M001,1,0
+0,1,0,0,-3.3,0,hsa04072,Phospholipase D signaling pathway,M010,1,0
+0,1,0,0,-2.1,0,hsa04550,Signaling pathways regulating pluripotency of stem cells,M010,1,0
+0,1,0,0,-3.5,0,hsa01522,Endocrine resistance,M010,1,0
+1,0,0,-2.4,0,0,GO:0021544,subpallium development,M100,1,0
+0,1,0,0,-2.2,0,GO:0098543,detection of other organism,M010,1,0
+0,0,1,0,0,-2.3,GO:0006869,lipid transport,M001,1,0
+0,0,1,0,0,-2.7,WP5066,FOXA2 pathway,M001,1,0

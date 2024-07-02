@@ -1630,7 +1630,7 @@ def plot_edge_discovery_enrichment(
         genes = np.array([split_edge_string(e) for e in counts_filtered.loc[within_range_mask, 'Edge']]).flatten()
         genes = [g for g in genes if not string_is_synthetic(g)]
         genes_unique = np.unique(genes)
-        if gene_max_num is not None and gene_max_num != 0: genes_unique = np.random.choice(genes_unique, gene_max_num, replace=False)
+        if gene_max_num is not None and gene_max_num != 0: genes_unique = np.random.choice(genes_unique, min(len(genes_unique), gene_max_num), replace=False)
         genes_new = pd.DataFrame({f'{column} - {(1 if use_percentile else 100)*ppr[0]:.1f}-{(1 if use_percentile else 100)*ppr[1]:.1f}': genes_unique})
         genes_list = pd.concat((genes_list, genes_new), axis=1)
 
