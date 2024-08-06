@@ -1,3 +1,9 @@
+### 2024-08-05
+- Annotation corrections
+- File name consistency fixes
+- Reruns
+- Revert language changes
+
 ### 2024-07-02 (1-5)
 - Figure revisions
 - Importance score language change

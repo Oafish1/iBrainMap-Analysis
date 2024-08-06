@@ -1690,7 +1690,7 @@ def plot_cross_enrichment(
     column_name='Gene Set',
     value_name='-log10(p)',
     postfix_name='Ancestry',
-    gene_set_idx=-1,  # Most general
+    gene_set_idx=-1,  # Most specific, ordered from least to most %
     transpose=True,
     num_terms=30,
 ):
@@ -1710,7 +1710,8 @@ def plot_cross_enrichment(
         enrichments = pd.concat((enrichments, enrichment))
 
     # Filter to gene set indicated by `gene_set_idx`
-    individual_set = enrichments[column_name].unique()[np.argsort([float(gene_set.split(' - ')[1].split('-')[0]) for gene_set in enrichments['Gene Set'].unique()])[gene_set_idx]]
+    assert enrichments.shape[0] > 0, 'No matching enrichment files found'
+    individual_set = enrichments[column_name].unique()[np.argsort([float(gene_set.split(' - ')[1].split('-')[0]) for gene_set in enrichments[column_name].unique()])[gene_set_idx]]
     enrichments = enrichments.loc[enrichments[column_name] == individual_set]
 
     # Pivot data
