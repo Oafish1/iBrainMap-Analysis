@@ -1,3 +1,8 @@
+### 2024-08-08
+- Enhanced script usability
+- HBCC graph embedding analyses
+- Updated file directories and data
+
 ### 2024-08-05
 - Annotation corrections
 - File name consistency fixes

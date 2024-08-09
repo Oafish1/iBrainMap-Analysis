@@ -17,10 +17,10 @@ COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
 # ATT = DATA_FOLDER + 'freeze2/attention/homo_5TF_1Tar_graph_with_edgeW_att.pkl'
 
 # Freeze 2.5
-# ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
-# ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
-# GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
-# SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
+ATT_FOLDER = DATA_FOLDER + 'freeze25/c01_5TF_10tar/'
+ATT = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_att.pkl'
+GE = ATT_FOLDER + 'output_embed_att/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_graph_embedding.pkl'
+SID = ATT_FOLDER + 'train_graph/homo_c01_5TF_10Tar_p2_5_graph_with_edgeW_sample_id.pkl'
 
 # Freeze 3
 # ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_embed_10_16/'
@@ -35,10 +35,10 @@ COEX_FOLDER = DATA_FOLDER + 'freeze2/regulon_grn/'
 # SID = NOT PROVIDED
 
 # Freeze 3 (2024-02-11)
-ATT_FOLDER = DATA_FOLDER + 'freeze3/c15_att_02_11/'
+ATT_FOLDER = DATA_FOLDER + 'freeze3/recent/'
 ATT_CSV = ATT_FOLDER + 'MSSM_attn_all_224.csv'
 ATT = ATT_FOLDER + 'MSSM_attn_all_224.pkl'
-# GE = NOT PROVIDED
+GE = ATT_FOLDER + 'HBCC_10p10p_224_embed_attn.pkl'
 # SID = NOT PROVIDED
 
 
@@ -118,12 +118,13 @@ def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True,
 
 
 def load_graph_embeddings():
-    # Currently does not work, as recent version provides no SIDs
-    with open(SID, 'rb') as f:
-        graph_sids = pickle.load(f)
+    # with open(SID, 'rb') as f:
+    #     graph_sids = pickle.load(f)
     with open(GE, 'rb') as f:
         graph_embeddings = pickle.load(f)
-    library = {sid: ge.detach().flatten().numpy() for sid, ge in zip(graph_sids, graph_embeddings)}
+
+    # library = {sid: ge.detach().flatten().numpy() for sid, ge in zip(graph_sids, graph_embeddings)}
+    library = {sid: emb.flatten() for sid, emb in zip(graph_embeddings['samples'], graph_embeddings['graph_embeddings'])}
     return library
 
 
