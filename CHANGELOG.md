@@ -1,4 +1,5 @@
 ### 2024-08-13 (1-2)
+- Figure revisions
 - HBCC graph embedding figure
 - Reruns
 
