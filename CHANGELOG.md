@@ -1,3 +1,6 @@
+### 2024-08-13
+- HBCC graph embedding figure
+
 ### 2024-08-08
 - Enhanced script usability
 - HBCC graph embedding analyses
