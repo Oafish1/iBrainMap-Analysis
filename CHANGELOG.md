@@ -1,5 +1,6 @@
-### 2024-08-13
+### 2024-08-13 (1-2)
 - HBCC graph embedding figure
+- Reruns
 
 ### 2024-08-08
 - Enhanced script usability
