@@ -1,3 +1,7 @@
+### 2024-09-02
+- Directory cleanup and reorganization
+- Refresh requirements
+
 ### 2024-09-01
 - Add uppercase argument for `alphabetize_shape`
 - Make panel labels lowercase by default
