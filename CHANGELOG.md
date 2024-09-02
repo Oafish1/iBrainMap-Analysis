@@ -1,3 +1,19 @@
+### 2024-09-01
+- Add uppercase argument for `alphabetize_shape`
+- Make panel labels lowercase by default
+- Revised filtering for main histogram panel
+- Various labeling changes
+
+### 2024-08-30
+- Add alt name argument for ancestry visualization
+- Add optional exclusions for ancestry visualization
+- Add verbosity argument and CLI outputs to edge discovery
+- Change column display names
+- Fix range for enrichment log axis
+- Fix warning message for ancestry and supplement visualization
+- Revise edge discovery visualization
+- Revise ancestry analysis visualization
+
 ### 2024-08-16
 - Tweak model structure for embedding analysis
 

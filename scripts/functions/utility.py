@@ -1266,7 +1266,7 @@ def filter_remove_tf_tg(df, col='id'):
     return df.loc[~df[col].map(lambda s: not string_is_synthetic(split_edge_string(s)[0]) and not string_is_synthetic(split_edge_string(s)[1]))]
 
 
-def alphabetize_shape(shape, *, offset=0, return_dict=False, return_offset=False):
+def alphabetize_shape(shape, *, offset=0, return_dict=False, return_offset=False, uppercase=False):
     "Alphabetize shape labels for a mosaic layout, useful for adding new panels to existing layouts without having to manually replace"
     # Get order of appearance
     del_chars = ('\n', '.', ' ')
@@ -1278,7 +1278,8 @@ def alphabetize_shape(shape, *, offset=0, return_dict=False, return_offset=False
     order = [shape_cull[i] for i in sorted(index)]
 
     # Get conversion
-    labels = string.ascii_uppercase[offset:offset+len(order)]  # Only works up to 26 at the moment
+    base = string.ascii_uppercase if uppercase else string.ascii_lowercase
+    labels = base[offset:offset+len(order)]  # Only works up to 26 at the moment
     conversion = {k : v for k, v in zip(order, labels)}
 
     # Replace characters

@@ -1493,12 +1493,13 @@ def plot_edge_discovery_enrichment(
         # hist_top=True,
         threshold=90,  # Normally 90 for low-volume graphs
         show_labels=False,
-        clamp_min=False,  # End lineplot at lowest
+        clamp_min=False,  # End lineplot at lowest group (bool), or at specified count (int)
         smooth_zeros=True,
         skip_plot=False,
         results_dir='../plots/',
         term_filter=filter_go_terms,
         postfix=None,
+        verbose=False,
         random_seed=42,
         **kwargs,
 ):
@@ -1536,8 +1537,7 @@ def plot_edge_discovery_enrichment(
     else:
         prioritizations_ranges = [[p*data.shape[2] for p in ppr] for ppr in percentage_prioritizations_ranges]
     # Debug for showing ranges
-    # print(percentage_prioritizations_ranges)
-    # print(prioritizations_ranges)
+    if verbose: print(f'Prioritization Ranges {prioritizations_ranges}')
 
     # Smooth if will have zero
     # Useful in the case that the filter is between two numbers, i.e. 61.2 - 61.4 people has nothing within it.
@@ -1549,7 +1549,11 @@ def plot_edge_discovery_enrichment(
                 prioritizations_ranges[i][0] = prioritizations_ranges[i][1] = np.ceil(pr[0])
 
     # Filter
-    if clamp_min: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
+    if clamp_min:
+        bf_count = counts_filtered.shape[0]
+        if type(clamp_min) == bool: counts_filtered = counts_filtered.loc[counts_filtered['Count'] > prioritizations_ranges[0][0]-1]
+        else: counts_filtered = counts_filtered.loc[counts_filtered['Count'] >= clamp_min]
+        if verbose: print(f'Filtered {bf_count - counts_filtered.shape[0]} edges of {bf_count} total from histogram')
 
     # Inset ax
     if not skip_plot:
@@ -1677,13 +1681,15 @@ def plot_edge_discovery_enrichment(
                 pl.set_ylabel(None)
                 sns.despine(ax=ax, bottom=True)
                 ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30), fontsize=bar_fontsize)
-                ax.set_xticklabels(ax.get_xticklabels(), fontsize=bar_fontsize)
+                # ax.set_xticklabels(ax.get_xticklabels(), fontsize=bar_fontsize)
+                ax.tick_params(axis='x', labelsize=bar_fontsize)
 
     if not skip_plot: return ret_ax
 
 
 def plot_cross_enrichment(
     postfixes,
+    names=None,
     ax=None,
     results_dir='../plots/',
     index_name='Description',
@@ -1693,6 +1699,7 @@ def plot_cross_enrichment(
     gene_set_idx=-1,  # Most specific, ordered from least to most %
     transpose=True,
     num_terms=30,
+    excluded_subgroups=None,  # Subgroups to include in sorting but exclude in plot
 ):
     # Compile enrichments across postfixes
     enrichments = pd.DataFrame()
@@ -1720,11 +1727,18 @@ def plot_cross_enrichment(
     # Filter to top terms
     enrichments = enrichments.iloc[enrichments.mean(axis=1).argsort().to_list()[:-num_terms:-1]]
 
+    # Remove excluded subgroups and rename
+    print(enrichments.columns)
+    if names is not None: enrichments.columns = names
+    print(enrichments.columns)
+    if excluded_subgroups is not None: enrichments = enrichments.drop(columns=excluded_subgroups)
+    print(enrichments.columns)
+
     # Plot
     if ax is not None:
         plot_circle_heatmap_patches(enrichments if not transpose else enrichments.T, ax=ax, cbar_label=value_name, cbar_kws={'shrink': .8 if not transpose else .7})
         if not transpose: ax.set_xticklabels(ax.get_xticklabels(), rotation=60)
-        else: ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+        else: ax.tick_params(axis='x', rotation=90)
 
     return enrichments
 
