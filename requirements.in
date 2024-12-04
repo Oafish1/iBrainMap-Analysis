@@ -9,6 +9,7 @@ jupyterlab
 matplotlib
 networkx
 numpy
+openpyxl
 pandas
 pecanpy
 pingouin
