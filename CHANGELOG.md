@@ -1,3 +1,6 @@
+### 2025-02-04
+- Add revision gene enrichment for BRAAK-correlating edges
+
 ### 2024-09-02 (1-2)
 - Directory cleanup and reorganization
 - Refresh requirements
