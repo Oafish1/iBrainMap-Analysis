@@ -1728,11 +1728,8 @@ def plot_cross_enrichment(
     enrichments = enrichments.iloc[enrichments.mean(axis=1).argsort().to_list()[:-num_terms:-1]]
 
     # Remove excluded subgroups and rename
-    print(enrichments.columns)
     if names is not None: enrichments.columns = names
-    print(enrichments.columns)
     if excluded_subgroups is not None: enrichments = enrichments.drop(columns=excluded_subgroups)
-    print(enrichments.columns)
 
     # Plot
     if ax is not None:

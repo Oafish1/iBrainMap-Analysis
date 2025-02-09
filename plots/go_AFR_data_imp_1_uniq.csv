@@ -1,0 +1,54 @@
+_MEMBER_data_imp_1 - 98.0-100.0,_LogP_data_imp_1 - 98.0-100.0,GO,Description,_PATTERN_,_RANK_,GiniIndex
+1,-2.3,WP4018,Clear cell renal cell carcinoma pathways,M1,1,0
+1,-3.3,GO:0060575,intestinal epithelial cell differentiation,M1,1,0
+1,-3.4,GO:0090103,cochlea morphogenesis,M1,1,0
+1,-2.9,R-HSA-3769402,Deactivation of the beta-catenin transactivating complex,M1,1,0
+1,-2.1,GO:0060538,skeletal muscle organ development,M1,1,0
+1,-2.2,GO:0006909,phagocytosis,M1,1,0
+1,-2.1,GO:0042692,muscle cell differentiation,M1,1,0
+1,-2.3,GO:0060675,ureteric bud morphogenesis,M1,1,0
+1,-2,GO:0072028,nephron morphogenesis,M1,1,0
+1,-2.3,WP5420,ADHD and autism ASD pathways,M1,1,0
+1,-2.2,GO:0072171,mesonephric tubule morphogenesis,M1,1,0
+1,-2.1,GO:0048565,digestive tract development,M1,1,0
+1,-3,GO:0010464,regulation of mesenchymal cell proliferation,M1,1,0
+1,-2.4,GO:0072164,mesonephric tubule development,M1,1,0
+1,-2.5,WP5353,Macrophage stimulating protein MSP signaling,M1,1,0
+1,-2.4,GO:0072163,mesonephric epithelium development,M1,1,0
+1,-2.6,WP5072,Modulators of TCR signaling and T cell activation,M1,1,0
+1,-2,GO:0072078,nephron tubule morphogenesis,M1,1,0
+1,-2.1,GO:0001775,cell activation,M1,1,0
+1,-2.6,GO:0110110,positive regulation of animal organ morphogenesis,M1,1,0
+1,-2.6,GO:0006879,intracellular iron ion homeostasis,M1,1,0
+1,-2.9,M124,PID CXCR4 PATHWAY,M1,1,0
+1,-2,GO:0055123,digestive system development,M1,1,0
+1,-4,M34,PID TCR PATHWAY,M1,1,0
+1,-3.1,GO:0031128,developmental induction,M1,1,0
+1,-2.2,GO:0001706,endoderm formation,M1,1,0
+1,-2.3,WP69,T cell receptor signaling,M1,1,0
+1,-2.1,GO:0043200,response to amino acid,M1,1,0
+1,-2.3,GO:0030100,regulation of endocytosis,M1,1,0
+1,-2.6,GO:0050922,negative regulation of chemotaxis,M1,1,0
+1,-2.7,GO:0090102,cochlea development,M1,1,0
+1,-2.4,hsa04660,T cell receptor signaling pathway,M1,1,0
+1,-3.1,GO:0045664,regulation of neuron differentiation,M1,1,0
+1,-2,R-HSA-201681,TCF dependent signaling in response to WNT,M1,1,0
+1,-2.6,GO:0048598,embryonic morphogenesis,M1,1,0
+1,-6.1,M88,PID CD8 TCR PATHWAY,M1,1,0
+1,-2.5,GO:0003151,outflow tract morphogenesis,M1,1,0
+1,-2.4,GO:0048562,embryonic organ morphogenesis,M1,1,0
+1,-2.1,GO:0050680,negative regulation of epithelial cell proliferation,M1,1,0
+1,-3.3,GO:0072189,ureter development,M1,1,0
+1,-2.4,GO:0060537,muscle tissue development,M1,1,0
+1,-2.2,GO:0002252,immune effector process,M1,1,0
+1,-3.1,GO:0042060,wound healing,M1,1,0
+1,-2.4,GO:0001823,mesonephros development,M1,1,0
+1,-2.6,GO:0001708,cell fate specification,M1,1,0
+1,-2.3,GO:0050678,regulation of epithelial cell proliferation,M1,1,0
+1,-2,GO:0072088,nephron epithelium morphogenesis,M1,1,0
+1,-2.2,GO:0007519,skeletal muscle tissue development,M1,1,0
+1,-2.2,GO:0001704,formation of primary germ layer,M1,1,0
+1,-2.4,GO:0001657,ureteric bud development,M1,1,0
+1,-2.3,GO:0009611,response to wounding,M1,1,0
+1,-3.7,GO:0001656,metanephros development,M1,1,0
+1,-2.5,M7,PID FCER1 PATHWAY,M1,1,0

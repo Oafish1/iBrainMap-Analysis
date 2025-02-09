@@ -1,0 +1,200 @@
+_MEMBER_data_imp_1 - 98.0-100.0,_LogP_data_imp_1 - 98.0-100.0,GO,Description,_PATTERN_,_RANK_,GiniIndex
+1,-2.9,WP3932,Focal adhesion PI3K Akt mTOR signaling,M1,1,0
+1,-3.3,GO:0003013,circulatory system process,M1,1,0
+1,-2.4,GO:0010976,positive regulation of neuron projection development,M1,1,0
+1,-2.7,GO:0051963,regulation of synapse assembly,M1,1,0
+1,-2,GO:0071774,response to fibroblast growth factor,M1,1,0
+1,-2.6,GO:0050807,regulation of synapse organization,M1,1,0
+1,-2.5,GO:0035988,chondrocyte proliferation,M1,1,0
+1,-2.5,GO:0042475,odontogenesis of dentin-containing tooth,M1,1,0
+1,-2.3,hsa04024,cAMP signaling pathway,M1,1,0
+1,-2.8,GO:0050954,sensory perception of mechanical stimulus,M1,1,0
+1,-4.2,GO:0070848,response to growth factor,M1,1,0
+1,-3.2,GO:0043434,response to peptide hormone,M1,1,0
+1,-2.4,R-HSA-187037,Signaling by NTRK1 (TRKA),M1,1,0
+1,-2.2,GO:0042531,positive regulation of tyrosine phosphorylation of STAT protein,M1,1,0
+1,-2.3,R-HSA-166520,Signaling by NTRKs,M1,1,0
+1,-2.5,GO:0061515,myeloid cell development,M1,1,0
+1,-2.4,GO:0099177,regulation of trans-synaptic signaling,M1,1,0
+1,-6.2,GO:0010517,regulation of phospholipase activity,M1,1,0
+1,-2.8,GO:0009612,response to mechanical stimulus,M1,1,0
+1,-2.7,GO:0070486,leukocyte aggregation,M1,1,0
+1,-2.4,GO:0010638,positive regulation of organelle organization,M1,1,0
+1,-2.3,GO:2000679,positive regulation of transcription regulatory region DNA binding,M1,1,0
+1,-2.4,GO:0050890,cognition,M1,1,0
+1,-2.5,WP5087,Pleural mesothelioma,M1,1,0
+1,-2.5,GO:0072132,mesenchyme morphogenesis,M1,1,0
+1,-3.1,GO:0051216,cartilage development,M1,1,0
+1,-2.4,GO:0110053,regulation of actin filament organization,M1,1,0
+1,-3.1,GO:0045596,negative regulation of cell differentiation,M1,1,0
+1,-2.7,R-HSA-198725,Nuclear Events (kinase and transcription factor activation),M1,1,0
+1,-2.3,GO:0007431,salivary gland development,M1,1,0
+1,-2.9,GO:0006887,exocytosis,M1,1,0
+1,-2,R-HSA-9012999,RHO GTPase cycle,M1,1,0
+1,-2.3,GO:0060193,positive regulation of lipase activity,M1,1,0
+1,-2.5,GO:1901890,positive regulation of cell junction assembly,M1,1,0
+1,-2.5,GO:0090287,regulation of cellular response to growth factor stimulus,M1,1,0
+1,-2.5,GO:0090100,positive regulation of transmembrane receptor protein serine/threonine kinase signaling pathway,M1,1,0
+1,-2.1,GO:0055021,regulation of cardiac muscle tissue growth,M1,1,0
+1,-2,GO:0003161,cardiac conduction system development,M1,1,0
+1,-2.2,WP69,T cell receptor signaling,M1,1,0
+1,-2.6,GO:0010463,mesenchymal cell proliferation,M1,1,0
+1,-6.1,GO:0001501,skeletal system development,M1,1,0
+1,-3.8,WP2032,Thyroid stimulating hormone TSH signaling,M1,1,0
+1,-2.2,GO:0043009,chordate embryonic development,M1,1,0
+1,-2.1,GO:0007188,adenylate cyclase-modulating G protein-coupled receptor signaling pathway,M1,1,0
+1,-2.1,GO:0055022,negative regulation of cardiac muscle tissue growth,M1,1,0
+1,-2.1,WP53,ID signaling,M1,1,0
+1,-2.1,GO:0051493,regulation of cytoskeleton organization,M1,1,0
+1,-2.5,GO:0030219,megakaryocyte differentiation,M1,1,0
+1,-3.5,GO:0032868,response to insulin,M1,1,0
+1,-2.3,WP4875,Disruption of postsynaptic signaling by CNV,M1,1,0
+1,-2.2,GO:0007218,neuropeptide signaling pathway,M1,1,0
+1,-2.1,GO:0044344,cellular response to fibroblast growth factor stimulus,M1,1,0
+1,-2.3,GO:0097094,craniofacial suture morphogenesis,M1,1,0
+1,-2.1,GO:0007015,actin filament organization,M1,1,0
+1,-2.5,GO:0035249,"synaptic transmission, glutamatergic",M1,1,0
+1,-2.3,GO:0031346,positive regulation of cell projection organization,M1,1,0
+1,-3.1,GO:0003203,endocardial cushion morphogenesis,M1,1,0
+1,-2.1,GO:1904705,regulation of vascular associated smooth muscle cell proliferation,M1,1,0
+1,-2.4,GO:0034330,cell junction organization,M1,1,0
+1,-3.1,GO:0031214,biomineral tissue development,M1,1,0
+1,-2.2,GO:0050679,positive regulation of epithelial cell proliferation,M1,1,0
+1,-4.4,M60,PID NFAT TFPATHWAY,M1,1,0
+1,-2.1,GO:0031529,ruffle organization,M1,1,0
+1,-3.6,GO:1904754,positive regulation of vascular associated smooth muscle cell migration,M1,1,0
+1,-2.5,GO:0051783,regulation of nuclear division,M1,1,0
+1,-3,GO:0001503,ossification,M1,1,0
+1,-2.3,WP5373,Osteoarthritic chondrocyte hypertrophy,M1,1,0
+1,-3.1,GO:0050678,regulation of epithelial cell proliferation,M1,1,0
+1,-2.9,GO:0051962,positive regulation of nervous system development,M1,1,0
+1,-2.6,GO:0050803,regulation of synapse structure or activity,M1,1,0
+1,-2.3,GO:0061050,regulation of cell growth involved in cardiac muscle cell development,M1,1,0
+1,-2.5,M288,PID HES HEY PATHWAY,M1,1,0
+1,-3.7,GO:0007610,behavior,M1,1,0
+1,-2.1,GO:0061117,negative regulation of heart growth,M1,1,0
+1,-3.2,GO:0098712,L-glutamate import across plasma membrane,M1,1,0
+1,-2.2,WP4767,FGFR3 signaling in chondrocyte proliferation and terminal differentiation,M1,1,0
+1,-2.4,GO:0043065,positive regulation of apoptotic process,M1,1,0
+1,-2.1,GO:0045663,positive regulation of myoblast differentiation,M1,1,0
+1,-2.1,GO:0042659,regulation of cell fate specification,M1,1,0
+1,-2.3,GO:0048008,platelet-derived growth factor receptor signaling pathway,M1,1,0
+1,-2.2,GO:0008064,regulation of actin polymerization or depolymerization,M1,1,0
+1,-5.5,WP2064,Neural crest differentiation,M1,1,0
+1,-2.2,GO:0007178,cell surface receptor protein serine/threonine kinase signaling pathway,M1,1,0
+1,-3.4,GO:0060348,bone development,M1,1,0
+1,-2.4,GO:0007632,visual behavior,M1,1,0
+1,-2.5,GO:0019082,viral protein processing,M1,1,0
+1,-2.2,GO:2001053,regulation of mesenchymal cell apoptotic process,M1,1,0
+1,-2.7,M167,PID AP1 PATHWAY,M1,1,0
+1,-2.5,GO:0046849,bone remodeling,M1,1,0
+1,-2.4,GO:0050804,modulation of chemical synaptic transmission,M1,1,0
+1,-3.4,GO:0021700,developmental maturation,M1,1,0
+1,-4.3,GO:0032869,cellular response to insulin stimulus,M1,1,0
+1,-3.3,GO:0007605,sensory perception of sound,M1,1,0
+1,-2.4,GO:0061061,muscle structure development,M1,1,0
+1,-2.4,GO:0006835,dicarboxylic acid transport,M1,1,0
+1,-2.7,GO:1901992,positive regulation of mitotic cell cycle phase transition,M1,1,0
+1,-2.1,GO:0089718,amino acid import across plasma membrane,M1,1,0
+1,-2,GO:0060322,head development,M1,1,0
+1,-3,GO:0003272,endocardial cushion formation,M1,1,0
+1,-2.8,GO:0071695,anatomical structure maturation,M1,1,0
+1,-2.3,GO:0014910,regulation of smooth muscle cell migration,M1,1,0
+1,-2.2,GO:1901888,regulation of cell junction assembly,M1,1,0
+1,-2.8,GO:0044089,positive regulation of cellular component biogenesis,M1,1,0
+1,-3.5,GO:1904752,regulation of vascular associated smooth muscle cell migration,M1,1,0
+1,-2.5,hsa04550,Signaling pathways regulating pluripotency of stem cells,M1,1,0
+1,-2.2,R-HSA-196849,Metabolism of water-soluble vitamins and cofactors,M1,1,0
+1,-2.1,GO:0048568,embryonic organ development,M1,1,0
+1,-2.7,GO:0003197,endocardial cushion development,M1,1,0
+1,-2.5,GO:0071773,cellular response to BMP stimulus,M1,1,0
+1,-3.4,GO:0002062,chondrocyte differentiation,M1,1,0
+1,-2.1,GO:1902905,positive regulation of supramolecular fiber organization,M1,1,0
+1,-2,hsa04020,Calcium signaling pathway,M1,1,0
+1,-3.3,GO:1902903,regulation of supramolecular fiber organization,M1,1,0
+1,-2,GO:0060485,mesenchyme development,M1,1,0
+1,-4.4,GO:0099537,trans-synaptic signaling,M1,1,0
+1,-2.9,GO:0042473,outer ear morphogenesis,M1,1,0
+1,-3.1,GO:0044057,regulation of system process,M1,1,0
+1,-2.2,GO:0042474,middle ear morphogenesis,M1,1,0
+1,-2.4,GO:0097435,supramolecular fiber organization,M1,1,0
+1,-3.6,GO:0042476,odontogenesis,M1,1,0
+1,-2.1,hsa04151,PI3K-Akt signaling pathway,M1,1,0
+1,-2.5,GO:0071772,response to BMP,M1,1,0
+1,-2.5,GO:0015813,L-glutamate transmembrane transport,M1,1,0
+1,-2.1,GO:1903522,regulation of blood circulation,M1,1,0
+1,-2.6,GO:0001701,in utero embryonic development,M1,1,0
+1,-2.5,R-HSA-9844594,Transcriptional regulation of brown and beige adipocyte differentiation by EBF2,M1,1,0
+1,-2.6,GO:0051148,negative regulation of muscle cell differentiation,M1,1,0
+1,-2,GO:1904707,positive regulation of vascular associated smooth muscle cell proliferation,M1,1,0
+1,-3.1,GO:0015800,acidic amino acid transport,M1,1,0
+1,-2,GO:0090257,regulation of muscle system process,M1,1,0
+1,-4.8,GO:0099536,synaptic signaling,M1,1,0
+1,-2.1,GO:1901989,positive regulation of cell cycle phase transition,M1,1,0
+1,-2,GO:0002065,columnar/cuboidal epithelial cell differentiation,M1,1,0
+1,-2.5,R-HSA-9843743,Transcriptional regulation of brown and beige adipocyte differentiation,M1,1,0
+1,-3.6,GO:1901699,cellular response to nitrogen compound,M1,1,0
+1,-2.6,GO:0007167,enzyme-linked receptor protein signaling pathway,M1,1,0
+1,-2,R-HSA-9679506,SARS-CoV Infections,M1,1,0
+1,-3.3,GO:0045931,positive regulation of mitotic cell cycle,M1,1,0
+1,-2.2,GO:0043068,positive regulation of programmed cell death,M1,1,0
+1,-2.9,GO:2000628,regulation of miRNA metabolic process,M1,1,0
+1,-2.1,GO:0007420,brain development,M1,1,0
+1,-4.1,GO:0007268,chemical synaptic transmission,M1,1,0
+1,-2.5,R-HSA-983231,Factors involved in megakaryocyte development and platelet production,M1,1,0
+1,-2.4,GO:0045744,negative regulation of G protein-coupled receptor signaling pathway,M1,1,0
+1,-4.1,GO:0098916,anterograde trans-synaptic signaling,M1,1,0
+1,-4.7,WP5417,Cell lineage map for neuronal differentiation,M1,1,0
+1,-3.1,GO:1902893,regulation of miRNA transcription,M1,1,0
+1,-3.3,GO:0045787,positive regulation of cell cycle,M1,1,0
+1,-3.1,R-HSA-9031628,NGF-stimulated transcription,M1,1,0
+1,-2.3,GO:0090092,regulation of transmembrane receptor protein serine/threonine kinase signaling pathway,M1,1,0
+1,-3.3,hsa04724,Glutamatergic synapse,M1,1,0
+1,-2.3,GO:0006302,double-strand break repair,M1,1,0
+1,-2.1,R-HSA-1433557,Signaling by SCF-KIT,M1,1,0
+1,-2.3,GO:1900006,positive regulation of dendrite development,M1,1,0
+1,-3.1,GO:0071375,cellular response to peptide hormone stimulus,M1,1,0
+1,-2.9,GO:0061052,negative regulation of cell growth involved in cardiac muscle cell development,M1,1,0
+1,-3.9,GO:0008283,cell population proliferation,M1,1,0
+1,-2.6,GO:0048661,positive regulation of smooth muscle cell proliferation,M1,1,0
+1,-2.9,GO:0098976,excitatory chemical synaptic transmission,M1,1,0
+1,-3.1,WP4540,Hippo signaling regulation,M1,1,0
+1,-2.6,GO:0007193,adenylate cyclase-inhibiting G protein-coupled receptor signaling pathway,M1,1,0
+1,-2.2,GO:0051938,L-glutamate import,M1,1,0
+1,-2,GO:0019233,sensory perception of pain,M1,1,0
+1,-2.3,GO:0097152,mesenchymal cell apoptotic process,M1,1,0
+1,-3.1,WP4808,Endochondral ossification with skeletal dysplasias,M1,1,0
+1,-3.2,WP4541,Hippo Merlin signaling dysregulation,M1,1,0
+1,-2.2,GO:0010996,response to auditory stimulus,M1,1,0
+1,-2.7,GO:0061448,connective tissue development,M1,1,0
+1,-2,R-HSA-112316,Neuronal System,M1,1,0
+1,-4.1,GO:0071363,cellular response to growth factor stimulus,M1,1,0
+1,-2.1,M18,PID INTEGRIN1 PATHWAY,M1,1,0
+1,-3.6,GO:0010518,positive regulation of phospholipase activity,M1,1,0
+1,-2,GO:1901879,regulation of protein depolymerization,M1,1,0
+1,-2.3,GO:0051960,regulation of nervous system development,M1,1,0
+1,-2.7,R-HSA-9006934,Signaling by Receptor Tyrosine Kinases,M1,1,0
+1,-2.1,GO:0030513,positive regulation of BMP signaling pathway,M1,1,0
+1,-2.6,GO:0043516,"regulation of DNA damage response, signal transduction by p53 class mediator",M1,1,0
+1,-2.1,GO:0007507,heart development,M1,1,0
+1,-3.2,GO:0045055,regulated exocytosis,M1,1,0
+1,-2.3,GO:0003007,heart morphogenesis,M1,1,0
+1,-2.2,GO:0034505,tooth mineralization,M1,1,0
+1,-3.1,WP4172,PI3K Akt signaling,M1,1,0
+1,-2.1,GO:0030832,regulation of actin filament length,M1,1,0
+1,-2.2,GO:0032870,cellular response to hormone stimulus,M1,1,0
+1,-2.2,GO:0009792,embryo development ending in birth or egg hatching,M1,1,0
+1,-4.4,hsa04810,Regulation of actin cytoskeleton,M1,1,0
+1,-3.3,GO:0090068,positive regulation of cell cycle process,M1,1,0
+1,-2.1,GO:0051896,regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction,M1,1,0
+1,-4.2,GO:0051965,positive regulation of synapse assembly,M1,1,0
+1,-2.9,GO:0051154,negative regulation of striated muscle cell differentiation,M1,1,0
+1,-2.3,GO:0007159,leukocyte cell-cell adhesion,M1,1,0
+1,-2.2,GO:0042509,regulation of tyrosine phosphorylation of STAT protein,M1,1,0
+1,-2,hsa05162,Measles,M1,1,0
+1,-2,GO:0050994,regulation of lipid catabolic process,M1,1,0
+1,-3,GO:0098609,cell-cell adhesion,M1,1,0
+1,-2.4,GO:0071345,cellular response to cytokine stimulus,M1,1,0
+1,-4,GO:0060191,regulation of lipase activity,M1,1,0
+1,-3.1,WP474,Endochondral ossification,M1,1,0
+1,-3.4,M235,PID TCR CALCIUM PATHWAY,M1,1,0
