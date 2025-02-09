@@ -1,3 +1,8 @@
+### 2025-02-09 (1-2)
+- Enrichment for unique genes in highly conserved edges across ancestries
+- Notebook reorganization
+- Small changes to CLI output behavior
+
 ### 2025-02-04
 - Add revision gene enrichment for BRAAK-correlating edges
 
