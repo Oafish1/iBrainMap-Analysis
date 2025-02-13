@@ -39,6 +39,7 @@ ATT_FOLDER = DATA_FOLDER + 'freeze3/recent/'
 ATT_CSV = ATT_FOLDER + 'MSSM_attn_all_224.csv'
 ATT = ATT_FOLDER + 'MSSM_attn_all_224.pkl'
 GE = ATT_FOLDER + 'HBCC_10p10p_224_embed_attn.pkl'
+GI = ATT_FOLDER + 'node_imp_score.csv'
 # SID = NOT PROVIDED
 
 
@@ -62,6 +63,9 @@ def get_attention_columns(scaled=False):
     exclude += [c for c in graph.columns if not c[-1].isdigit()]
 
     return [c for c in graph.columns if c not in exclude]
+
+
+def get_importance_scores(): return pd.read_csv(GI, index_col=0)
 
 
 def load_graph_by_id(graph_id, source='attention', column=None, train_omit=True, average=False, **kwargs):

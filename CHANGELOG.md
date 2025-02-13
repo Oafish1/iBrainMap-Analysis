@@ -1,3 +1,10 @@
+### 2025-02-12
+- Add significance testing for unique ancestry genes
+- Folder reorganization
+- New figure for unique and overlapping ancestry genes
+- New function for getting gene importance scores
+- Replace edge analysis with gene importance for revision
+
 ### 2025-02-09 (1-2)
 - Enrichment for unique genes in highly conserved edges across ancestries
 - Notebook reorganization
