@@ -1,3 +1,9 @@
+### 2025-02-17
+- Add intersections to revision ancestry enrichment
+- Change group sorting for revision ancestry enrichment
+- Figure updates
+- Fixes for group distribution ordering
+
 ### 2025-02-12
 - Add significance testing for unique ancestry genes
 - Folder reorganization
