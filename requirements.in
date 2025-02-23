@@ -16,6 +16,7 @@ pingouin
 pip-tools
 plotly
 pydot
+scanpy
 scikit-learn
 seaborn
 statannotations

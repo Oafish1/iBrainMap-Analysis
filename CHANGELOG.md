@@ -1,3 +1,11 @@
+### 2025-02-22
+- Add scGNN pseudobulk preprocessing notebook
+- Requirement updates for scanpy, recompile
+
+### 2025-02-18
+- Broaden ancestry analyses
+- Figure revisions
+
 ### 2025-02-17
 - Add intersections to revision ancestry enrichment
 - Change group sorting for revision ancestry enrichment
