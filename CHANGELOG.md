@@ -1,3 +1,22 @@
+### 2025-03-05
+- Run variants of scGNN-v1 and compute final accuracies
+
+### 2025-03-04
+- Recover pseudobulk from unexported trial
+- Run scGNN on new pseudobulk files
+
+### 2025-03-03
+- Add SEA-AD dataset to pseudocells and recalculate
+- Figure changes
+- Migrate to scGNN-v2
+- Reorganization and deletion of unused figures
+
+### 2025-02-26
+- Correction for AUC calculation on scGNN embeddings
+
+### 2025-02-24
+- Compute prediction accuracies for scGNN embeddings on MSSM holdout
+
 ### 2025-02-22
 - Add scGNN pseudobulk preprocessing notebook
 - Requirement updates for scanpy, recompile
