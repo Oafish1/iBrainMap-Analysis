@@ -1,4 +1,14 @@
+### 2025-03-10
+- Add grQTL files to `file` module
+- MPRA Crispr vs grQTL intersection analysis
+
+### 2025-03-07
+- Fix background calculation for top correlating gene importance score analysis
+- Use spearman in rev1 top correlating gene importance score analysis
+- Revise top correlating gene importance score analysis to focus on positive/negative rather than significance and head
+
 ### 2025-03-05
+- Add 9 methods to `supplement_6` analysis
 - Run variants of scGNN-v1 and compute final accuracies
 
 ### 2025-03-04
