@@ -16,6 +16,7 @@ pingouin
 pip-tools
 plotly
 pydot
+pyensembl
 scanpy
 scikit-learn
 seaborn

@@ -40,8 +40,8 @@ ATT_CSV = ATT_FOLDER + 'MSSM_attn_all_224.csv'
 ATT = ATT_FOLDER + 'MSSM_attn_all_224.pkl'
 GE = ATT_FOLDER + 'HBCC_10p10p_224_embed_attn.pkl'
 GI = ATT_FOLDER + 'node_imp_score.csv'
-GRQTL_TF = ATT_FOLDER + 'cisTF_qtl_topVar.csv'
-GRQTL_TG = ATT_FOLDER + 'cisTG_qtl_topVar.csv'
+GRQTL_TF = ATT_FOLDER + 'cisTF_qtl.csv'  # _topVar
+GRQTL_TG = ATT_FOLDER + 'cisTG_qtl.csv'  # _topVar
 # SID = NOT PROVIDED
 
 

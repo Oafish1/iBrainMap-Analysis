@@ -1,3 +1,12 @@
+### 2025-03-14
+- Add same-gene filtering between grQTLs and MPRA SNPs
+- Notebook formatting
+- QOL and reporting changes to grQTL MPRA analysis
+- Rerun grQTL MPRA analysis
+
+### 2025-03-12
+- Compute grQTL MPRA analysis on all grQTLs
+
 ### 2025-03-10
 - Add grQTL files to `file` module
 - MPRA Crispr vs grQTL intersection analysis
