@@ -1,6 +1,8 @@
-### 2025-03-18
+### 2025-03-18 (1-2)
 - Dataframe value sanitization for CLI reporting
+- Fix count duplication behavior for MPRA grQTL overlap analysis
 - Plot for MPRA grQTL overlap analysis
+- Update cell type colors for MPRA overlap plot
 
 ### 2025-03-14
 - Add same-gene filtering between grQTLs and MPRA SNPs
