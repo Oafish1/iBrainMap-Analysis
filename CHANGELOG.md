@@ -1,3 +1,7 @@
+### 2025-03-18
+- Dataframe value sanitization for CLI reporting
+- Plot for MPRA grQTL overlap analysis
+
 ### 2025-03-14
 - Add same-gene filtering between grQTLs and MPRA SNPs
 - Notebook formatting
