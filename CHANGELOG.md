@@ -1,3 +1,7 @@
+### 2025-03-19
+- Add Cell Type legend to MPRA grQTL overlap plot
+- Revise coloration and formatting of MPRA grQTL overlap plot
+
 ### 2025-03-18 (1-2)
 - Dataframe value sanitization for CLI reporting
 - Fix count duplication behavior for MPRA grQTL overlap analysis
