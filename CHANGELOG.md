@@ -1,3 +1,9 @@
+### 2025-03-31
+- Add code for SIMBA run and evaluation
+
+### 2025-03-28
+- Figure changes
+
 ### 2025-03-19
 - Add Cell Type legend to MPRA grQTL overlap plot
 - Revise coloration and formatting of MPRA grQTL overlap plot
