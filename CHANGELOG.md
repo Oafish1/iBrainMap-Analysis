@@ -1,3 +1,6 @@
+### 2025-04-11
+- SIMBA evaluation run
+
 ### 2025-03-31
 - Add code for SIMBA run and evaluation
 
