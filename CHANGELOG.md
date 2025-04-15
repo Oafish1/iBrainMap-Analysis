@@ -1,3 +1,10 @@
+### 2025-04-15
+- Figure revisions
+- Gitignore fix
+
+### 2025-04-13
+- Format ancestry genes into excel file
+
 ### 2025-04-11
 - SIMBA evaluation run
 
