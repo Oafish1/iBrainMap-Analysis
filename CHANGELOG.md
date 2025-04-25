@@ -1,3 +1,8 @@
+### 2025-04-24
+- Figure changes
+- File structure update
+- Prediction calculation change for Supplement 6
+
 ### 2025-04-15
 - Figure revisions
 - Gitignore fix

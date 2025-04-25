@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 
 # Locations
-DATA_FOLDER = '../../data/'
+DATA_FOLDER = '../data/'
 META = DATA_FOLDER + 'metadata_dec.csv'
 GENOTYPE_META = DATA_FOLDER + 'genotype_metadata_dec.csv'
 CONTRAST = DATA_FOLDER + 'contrasts.csv'
