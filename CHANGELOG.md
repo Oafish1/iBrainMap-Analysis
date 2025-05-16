@@ -1,4 +1,4 @@
-### 2025-05-16
+### 2025-05-16 (1-2)
 - Recompile requirements for seaborn-statannotations compatibility
 - Small label and color changes to panel 5b
 
