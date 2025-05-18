@@ -1,3 +1,6 @@
+### 2025-05-18
+- Figure 5 supplement label revisions
+
 ### 2025-05-16 (1-2)
 - Recompile requirements for seaborn-statannotations compatibility
 - Small label and color changes to panel 5b
