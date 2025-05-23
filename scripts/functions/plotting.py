@@ -1489,6 +1489,7 @@ def plot_edge_discovery_enrichment(
         gene_max_num=500,
         interval=10,
         num_descriptors=5,
+        wrap_chars=30,
         bar_fontsize='xx-small',
         # hist_top=True,
         threshold=90,  # Normally 90 for low-volume graphs
@@ -1680,7 +1681,7 @@ def plot_edge_discovery_enrichment(
                 pl.set_xlabel(None)
                 pl.set_ylabel(None)
                 sns.despine(ax=ax, bottom=True)
-                ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=30), fontsize=bar_fontsize)
+                ax.set_yticklabels(wrap_text(ax.get_yticklabels(), chars=wrap_chars), fontsize=bar_fontsize)
                 # ax.set_xticklabels(ax.get_xticklabels(), fontsize=bar_fontsize)
                 ax.tick_params(axis='x', labelsize=bar_fontsize)
 
