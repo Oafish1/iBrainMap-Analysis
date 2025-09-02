@@ -7,5 +7,8 @@ __pycache__
 # Data
 data
 
+# Figure out if PII
+figure_2d_clusters.csv
+
 # Thumbs
 thumbs.db
