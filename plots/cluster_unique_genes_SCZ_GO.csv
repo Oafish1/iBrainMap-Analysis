@@ -1,0 +1,298 @@
+_MEMBER_0.0,_MEMBER_1.0,_MEMBER_2.0,_MEMBER_3.0,_MEMBER_4.0,_LogP_0.0,_LogP_1.0,_LogP_2.0,_LogP_3.0,_LogP_4.0,GO,Description,_PATTERN_,_RANK_,GiniIndex
+1,1,1,1,0,-5.9,-6.1,-6.3,-3.3,0,GO:0006338,chromatin remodeling,M11110,4,0
+1,1,1,1,0,-2.5,-2.3,-3.2,-2.3,0,GO:0006259,DNA metabolic process,M11110,4,0
+1,1,1,1,0,-5.5,-4.1,-2.5,-2.3,0,R-HSA-3247509,Chromatin modifying enzymes,M11110,4,0
+1,1,1,1,0,-5.1,-3.8,-2.3,-2.2,0,R-HSA-4839726,Chromatin organization,M11110,4,0
+1,1,1,1,0,-3.1,-3.9,-7.6,-2.3,0,R-HSA-9843940,Regulation of endogenous retroelements by KRAB-ZFP proteins,M11110,4,0
+1,1,1,0,0,-2.4,-4.6,-5.4,0,0,R-HSA-212165,Epigenetic regulation of gene expression,M11100,3,0
+1,1,1,0,0,-6.2,-3,-4.8,0,0,GO:0006366,transcription by RNA polymerase II,M11100,3,0
+1,0,1,0,1,-4.6,0,-3,0,-2.6,M101,PID HDAC CLASSI PATHWAY,M10101,3,0
+1,1,1,0,0,-3.8,-4,-7.6,0,0,R-HSA-9842860,Regulation of endogenous retroelements,M11100,3,0
+0,1,1,1,0,0,-3.2,-2.4,-3.5,0,GO:0071897,DNA biosynthetic process,M01110,3,0
+0,1,1,1,0,0,-2.4,-3.8,-2.2,0,GO:0009299,mRNA transcription,M01110,3,0
+0,1,1,1,0,0,-2.1,-2.1,-2.2,0,hsa03082,ATP-dependent chromatin remodeling,M01110,3,0
+1,1,1,0,0,-3.2,-2.5,-2.6,0,0,GO:0006281,DNA repair,M11100,3,0
+1,1,1,0,0,-7.8,-4.6,-5.2,0,0,GO:0006351,DNA-templated transcription,M11100,3,0
+1,1,1,0,0,-2,-2.6,-3.4,0,0,GO:0042789,mRNA transcription by RNA polymerase II,M11100,3,0
+1,1,1,0,0,-3,-4.6,-6.3,0,0,GO:0045814,"negative regulation of gene expression, epigenetic",M11100,3,0
+0,1,1,1,0,0,-2,-5,-2.3,0,GO:0016071,mRNA metabolic process,M01110,3,0
+1,1,1,0,0,-3.3,-5.9,-4.2,0,0,GO:0031507,heterochromatin formation,M11100,3,0
+1,1,1,0,0,-4.4,-5.1,-4.6,0,0,GO:0040029,epigenetic regulation of gene expression,M11100,3,0
+1,0,1,0,0,-2.1,0,-2.4,0,0,M2,PID SMAD2 3NUCLEAR PATHWAY,M10100,2,0
+1,0,0,0,1,-2.4,0,0,0,-2.4,R-HSA-2990846,SUMOylation,M10001,2,0
+0,1,0,1,0,0,-3.5,0,-3.1,0,GO:0060260,regulation of transcription initiation by RNA polymerase II,M01010,2,0
+0,0,1,1,0,0,0,-3.6,-2.3,0,R-HSA-5656169,Termination of translesion DNA synthesis,M00110,2,0
+0,0,1,1,0,0,0,-3.7,-2.2,0,WP4946,DNA repair pathways full network,M00110,2,0
+0,0,1,1,0,0,0,-3.2,-2.1,0,R-HSA-73893,DNA Damage Bypass,M00110,2,0
+1,1,0,0,0,-3.6,-2.6,0,0,0,WP1541,Energy metabolism,M11000,2,0
+1,1,0,0,0,-2,-2.4,0,0,0,GO:0035270,endocrine system development,M11000,2,0
+0,0,1,1,0,0,0,-2,-2.7,0,R-HSA-9020958,Interleukin-21 signaling,M00110,2,0
+0,0,0,1,1,0,0,0,-2.2,-2.9,WP1971,Integrated cancer pathway,M00011,2,0
+0,1,0,0,1,0,-2.3,0,0,-2,R-HSA-3700989,Transcriptional Regulation by TP53,M01001,2,0
+1,0,1,0,0,-2.2,0,-2.8,0,0,hsa04917,Prolactin signaling pathway,M10100,2,0
+0,0,1,1,0,0,0,-2.5,-2.3,0,R-HSA-73884,Base Excision Repair,M00110,2,0
+1,0,1,0,0,-2.5,0,-3,0,0,GO:0006984,ER-nucleus signaling pathway,M10100,2,0
+0,1,1,0,0,0,-2,-2,0,0,R-HSA-167287,HIV elongation arrest and recovery,M01100,2,0
+0,1,1,0,0,0,-2.2,-2.2,0,0,GO:0000731,DNA synthesis involved in DNA repair,M01100,2,0
+1,0,1,0,0,-2.1,0,-2.4,0,0,CORUM:3064,"RNA polymerase II complex, chromatin structure modifying",M10100,2,0
+0,0,1,1,0,0,0,-3.4,-2.2,0,R-HSA-110313,Translesion synthesis by Y family DNA polymerases bypasses lesions on DNA template,M00110,2,0
+0,1,1,0,0,0,-2,-2,0,0,R-HSA-167290,Pausing and recovery of HIV elongation,M01100,2,0
+0,1,1,0,0,0,-2.2,-2.2,0,0,R-HSA-167243,Tat-mediated HIV elongation arrest and recovery,M01100,2,0
+1,0,0,0,1,-2.4,0,0,0,-2.4,R-HSA-3108232,SUMO E3 ligases SUMOylate target proteins,M10001,2,0
+1,0,1,0,0,-2.1,0,-4.3,0,0,R-HSA-72203,Processing of Capped Intron-Containing Pre-mRNA,M10100,2,0
+0,1,1,0,0,0,-2.2,-2.2,0,0,R-HSA-167238,Pausing and recovery of Tat-mediated HIV elongation,M01100,2,0
+1,0,1,0,0,-2.5,0,-2.2,0,0,R-HSA-383280,Nuclear Receptor transcription pathway,M10100,2,0
+1,0,1,0,0,-2.9,0,-3.6,0,0,R-HSA-9931509,"Expression of BMAL (ARNTL), CLOCK, and NPAS2",M10100,2,0
+1,1,0,0,0,-5.1,-4.5,0,0,0,R-HSA-3214842,HDMs demethylate histones,M11000,2,0
+0,1,0,1,0,0,-3.5,0,-2.5,0,GO:2000142,regulation of DNA-templated transcription initiation,M01010,2,0
+1,0,1,0,0,-2.3,0,-2.2,0,0,M105,PID TELOMERASE PATHWAY,M10100,2,0
+1,0,1,0,0,-2.3,0,-2.4,0,0,R-HSA-9909396,Circadian clock,M10100,2,0
+1,0,0,0,0,-2,0,0,0,0,GO:0035967,cellular response to topologically incorrect protein,M10000,1,0
+0,0,0,1,0,0,0,0,-2.4,0,GO:0033028,myeloid cell apoptotic process,M00010,1,0
+0,0,1,0,0,0,0,-4.2,0,0,R-HSA-1592230,Mitochondrial biogenesis,M00100,1,0
+0,0,1,0,0,0,0,-3.6,0,0,hsa03420,Nucleotide excision repair,M00100,1,0
+0,0,0,1,0,0,0,0,-2.1,0,GO:2000278,regulation of DNA biosynthetic process,M00010,1,0
+1,0,0,0,0,-2.8,0,0,0,0,R-HSA-5619507,Activation of HOX genes during differentiation,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0031053,primary miRNA processing,M10000,1,0
+0,0,1,0,0,0,0,-3.1,0,0,R-HSA-72163,mRNA Splicing - Major Pathway,M00100,1,0
+1,0,0,0,0,-2.9,0,0,0,0,R-HSA-72202,Transport of Mature Transcript to Cytoplasm,M10000,1,0
+0,1,0,0,0,0,-3.3,0,0,0,R-HSA-167172,Transcription of the HIV genome,M01000,1,0
+0,0,1,0,0,0,0,-6.6,0,0,WP411,mRNA processing,M00100,1,0
+0,0,0,1,0,0,0,0,-3.4,0,GO:0001824,blastocyst development,M00010,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0070918,regulatory ncRNA processing,M10000,1,0
+0,0,1,0,0,0,0,-3.9,0,0,R-HSA-9707616,Heme signaling,M00100,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0030220,platelet formation,M10000,1,0
+0,0,1,0,0,0,0,-2.4,0,0,GO:1904753,negative regulation of vascular associated smooth muscle cell migration,M00100,1,0
+0,1,0,0,0,0,-2,0,0,0,WP4577,Neurodegeneration with brain iron accumulation NBIA subtypes pathway,M01000,1,0
+0,1,0,0,0,0,-2.4,0,0,0,GO:2000143,negative regulation of DNA-templated transcription initiation,M01000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,M30,PID HDAC CLASSII PATHWAY,M10000,1,0
+0,0,0,1,0,0,0,0,-2.3,0,GO:0001825,blastocyst formation,M00010,1,0
+0,1,0,0,0,0,-3,0,0,0,GO:0140719,constitutive heterochromatin formation,M01000,1,0
+1,0,0,0,0,-3,0,0,0,0,GO:0043009,chordate embryonic development,M10000,1,0
+1,0,0,0,0,-3.3,0,0,0,0,GO:1900037,regulation of cellular response to hypoxia,M10000,1,0
+0,0,1,0,0,0,0,-4.2,0,0,R-HSA-5696398,Nucleotide Excision Repair,M00100,1,0
+0,0,0,1,0,0,0,0,-2.6,0,GO:2000279,negative regulation of DNA biosynthetic process,M00010,1,0
+1,0,0,0,0,-2.8,0,0,0,0,GO:0090311,regulation of protein deacetylation,M10000,1,0
+1,0,0,0,0,-2.2,0,0,0,0,GO:2000036,regulation of stem cell population maintenance,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0043587,tongue morphogenesis,M10000,1,0
+1,0,0,0,0,-2.8,0,0,0,0,R-HSA-5617472,Activation of anterior HOX genes in hindbrain development during early embryogenesis,M10000,1,0
+0,0,1,0,0,0,0,-3.7,0,0,R-HSA-5696399,Global Genome Nucleotide Excision Repair (GG-NER),M00100,1,0
+0,0,1,0,0,0,0,-2.9,0,0,R-HSA-110314,Recognition of DNA damage by PCNA-containing replication complex,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,R-HSA-6781823,Formation of TC-NER Pre-Incision Complex,M00100,1,0
+0,0,0,1,0,0,0,0,-2.4,0,GO:0043489,RNA stabilization,M00010,1,0
+0,0,1,0,0,0,0,-3.2,0,0,R-HSA-5693538,Homology Directed Repair,M00100,1,0
+1,0,0,0,0,-2,0,0,0,0,hsa05207,Chemical carcinogenesis - receptor activation,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:1900542,regulation of purine nucleotide metabolic process,M10000,1,0
+0,1,0,0,0,0,-2.9,0,0,0,M279,PID RB 1PATHWAY,M01000,1,0
+0,1,0,0,0,0,-2,0,0,0,GO:0007283,spermatogenesis,M01000,1,0
+0,1,0,0,0,0,-2.2,0,0,0,hsa03022,Basal transcription factors,M01000,1,0
+0,1,0,0,0,0,-4.5,0,0,0,R-HSA-5250941,Negative epigenetic regulation of rRNA expression,M01000,1,0
+0,1,0,0,0,0,-4.5,0,0,0,R-HSA-427413,NoRC negatively regulates rRNA expression,M01000,1,0
+0,1,0,0,0,0,-2.2,0,0,0,CORUM:632,Anti-HDAC2 complex,M01000,1,0
+0,0,0,1,0,0,0,0,-2.1,0,WP5039,SARS CoV 2 innate immunity evasion and cell specific immune response,M00010,1,0
+1,0,0,0,0,-2.8,0,0,0,0,R-HSA-8939211,ESR-mediated signaling,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:0045981,positive regulation of nucleotide metabolic process,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:1900544,positive regulation of purine nucleotide metabolic process,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:1905564,positive regulation of vascular endothelial cell proliferation,M10000,1,0
+1,0,0,0,0,-2.9,0,0,0,0,GO:0006383,transcription by RNA polymerase III,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,R-HSA-9833109,Evasion by RSV of host interferon responses,M00100,1,0
+0,0,1,0,0,0,0,-4.5,0,0,R-HSA-2151201,Transcriptional activation of mitochondrial biogenesis,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,R-HSA-73772,RNA Polymerase I Promoter Escape,M01000,1,0
+0,0,1,0,0,0,0,-2,0,0,M139,PID MYC PATHWAY,M00100,1,0
+0,0,0,1,0,0,0,0,-2.6,0,GO:1904356,regulation of telomere maintenance via telomere lengthening,M00010,1,0
+1,0,0,0,0,-2.4,0,0,0,0,GO:1905562,regulation of vascular endothelial cell proliferation,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:0062013,positive regulation of small molecule metabolic process,M10000,1,0
+1,0,0,0,0,-2.4,0,0,0,0,GO:0045721,negative regulation of gluconeogenesis,M10000,1,0
+1,0,0,0,0,-2.8,0,0,0,0,GO:0043470,regulation of carbohydrate catabolic process,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0034620,cellular response to unfolded protein,M10000,1,0
+0,1,0,0,0,0,-3.4,0,0,0,GO:0048854,brain morphogenesis,M01000,1,0
+0,0,1,0,0,0,0,-2.5,0,0,GO:0071498,cellular response to fluid shear stress,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:0060633,negative regulation of transcription initiation by RNA polymerase II,M01000,1,0
+1,0,0,0,0,-2.7,0,0,0,0,WP3995,Prion disease pathway,M10000,1,0
+0,1,0,0,0,0,-3.1,0,0,0,R-HSA-674695,RNA Polymerase II Pre-transcription Events,M01000,1,0
+0,1,0,0,0,0,-3.2,0,0,0,R-HSA-9617828,FOXO-mediated transcription of cell cycle genes,M01000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,R-HSA-72187,mRNA 3'-end processing,M10000,1,0
+0,0,1,0,0,0,0,-3,0,0,R-HSA-72172,mRNA Splicing,M00100,1,0
+0,0,1,0,0,0,0,-2.7,0,0,WP4495,IL10 anti inflammatory signaling,M00100,1,0
+1,0,0,0,0,-2.1,0,0,0,0,WP5477,Molecular pathway for oxidative stress,M10000,1,0
+1,0,0,0,0,-3.5,0,0,0,0,R-HSA-6807505,RNA polymerase II transcribes snRNA genes,M10000,1,0
+1,0,0,0,0,-3,0,0,0,0,GO:0006354,DNA-templated transcription elongation,M10000,1,0
+1,0,0,0,0,-2.7,0,0,0,0,WP170,Nuclear receptors,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,WP1982,Sterol regulatory element binding proteins SREBP signaling,M10000,1,0
+0,0,0,1,0,0,0,0,-3.4,0,WP5049,Glycolysis in senescence,M00010,1,0
+0,0,0,1,0,0,0,0,-2.1,0,GO:0043488,regulation of mRNA stability,M00010,1,0
+0,1,0,0,0,0,-2.4,0,0,0,R-HSA-6790901,rRNA modification in the nucleus and cytosol,M01000,1,0
+1,0,0,0,0,-3.8,0,0,0,0,GO:0080135,regulation of cellular response to stress,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:2000291,regulation of myoblast proliferation,M10000,1,0
+0,0,1,0,0,0,0,-2,0,0,hsa03030,DNA replication,M00100,1,0
+1,0,0,0,0,-2.2,0,0,0,0,WP2380,Brain derived neurotrophic factor BDNF signaling,M10000,1,0
+0,0,1,0,0,0,0,-2.9,0,0,R-HSA-73933,Resolution of Abasic Sites (AP sites),M00100,1,0
+1,0,0,0,0,-2.4,0,0,0,0,R-HSA-8874211,CREB3 factors activate genes,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,R-HSA-110373,Resolution of AP sites via the multiple-nucleotide patch replacement pathway,M00100,1,0
+0,0,1,0,0,0,0,-3.4,0,0,R-HSA-5696400,Dual Incision in GG-NER,M00100,1,0
+0,1,0,0,0,0,-2,0,0,0,GO:0071514,genomic imprinting,M01000,1,0
+0,0,1,0,0,0,0,-2.9,0,0,WP61,Notch signaling,M00100,1,0
+0,0,1,0,0,0,0,-2.1,0,0,R-HSA-5693532,DNA Double-Strand Break Repair,M00100,1,0
+1,0,0,0,0,-2.2,0,0,0,0,R-HSA-2262752,Cellular responses to stress,M10000,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:0070897,transcription preinitiation complex assembly,M01000,1,0
+1,0,0,0,0,-3.3,0,0,0,0,CORUM:1521,p300-SMAD1-STAT3 complex,M10000,1,0
+0,0,0,0,1,0,0,0,0,-2.2,WP138,Androgen receptor signaling,M00001,1,0
+1,0,0,0,0,-3.2,0,0,0,0,M115,PID REG GR PATHWAY,M10000,1,0
+0,1,0,0,0,0,-2.2,0,0,0,GO:0048232,male gamete generation,M01000,1,0
+0,0,1,0,0,0,0,-3.2,0,0,WP4753,Nucleotide excision repair,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,GO:0045943,positive regulation of transcription by RNA polymerase I,M00100,1,0
+1,0,0,0,0,-2.2,0,0,0,0,hsa05030,Cocaine addiction,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,WP4666,Hepatitis B infection,M10000,1,0
+0,1,0,0,0,0,-2.5,0,0,0,GO:0051151,negative regulation of smooth muscle cell differentiation,M01000,1,0
+0,0,0,0,1,0,0,0,0,-2.4,GO:0033143,regulation of intracellular steroid hormone receptor signaling pathway,M00001,1,0
+0,0,1,0,0,0,0,-2.2,0,0,WP4912,SARS coronavirus and innate immunity,M00100,1,0
+1,0,0,0,0,-2.8,0,0,0,0,R-HSA-74158,RNA Polymerase III Transcription,M10000,1,0
+0,0,0,0,1,0,0,0,0,-2,WP179,Cell cycle,M00001,1,0
+0,1,0,0,0,0,-2,0,0,0,GO:0006334,nucleosome assembly,M01000,1,0
+1,0,0,0,0,-2.6,0,0,0,0,GO:0009952,anterior/posterior pattern specification,M10000,1,0
+0,0,1,0,0,0,0,-2,0,0,WP4312,Rett syndrome,M00100,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:1903578,regulation of ATP metabolic process,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,WP2112,IL17 signaling,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,WP49,IL2 signaling,M10000,1,0
+1,0,0,0,0,-3,0,0,0,0,GO:0030968,endoplasmic reticulum unfolded protein response,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,R-HSA-381119,Unfolded Protein Response (UPR),M10000,1,0
+0,1,0,0,0,0,-2.4,0,0,0,R-HSA-73854,RNA Polymerase I Promoter Clearance,M01000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,R-HSA-76071,RNA Polymerase III Transcription Initiation From Type 3 Promoter,M10000,1,0
+0,1,0,0,0,0,-2.4,0,0,0,R-HSA-73863,RNA Polymerase I Transcription Termination,M01000,1,0
+0,0,1,0,0,0,0,-2.8,0,0,R-HSA-1852241,Organelle biogenesis and maintenance,M00100,1,0
+1,0,0,0,0,-4.5,0,0,0,0,GO:1905897,regulation of response to endoplasmic reticulum stress,M10000,1,0
+1,0,0,0,0,-2.7,0,0,0,0,WP2324,AGE RAGE pathway,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,WP3584,MECP2 and associated Rett syndrome,M00100,1,0
+0,0,0,1,0,0,0,0,-2.4,0,GO:0060218,hematopoietic stem cell differentiation,M00010,1,0
+0,1,0,0,0,0,-2.2,0,0,0,GO:0021591,ventricular system development,M01000,1,0
+0,0,0,1,0,0,0,0,-3.1,0,M223,PID BETA CATENIN NUC PATHWAY,M00010,1,0
+0,0,1,0,0,0,0,-2.5,0,0,GO:0007623,circadian rhythm,M00100,1,0
+0,0,0,0,1,0,0,0,0,-2.1,WP2263,Androgen receptor network in prostate cancer,M00001,1,0
+1,0,0,0,0,-2.8,0,0,0,0,GO:0006109,regulation of carbohydrate metabolic process,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,R-HSA-73856,RNA Polymerase II Transcription Termination,M10000,1,0
+0,0,1,0,0,0,0,-3.3,0,0,GO:2000736,regulation of stem cell differentiation,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:1903925,response to bisphenol A,M01000,1,0
+0,1,0,0,0,0,-4.8,0,0,0,GO:0065004,protein-DNA complex assembly,M01000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,WP5331,Autophagy in pancreatic ductal adenocarcinoma,M10000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:1903580,positive regulation of ATP metabolic process,M10000,1,0
+0,1,0,0,0,0,-2,0,0,0,R-HSA-162587,HIV Life Cycle,M01000,1,0
+0,1,0,0,0,0,-3.4,0,0,0,WP5563,RNA Polymerase II transcription the preinitiation complex,M01000,1,0
+1,0,0,0,0,-2.4,0,0,0,0,GO:0060612,adipose tissue development,M10000,1,0
+0,0,1,0,0,0,0,-2.1,0,0,WP4880,Host pathogen interaction of human coronaviruses interferon induction,M00100,1,0
+1,0,0,0,0,-2.2,0,0,0,0,GO:0045739,positive regulation of DNA repair,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0006986,response to unfolded protein,M10000,1,0
+1,0,0,0,0,-2.6,0,0,0,0,GO:0019216,regulation of lipid metabolic process,M10000,1,0
+0,0,1,0,0,0,0,-4.3,0,0,R-HSA-6782135,Dual incision in TC-NER,M00100,1,0
+0,0,1,0,0,0,0,-2.3,0,0,GO:0060337,type I interferon-mediated signaling pathway,M00100,1,0
+0,0,0,1,0,0,0,0,-3.2,0,GO:1904357,negative regulation of telomere maintenance via telomere lengthening,M00010,1,0
+0,0,0,0,1,0,0,0,0,-2.4,WP2853,Endoderm differentiation,M00001,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0030811,regulation of nucleotide catabolic process,M10000,1,0
+0,0,1,0,0,0,0,-3.7,0,0,GO:0098935,dendritic transport,M00100,1,0
+1,0,0,0,0,-2.3,0,0,0,0,R-HSA-9614657,FOXO-mediated transcription of cell death genes,M10000,1,0
+0,0,1,0,0,0,0,-5.2,0,0,R-HSA-6781827,Transcription-Coupled Nucleotide Excision Repair (TC-NER),M00100,1,0
+1,0,0,0,0,-2.4,0,0,0,0,WP4553,FBXL10 enhancement of MAP ERK signaling in diffuse large B cell lymphoma,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0021522,spinal cord motor neuron differentiation,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:2000288,positive regulation of myoblast proliferation,M10000,1,0
+0,0,1,0,0,0,0,-4.1,0,0,R-HSA-5696397,Gap-filling DNA repair synthesis and ligation in GG-NER,M00100,1,0
+0,0,0,0,1,0,0,0,0,-2.1,GO:0003179,heart valve morphogenesis,M00001,1,0
+0,0,1,0,0,0,0,-2.5,0,0,hsa03410,Base excision repair,M00100,1,0
+0,0,1,0,0,0,0,-2.7,0,0,CORUM:2685,RNA polymerase II (RNAPII),M00100,1,0
+0,0,0,1,0,0,0,0,-2.1,0,hsa03015,mRNA surveillance pathway,M00010,1,0
+1,0,0,0,0,-3,0,0,0,0,hsa04935,"Growth hormone synthesis, secretion and action",M10000,1,0
+0,1,0,0,0,0,-2.1,0,0,0,GO:0006352,DNA-templated transcription initiation,M01000,1,0
+1,0,0,0,0,-3.3,0,0,0,0,GO:0045648,positive regulation of erythrocyte differentiation,M10000,1,0
+1,0,0,0,0,-2.9,0,0,0,0,R-HSA-9006931,Signaling by Nuclear Receptors,M10000,1,0
+0,1,0,0,0,0,-2.4,0,0,0,R-HSA-73864,RNA Polymerase I Transcription,M01000,1,0
+0,0,1,0,0,0,0,-2.4,0,0,GO:0006397,mRNA processing,M00100,1,0
+1,0,0,0,0,-2.6,0,0,0,0,GO:0045165,cell fate commitment,M10000,1,0
+0,0,0,1,0,0,0,0,-2.7,0,GO:0048255,mRNA stabilization,M00010,1,0
+0,0,1,0,0,0,0,-2.3,0,0,GO:0071357,cellular response to type I interferon,M00100,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0033121,regulation of purine nucleotide catabolic process,M10000,1,0
+1,0,0,0,0,-2,0,0,0,0,GO:0062012,regulation of small molecule metabolic process,M10000,1,0
+0,1,0,0,0,0,-2.3,0,0,0,R-HSA-162599,Late Phase of HIV Life Cycle,M01000,1,0
+1,0,0,0,0,-2.3,0,0,0,0,GO:0006140,regulation of nucleotide metabolic process,M10000,1,0
+1,0,0,0,0,-3,0,0,0,0,GO:0006368,transcription elongation by RNA polymerase II,M10000,1,0
+0,0,1,0,0,0,0,-2.4,0,0,WP4816,TGF beta receptor signaling in skeletal dysplasias,M00100,1,0
+1,0,0,0,0,-2.2,0,0,0,0,GO:0045646,regulation of erythrocyte differentiation,M10000,1,0
+0,0,0,0,1,0,0,0,0,-2.2,R-HSA-5633007,Regulation of TP53 Activity,M00001,1,0
+0,1,0,0,0,0,-3.4,0,0,0,GO:0097284,hepatocyte apoptotic process,M01000,1,0
+0,0,1,0,0,0,0,-2,0,0,GO:0045686,negative regulation of glial cell differentiation,M00100,1,0
+0,0,1,0,0,0,0,-2.4,0,0,GO:0048384,retinoic acid receptor signaling pathway,M00100,1,0
+0,0,1,0,0,0,0,-3.6,0,0,WP5114,Nucleotide excision repair in xeroderma pigmentosum,M00100,1,0
+0,0,0,1,0,0,0,0,-2.6,0,GO:0001701,in utero embryonic development,M00010,1,0
+1,0,0,0,0,-2.3,0,0,0,0,R-HSA-400206,Regulation of lipid metabolism by PPARalpha,M10000,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:1903943,regulation of hepatocyte apoptotic process,M01000,1,0
+0,0,1,0,0,0,0,-2.4,0,0,WP560,TGF beta receptor signaling,M00100,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0006110,regulation of glycolytic process,M10000,1,0
+1,0,0,0,0,-2.9,0,0,0,0,R-HSA-3899300,SUMOylation of transcription cofactors,M10000,1,0
+1,0,0,0,0,-2.1,0,0,0,0,WP5516,IL23 inhibitors in inflammatory bowel disease,M10000,1,0
+0,0,0,1,0,0,0,0,-2.2,0,GO:0006007,glucose catabolic process,M00010,1,0
+0,0,1,0,0,0,0,-2.7,0,0,WP531,DNA mismatch repair,M00100,1,0
+0,0,1,0,0,0,0,-2.4,0,0,R-HSA-5651801,PCNA-Dependent Long Patch Base Excision Repair,M00100,1,0
+0,0,0,1,0,0,0,0,-2.3,0,GO:0051052,regulation of DNA metabolic process,M00010,1,0
+0,0,1,0,0,0,0,-2.4,0,0,R-HSA-5656121,Translesion synthesis by POLI,M00100,1,0
+1,0,0,0,0,-2.3,0,0,0,0,R-HSA-159236,Transport of Mature mRNA derived from an Intron-Containing Transcript,M10000,1,0
+0,0,1,0,0,0,0,-3.8,0,0,CORUM:1183,CDC5L complex,M00100,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0045454,cell redox homeostasis,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:2001014,regulation of skeletal muscle cell differentiation,M10000,1,0
+1,0,0,0,0,-2,0,0,0,0,GO:1902459,positive regulation of stem cell population maintenance,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,R-HSA-9623433,NR1H2 & NR1H3 regulate gene expression to control bile acid homeostasis,M00100,1,0
+1,0,0,0,0,-3.4,0,0,0,0,R-HSA-9018519,Estrogen-dependent gene expression,M10000,1,0
+0,0,1,0,0,0,0,-2.4,0,0,R-HSA-525793,Myogenesis,M00100,1,0
+0,0,1,0,0,0,0,-2.1,0,0,R-HSA-5685942,HDR through Homologous Recombination (HRR),M00100,1,0
+1,0,0,0,0,-3.5,0,0,0,0,R-HSA-76046,RNA Polymerase III Transcription Initiation,M10000,1,0
+0,0,1,0,0,0,0,-2.6,0,0,hsa05202,Transcriptional misregulation in cancer,M00100,1,0
+0,1,0,0,0,0,-2.2,0,0,0,GO:0034728,nucleosome organization,M01000,1,0
+0,0,0,1,0,0,0,0,-3.4,0,GO:0032211,negative regulation of telomere maintenance via telomerase,M00010,1,0
+0,1,0,0,0,0,-2,0,0,0,R-HSA-9841251,Mitochondrial unfolded protein response (UPRmt),M01000,1,0
+0,1,0,0,0,0,-4.8,0,0,0,GO:0071824,protein-DNA complex organization,M01000,1,0
+0,0,1,0,0,0,0,-2.1,0,0,WP5130,Th17 cell differentiation pathway,M00100,1,0
+0,0,0,0,1,0,0,0,0,-2.5,WP1984,Integrated breast cancer pathway,M00001,1,0
+0,0,1,0,0,0,0,-2.9,0,0,R-HSA-72165,mRNA Splicing - Minor Pathway,M00100,1,0
+0,0,1,0,0,0,0,-2.6,0,0,R-HSA-5693567,HDR through Homologous Recombination (HRR) or Single Strand Annealing (SSA),M00100,1,0
+0,0,0,1,0,0,0,0,-2.2,0,GO:1903312,negative regulation of mRNA metabolic process,M00010,1,0
+0,0,1,0,0,0,0,-2.4,0,0,WP2038,Microtubule cytoskeleton regulation,M00100,1,0
+0,0,1,0,0,0,0,-3.6,0,0,WP2023,Cell differentiation expanded index,M00100,1,0
+0,0,0,1,0,0,0,0,-2.5,0,GO:1902373,negative regulation of mRNA catabolic process,M00010,1,0
+0,1,0,0,0,0,-2.2,0,0,0,WP3657,Hematopoietic stem cell gene regulation by GABP alpha beta complex,M01000,1,0
+0,0,1,0,0,0,0,-3.1,0,0,R-HSA-73894,DNA Repair,M00100,1,0
+1,0,0,0,0,-3.3,0,0,0,0,GO:0036500,ATF6-mediated unfolded protein response,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,M203,PID ALK2 PATHWAY,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,M95,PID CIRCADIAN PATHWAY,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:0009791,post-embryonic development,M01000,1,0
+0,1,0,0,0,0,-2.5,0,0,0,GO:0043045,epigenetic programming of gene expression,M01000,1,0
+0,0,1,0,0,0,0,-2.7,0,0,CORUM:3066,"RNA polymerase II complex, chromatin structure modifying",M00100,1,0
+0,1,0,0,0,0,-2.2,0,0,0,CORUM:633,anti-BHC110 complex,M01000,1,0
+0,0,1,0,0,0,0,-2.1,0,0,GO:0048715,negative regulation of oligodendrocyte differentiation,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,R-HSA-6804756,Regulation of TP53 Activity through Phosphorylation,M01000,1,0
+1,0,0,0,0,-2.8,0,0,0,0,GO:0090043,regulation of tubulin deacetylation,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,hsa04211,Longevity regulating pathway,M10000,1,0
+0,0,0,1,0,0,0,0,-2.9,0,GO:0032205,negative regulation of telomere maintenance,M00010,1,0
+0,1,0,0,0,0,-2.2,0,0,0,CORUM:282,SNF2h-cohesin-NuRD complex,M01000,1,0
+0,0,1,0,0,0,0,-3.8,0,0,GO:1902036,regulation of hematopoietic stem cell differentiation,M00100,1,0
+0,1,0,0,0,0,-2.7,0,0,0,GO:1903944,negative regulation of hepatocyte apoptotic process,M01000,1,0
+0,0,1,0,0,0,0,-2.6,0,0,WP5381,Smith Magenis and Potocki Lupski syndrome copy number variation,M00100,1,0
+1,0,0,0,0,-2.9,0,0,0,0,GO:0009792,embryo development ending in birth or egg hatching,M10000,1,0
+1,0,0,0,0,-2.5,0,0,0,0,GO:0036344,platelet morphogenesis,M10000,1,0
+1,0,0,0,0,-2,0,0,0,0,GO:0010906,regulation of glucose metabolic process,M10000,1,0
+0,0,1,0,0,0,0,-2.2,0,0,CORUM:103,RNA polymerase II holoenzyme complex,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,CORUM:2825,BRCA1-RNA polymerase II complex,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,GO:0060338,regulation of type I interferon-mediated signaling pathway,M00100,1,0
+0,0,1,0,0,0,0,-2.5,0,0,WP5113,Antiviral and anti inflammatory effects of Nrf2 on SARS CoV 2 pathway,M00100,1,0
+0,0,1,0,0,0,0,-2,0,0,GO:0060333,type II interferon-mediated signaling pathway,M00100,1,0
+0,1,0,0,0,0,-3.4,0,0,0,GO:0006346,DNA methylation-dependent constitutive heterochromatin formation,M01000,1,0
+0,0,0,1,0,0,0,0,-2.2,0,GO:1902369,negative regulation of RNA catabolic process,M00010,1,0
+1,0,0,0,0,-2.2,0,0,0,0,GO:0019218,regulation of steroid metabolic process,M10000,1,0
+0,0,1,0,0,0,0,-3.1,0,0,GO:0140888,interferon-mediated signaling pathway,M00100,1,0
+0,0,0,1,0,0,0,0,-2.9,0,GO:0032210,regulation of telomere maintenance via telomerase,M00010,1,0
+1,0,0,0,0,-2.1,0,0,0,0,GO:0031943,regulation of glucocorticoid metabolic process,M10000,1,0
+0,1,0,0,0,0,-2.4,0,0,0,GO:0010833,telomere maintenance via telomere lengthening,M01000,1,0
+0,0,1,0,0,0,0,-2.1,0,0,GO:0010874,regulation of cholesterol efflux,M00100,1,0
+0,0,1,0,0,0,0,-2.5,0,0,WP5352,10q11 21q11 23 copy number variation syndrome,M00100,1,0
+0,0,1,0,0,0,0,-2.4,0,0,GO:0007398,ectoderm development,M00100,1,0
+1,0,0,0,0,-2.4,0,0,0,0,CORUM:3045,hs4 enhancer complex (faster migrating complex),M10000,1,0
+1,0,0,0,0,-2.8,0,0,0,0,R-HSA-749476,RNA Polymerase III Abortive And Retractive Initiation,M10000,1,0
+0,1,0,0,0,0,-2.2,0,0,0,GO:0006360,transcription by RNA polymerase I,M01000,1,0
+0,0,1,0,0,0,0,-2.9,0,0,GO:1901532,regulation of hematopoietic progenitor cell differentiation,M00100,1,0
+0,0,1,0,0,0,0,-4.3,0,0,R-HSA-6782210,Gap-filling DNA repair synthesis and ligation in TC-NER,M00100,1,0
+0,0,1,0,0,0,0,-2.1,0,0,M162,PID RXR VDR PATHWAY,M00100,1,0

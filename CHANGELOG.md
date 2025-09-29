@@ -1,3 +1,11 @@
+### 2025-09-29
+- New figure for DEG gene analyses
+- Revisions to DEX gene and consensus analyses
+
+### 2025-09-22
+- Bubble plots for more head groups
+- Better significance analyses and capstone overlap analysis
+
 ### 2025-09-08
 - Bubble plot for unique cluster edge enrichments
 
