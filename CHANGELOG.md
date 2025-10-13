@@ -1,3 +1,7 @@
+### 2025-10-13
+- Changes to capstone overlap plots
+- Figure revisions
+
 ### 2025-10-05
 - Figure changes
 - New capstone overlap panel
