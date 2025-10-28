@@ -1,3 +1,7 @@
+### 2025-10-27
+- Figure changes
+- Formatting changes to revision figure panels for edge frequency histograms and unique cluster gene enrichments
+
 ### 2025-10-13
 - Changes to capstone overlap plots
 - Figure revisions
