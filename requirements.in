@@ -19,6 +19,7 @@ pydot
 pyensembl
 scanpy
 scikit-learn
+scipy
 seaborn
 statannotations
 sympy

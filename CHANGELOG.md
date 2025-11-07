@@ -1,3 +1,10 @@
+### 2025-11-06
+- Add CLI printout for revision histogram
+- Comparison of gene prioritization frequency for DEX-overlapping and non-DEX-overlapping genes, with significance testing
+- Figure revisions
+- Heavy manual optimization for histogram plot
+- Recompile requirements
+
 ### 2025-10-27
 - Figure changes
 - Formatting changes to revision figure panels for edge frequency histograms and unique cluster gene enrichments
