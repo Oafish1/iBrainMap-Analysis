@@ -1,3 +1,7 @@
+### 2025-11-12
+- Add boxplot per-donor prioritization frequency distribution
+- Clean default string references in `utility` module
+
 ### 2025-11-06
 - Add CLI printout for revision histogram
 - Comparison of gene prioritization frequency for DEX-overlapping and non-DEX-overlapping genes, with significance testing

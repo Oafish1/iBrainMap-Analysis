@@ -1370,8 +1370,8 @@ def label_add_arrow(labels, ct=False):
     for l in labels:
         text = l.get_text()
         text = text.split('_')
-        if ct: text = '_'.join(text[:-2]) + ': ' + ' --> '.join(text[-2:])
-        else: text = ' --> '.join(text)
+        if ct: text = '_'.join(text[:-2]) + ': ' + get_edge_string().join(text[-2:])
+        else: text = get_edge_string().join(text)
         l.set_text(text)
 
     return labels
