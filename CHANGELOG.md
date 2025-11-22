@@ -1,3 +1,6 @@
+### 2025-11-14
+- Small supplementary figure changes
+
 ### 2025-11-12
 - Add boxplot per-donor prioritization frequency distribution
 - Clean default string references in `utility` module
