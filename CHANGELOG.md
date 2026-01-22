@@ -1,3 +1,6 @@
+### 2026-01-22
+- Export gene prioritizations
+
 ### 2025-11-14
 - Small supplementary figure changes
 
